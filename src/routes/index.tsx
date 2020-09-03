@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
-import { SignupPage } from '../pages/SignupPage';
+import { WelcomePage } from '../pages/WelcomePage';
 
 export function Routes() {
   return (
     <BrowserRouter>
       {/* <Toaster /> */}
       <Switch>
-        <Route exact path="/" render={() => <Redirect to="/signup" />} />
-        <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/" render={() => <Redirect to="/welcome" />} />
+        <Route exact path="/welcome" component={WelcomePage} />
         {/* 
           <ProtectedRoute exact path="/profile" component={Profile} /> 
         */}
