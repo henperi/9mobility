@@ -10,7 +10,18 @@ const NavBar = styled.div`
   padding: 0 56px;
   position: sticky;
   top: 0;
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    span {
+      margin-right: 40px;
+
+      &:last-child {
+        margin-right: unset;
+      }
+    }
+  }
 `;
 
 export const Styles = {

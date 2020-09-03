@@ -9,8 +9,11 @@ div {
 *::after,
 *::before {
   box-sizing: border-box;
+  font-family: 'Maven Pro', sans-serif;
 }
 
 html {
   box-sizing: border-box;
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 16px;
 }

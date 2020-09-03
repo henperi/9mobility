@@ -5,6 +5,7 @@ import { rootReducer, initialState } from './store/modules';
 import { initialiseStore } from './store/modules/init/actions';
 import { dispatchHelper } from './utils/dispatchHelper';
 import { AppContainer } from './components/AppContainer';
+import { Spinner } from './components/Spinner';
 
 /**
  * The App Component
@@ -24,14 +25,7 @@ export function App() {
   return (
     <AppProvider state={state} dispatch={dispatch}>
       <AppContainer>
-        {state.app.isReady ? (
-          <Routes />
-        ) : (
-          <div className="col">
-            {/* <Spinner center /> */}
-            loading...
-          </div>
-        )}
+        {state.app.isReady ? <Routes /> : <Spinner isFixed />}
       </AppContainer>
     </AppProvider>
   );
