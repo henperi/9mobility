@@ -18,14 +18,15 @@ export const WelcomePage = () => {
             <Text variant="darker" size={32}>
               Welcome
             </Text>
-            <SizedBox height={25} />
+            <SizedBox height={4} />
             <Text variant="lighter">
               You’ll get an sms to confirm your number
             </Text>
-            <SizedBox height={92} />
+            <SizedBox height={78} />
             <TextField leftIcon="+234" placeholder="Enter phone number"></TextField>
             <SizedBox height={60} />
             <Button fullWidth>Continue</Button>
+            <SizedBox height={100} />
           </Column>
         </Card>
       </PageBody>

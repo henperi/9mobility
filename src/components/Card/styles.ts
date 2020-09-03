@@ -25,24 +25,42 @@ const Card = styled.div.attrs({})<{
         content: '';
         display: flex;
         align-self: center;
-        width: 80%;
-        height: 80%;
-        background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)};
+        width: 70%;
+        height: 70%;
+        /* background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)}; */
+        background: linear-gradient(
+          180deg,
+          #b4c404 0%,
+          #008b69 75.74%,
+          #006848 100%
+        );
+        opacity: 0.1;
         z-index: -1;
         transform: rotateZ(45deg);
         left: -50%;
+        bottom: -5%;
       }
       &:after {
         position: absolute;
         content: '';
         display: flex;
         align-self: center;
-        width: 80%;
-        height: 80%;
-        background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)};
+        width: 70%;
+        height: 70%;
+        /* background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)}; */
+
+        background: linear-gradient(
+          180deg,
+          #b4c404 0%,
+          #008b69 75.74%,
+          #006848 100%
+        );
+        opacity: 0.1;
+
         z-index: -1;
-        transform: rotateZ(45deg);
+        transform: rotateZ(-45deg);
         right: -50%;
+        bottom: -5%;
       }
     `}
 `;

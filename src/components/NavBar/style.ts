@@ -7,7 +7,7 @@ const NavBar = styled.div`
   height: 96px;
   display: flex;
   align-items: center;
-  padding: 0 56px;
+  padding: 0 10%;
   position: sticky;
   top: 0;
   display: flex;
