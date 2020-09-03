@@ -71,14 +71,7 @@
         "ignoreRestArgs": true
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "vars": "all",
-        "args": "none"
-      }
-    ],
-
+    "@typescript-eslint/no-unused-vars": "error",
     "max-len": [
       "warn",
       {
@@ -96,12 +89,7 @@
     ],
     "react/jsx-key": "error",
     "object-curly-spacing": ["warn", "always"],
-    "no-unused-vars": [
-      "error",
-      {
-        "vars": "all",
-        "args": "none"
-      }
-    ]
+    "no-unused-vars": "error",
+    "no-unused-expressions": "error"
   }
 }

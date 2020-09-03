@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Routes } from './routes';
+import { AppProvider } from './store';
+import { rootReducer, initialState } from './store/modules';
+import { initialiseStore } from './store/modules/init/actions';
+import { dispatchHelper } from './utils/dispatchHelper';
 
 /**
- *  React Function
- *  @returns Element
+ * The App Component
+ *
+ * @returns Jsx Element
  */
-function App() {
+export function App() {
+  const [state, dispatchBase] = React.useReducer(rootReducer, initialState);
+  const dispatch = React.useCallback(dispatchHelper(dispatchBase, state), [
+    dispatchBase,
+  ]);
+
+  useEffect(() => {
+    initialiseStore(dispatch);
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider state={state} dispatch={dispatch}>
+      {state.app.isReady ? (
+        <Routes />
+      ) : (
+        <div className="col">
+          {/* <Spinner center /> */}
+          loading...
+        </div>
+      )}
+    </AppProvider>
   );
 }
-
-export default App;
