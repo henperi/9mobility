@@ -9,7 +9,7 @@ export const Colors = {
   lightGreen: '#00987B',
   yellowGreen: '#B4C404',
   grey: '#DEDEDE',
-  error: 'red',
+  error: '#ff3e3ea6',
 };
 
 export const backgroundColor = theme.variants('mode', 'variant', {

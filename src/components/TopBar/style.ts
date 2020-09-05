@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const NavBar = styled.div`
+const TopBar = styled.div`
   width: 100%;
   background-color: #fff;
   box-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.05);
@@ -25,5 +25,5 @@ const NavBar = styled.div`
 `;
 
 export const Styles = {
-  NavBar,
+  TopBar,
 };

@@ -15,6 +15,9 @@ const Spinner = styled.div.attrs({})<{
   size: number;
 }>`
   margin: 0 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${(props) =>
     props.isFixed &&

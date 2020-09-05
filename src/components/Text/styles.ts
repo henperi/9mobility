@@ -1,20 +1,18 @@
 import styled, { css } from 'styled-components';
 import { fontColor } from '../../themes/colors';
-// import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
+import { TextProps } from '.';
+import { rem } from '../../utils/rem';
 
-const Text = styled.span.attrs({})<{
-  variant?: 'darker' | 'lighter' | 'white' | undefined;
-  size?: number;
-  color?: string;
-}>`
+const Text = styled.span.attrs((props: TextProps) => ({
+  size: props.size || 16,
+  casing: props.casing || 'inherit',
+  alignment: props.alignment || 'left',
+}))<TextProps & { size: number }>`
   color: ${fontColor};
-
-  ${({ size }) =>
-    size &&
-    css`
-      font-size: ${size / 16}rem;
-      line-height: ${(size / 16) * (size < 13 ? 1 : 1.35)}rem;
-    `};
+  font-size: ${({ size }) => rem(size)};
+  line-height: ${({ size }) => rem(size * (size < 13 ? 1 : 1.35))};
+  text-transform: ${({ casing }) => casing};
+  text-align: ${({ alignment }) => alignment};;
 
   ${({ color }) =>
     color &&

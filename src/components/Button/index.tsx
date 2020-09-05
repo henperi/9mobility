@@ -1,5 +1,6 @@
 import React from 'react';
 import { Styles } from './styles';
+import { Spinner } from '../Spinner';
 
 export const Button: React.FC<{
   variant?: 'default' | 'primary' | 'secondary' | 'Tertiary' | 'Neutral';
@@ -11,7 +12,7 @@ export const Button: React.FC<{
   const { children, variant = 'primary', ...rest } = props;
   return (
     <Styles.Button variant={variant} {...rest}>
-      {children}
+      {props.loading ? <Spinner size={20}></Spinner> : children}
     </Styles.Button>
   );
 };

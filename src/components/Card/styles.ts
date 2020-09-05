@@ -5,7 +5,7 @@ import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 const Card = styled.div.attrs({})<{
   showOverlayedDesign?: boolean;
 }>`
-  padding: 40px 5%;
+  padding: 40px 7%;
   min-height: 1rem;
   width: fit-content;
   height: fit-content;
