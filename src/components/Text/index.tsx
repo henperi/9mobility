@@ -3,7 +3,7 @@ import { Styles } from './styles';
 import '@gouch/to-title-case';
 import { sentenceCase } from '../../utils/sentenceCase';
 
-export interface TextProps {
+export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: number;
   variant?: 'darker' | 'lighter' | 'white' | undefined;
   color?: string;

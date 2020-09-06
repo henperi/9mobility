@@ -1,10 +1,8 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Colors } from '../../themes/colors';
-import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
+import { rem } from '../../utils/rem';
 
-const Card = styled.div.attrs({})<{
-  showOverlayedDesign?: boolean;
-}>`
+const Card = styled.div.attrs({})<{}>`
   padding: 40px 7%;
   min-height: 1rem;
   width: fit-content;
@@ -16,57 +14,82 @@ const Card = styled.div.attrs({})<{
   overflow: hidden;
   z-index: 1;
   display: flex;
+`;
 
-  ${({ showOverlayedDesign }) =>
-    showOverlayedDesign &&
-    css`
-      &:before {
-        position: absolute;
-        content: '';
-        display: flex;
-        align-self: center;
-        width: 70%;
-        height: 70%;
-        /* background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)}; */
-        background: linear-gradient(
-          180deg,
-          #b4c404 0%,
-          #008b69 75.74%,
-          #006848 100%
-        );
-        opacity: 0.1;
-        z-index: -1;
-        transform: rotateZ(45deg);
-        left: -50%;
-        bottom: -5%;
-      }
-      &:after {
-        position: absolute;
-        content: '';
-        display: flex;
-        align-self: center;
-        width: 70%;
-        height: 70%;
-        /* background-color: ${convertHexToRGBA(Colors.lightGreen, 0.04)}; */
+const CardHeader = styled.div`
+  padding: ${rem(40)} 7%;
+  padding-top: ${rem(65)};
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
+  background: radial-gradient(circle, #00a17e 0%, #b4c404 0%, #006848 100%)
+    no-repeat;
+  position: absolute;
+  width: 100%;
+  height: fit-content;
+  height: ${rem(182)};
+  top: 0;
+  left: 0;
+  * {
+    color: ${Colors.white};
+  }
 
-        background: linear-gradient(
-          180deg,
-          #b4c404 0%,
-          #008b69 75.74%,
-          #006848 100%
-        );
-        opacity: 0.1;
+  img {
+    position: absolute;
+    right: 10%;
+    top: 12.5%;
+  }
+`;
 
-        z-index: -1;
-        transform: rotateZ(-45deg);
-        right: -50%;
-        bottom: -5%;
-      }
-    `}
+const OverlayedDesign = styled.div`
+  height: ${rem(300)};
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  opacity: 0.08;
+  z-index: -1;
+  z-index: -1;
+
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    left: -10%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      45deg,
+      #b4c404 0%,
+      #008b69 75.74%,
+      #006848 100%
+    );
+    transform-origin: left bottom;
+    transform: rotateZ(135deg) skew(5deg, 5deg);
+  }
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 115%;
+    right: -10%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      -45deg,
+      #b4c404 0%,
+      #008b69 75.74%,
+      #006848 100%
+    );
+    transform-origin: right bottom;
+    transform: rotateZ(-135deg) skew(-5deg, -5deg);
+  }
 `;
 
 const Styles = {
   Card,
+  OverlayedDesign,
+  CardHeader,
 };
 
 export { Styles };

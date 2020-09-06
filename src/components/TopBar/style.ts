@@ -12,13 +12,32 @@ const TopBar = styled.div`
   top: 0;
   display: flex;
   justify-content: space-between;
+  z-index: 10;
 
   div {
-    span {
-      margin-right: 40px;
+    span,
+    img {
+      margin-left: 40px;
+    }
 
-      &:last-child {
-        margin-right: unset;
+    .mobile-dowloads {
+      @media (max-width: 600px) {
+        position: fixed;
+        bottom: 1%;
+        right: 2%;
+        display: flex;
+        flex-direction: column;
+
+        img {
+          opacity: 0.5;
+          margin-left: 0;
+          margin-top: 10px;
+
+          &:hover,
+          &:focus {
+            opacity: unset;
+          }
+        }
       }
     }
   }

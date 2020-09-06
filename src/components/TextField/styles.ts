@@ -43,6 +43,7 @@ const TextField = styled.div.attrs((props: ITextField) => ({
   border-radius: ${rem(5)};
   display: flex;
   align-items: center;
+  width: 100%;
 
   &:focus-within {
     border: 1px solid ${Colors.lightGreen};

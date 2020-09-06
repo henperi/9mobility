@@ -1,15 +1,18 @@
 import styled, { css } from 'styled-components';
 import { backgroundColor, Colors } from '../../themes/colors';
+import { IButtonProps } from '.';
 
-const Button = styled.button.attrs({})<{
-  variant?: 'default' | 'primary' | 'secondary' | 'Tertiary' | 'Neutral';
-  fullWidth?: boolean;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  disabled?: boolean;
-  loading?: boolean;
-}>`
+const Button = styled.button.attrs((props: IButtonProps) => ({
+  borderColor: props.borderColor || 'transparent',
+}))<IButtonProps>`
   outline: none;
   border: none;
+
+  ${({ border }) =>
+    border &&
+    css`
+      border: 1px solid #efefef;
+    `};
 
   padding: 20px 28px;
   background-color: ${backgroundColor};
@@ -21,8 +24,19 @@ const Button = styled.button.attrs({})<{
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
   cursor: pointer;
   border-radius: 2px;
-  box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.13);
   font-family: inherit;
+
+  ${({ elevated }) =>
+    elevated &&
+    css`
+      box-shadow: 0px 2px 16px rgba(0, 0, 0, 0.13);
+    `};
+
+  ${({ rounded }) =>
+    rounded &&
+    css`
+      border-radius: 28px; ;
+    `};
 
   &:disabled {
     cursor: not-allowed;

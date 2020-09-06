@@ -20,10 +20,7 @@ export const Register = () => {
             We’d like to know a little more about you
           </Text>
           <SizedBox height={36} />
-          <TextField
-            label="Email"
-            placeholder="Enter email"
-          ></TextField>
+          <TextField label="Email" placeholder="Enter email"></TextField>
           <SizedBox height={16} />
           <TextField
             label="First Name"
@@ -36,7 +33,18 @@ export const Register = () => {
           ></TextField>
           <SizedBox height={24} />
           <Button fullWidth>Finish</Button>
-          <SizedBox height={100} />
+          <SizedBox height={24} />
+          <Text alignment="center" variant="lighter">
+            Or complete signup with social
+          </Text>
+          <SizedBox height={16} />
+          <Button border elevated={false} rounded variant="default" fullWidth>
+            Sign up with google
+          </Button>
+          <SizedBox height={10} />
+          <Button border elevated={false} rounded variant="default" fullWidth>
+            Sign up with facebook
+          </Button>
         </Column>
       </Card>
     </PageBody>
