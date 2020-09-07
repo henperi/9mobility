@@ -1,7 +1,7 @@
 import { appReducer, appInitialState } from './init/reducer';
 
 export const initialState = {
-  app: appInitialState
+  app: appInitialState,
 };
 
 export const rootReducer = (state: typeof initialState, action: any) => {

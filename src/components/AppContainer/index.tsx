@@ -1,6 +1,6 @@
 import React from 'react';
-import { Styles } from './style';
 import { ThemeProvider } from 'styled-components';
+import { Styles } from './style';
 import { TopBar } from '../TopBar';
 import { NavBar } from '../NavBar';
 import { Row } from '../Row';

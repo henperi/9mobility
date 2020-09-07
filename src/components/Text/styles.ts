@@ -12,7 +12,7 @@ const Text = styled.span.attrs((props: TextProps) => ({
   font-size: ${({ size }) => rem(size)};
   line-height: ${({ size }) => rem(size * (size < 13 ? 1 : 1.35))};
   text-transform: ${({ casing }) => casing};
-  text-align: ${({ alignment }) => alignment};;
+  text-align: ${({ alignment }) => alignment};
 
   ${({ color }) =>
     color &&

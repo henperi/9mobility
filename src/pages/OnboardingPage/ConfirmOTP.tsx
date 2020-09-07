@@ -24,8 +24,12 @@ export const ConfirmOTP = () => {
             label="OTP"
             isUnit
             numberOfUnits={4}
-            style={{ display: 'flex', alignSelf: 'center', width: 'max-content' }}
-          ></TextField>
+            style={{
+              display: 'flex',
+              alignSelf: 'center',
+              width: 'max-content',
+            }}
+          />
           <SizedBox height={60} />
           <Button fullWidth>Continue</Button>
           <SizedBox height={32} />

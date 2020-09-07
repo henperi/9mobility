@@ -21,7 +21,7 @@ const getChildren = (
   casing: TextProps['casing'],
 ) => {
   if (casing === 'titleCase' && typeof children === 'string') {
-    //@ts-ignore
+    // @ts-ignore
     return children.toTitleCase();
   }
   if (casing === 'sentenceCase' && typeof children === 'string') {

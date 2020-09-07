@@ -20,17 +20,11 @@ export const Register = () => {
             We’d like to know a little more about you
           </Text>
           <SizedBox height={36} />
-          <TextField label="Email" placeholder="Enter email"></TextField>
+          <TextField label="Email" placeholder="Enter email" />
           <SizedBox height={16} />
-          <TextField
-            label="First Name"
-            placeholder="Enter first name"
-          ></TextField>
+          <TextField label="First Name" placeholder="Enter first name" />
           <SizedBox height={16} />
-          <TextField
-            label="Last Name"
-            placeholder="Enter last name"
-          ></TextField>
+          <TextField label="Last Name" placeholder="Enter last name" />
           <SizedBox height={24} />
           <Button fullWidth>Finish</Button>
           <SizedBox height={24} />
