@@ -7,7 +7,7 @@ import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
 
-export const ConfirmNumber = () => {
+export const ConfirmNumber: React.FC = () => {
   return (
     <PageBody centeralize>
       <Card>
@@ -24,7 +24,7 @@ export const ConfirmNumber = () => {
             label="Phone Number"
             leftIcon="+234"
             placeholder="Enter phone number"
-          ></TextField>
+          />
           <SizedBox height={60} />
           <Button fullWidth>Continue</Button>
           <SizedBox height={100} />

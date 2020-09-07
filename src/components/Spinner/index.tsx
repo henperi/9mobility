@@ -6,5 +6,5 @@ export const Spinner: React.FC<{
   size?: number;
 }> = (props) => {
   const { isFixed = false, size = 50 } = props;
-  return <Styles.Spinner isFixed={isFixed} size={size}></Styles.Spinner>;
+  return <Styles.Spinner isFixed={isFixed} size={size} />;
 };

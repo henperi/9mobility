@@ -1,4 +1,6 @@
 import React from 'react';
+import range from 'lodash/range';
+import shortId from 'shortid';
 import { Styles } from './styles';
 import { Text } from '../Text';
 import { SizedBox } from '../SizedBox';
@@ -6,7 +8,6 @@ import { Colors } from '../../themes/colors';
 import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { Column } from '../Column';
 import { Row } from '../Row';
-import range from 'lodash/range';
 
 export interface ITextField
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -51,6 +52,7 @@ export const TextField: React.FC<ITextField> = (props) => {
               hasError={Boolean(error)}
               backgroundColor={backgroundColor}
               disabled={!!inputProps.disabled}
+              key={shortId.generate()}
             >
               <Styles.Input {...unitProps} maxLength={1} />
             </Styles.UnitTextField>

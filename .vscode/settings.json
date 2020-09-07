@@ -14,7 +14,13 @@
   "[typescriptreact]": {
     "editor.formatOnSave": false
   },
-  "eslint.validate": ["javascript", "javascriptreact", "autoFix"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "autoFix"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
     "eslint.autoFixOnSave": true

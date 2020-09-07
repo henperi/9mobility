@@ -16,10 +16,10 @@ export interface IButtonProps
 }
 
 export const Button: React.FC<IButtonProps> = (props) => {
-  const { children, variant = 'primary', ...rest } = props;
+  const { children, variant = 'primary', loading, ...rest } = props;
   return (
     <Styles.Button variant={variant} {...rest}>
-      {props.loading ? <Spinner size={20}></Spinner> : children}
+      {loading ? <Spinner size={20} /> : children}
     </Styles.Button>
   );
 };
