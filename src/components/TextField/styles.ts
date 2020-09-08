@@ -95,6 +95,10 @@ const UnitTextField = styled(TextField).attrs((props) => ({
   width: ${rem(50)};
   margin-right: ${rem(8)};
 
+  &:last-child {
+    margin-right: unset;
+  }
+
   input {
     text-align: center;
   }

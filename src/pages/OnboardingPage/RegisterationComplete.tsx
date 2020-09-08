@@ -6,8 +6,9 @@ import { Column } from '../../components/Column';
 import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { Checkbox } from '../../components/CheckBox';
+import { SetScreen } from '.';
 
-export const RegisterationComplete = () => {
+export const RegisterationComplete: React.FC<SetScreen> = () => {
   return (
     <PageBody centeralize>
       <Card

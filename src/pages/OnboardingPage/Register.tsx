@@ -6,8 +6,9 @@ import { Column } from '../../components/Column';
 import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
+import { SetScreen } from '.';
 
-export const Register = () => {
+export const Register: React.FC<SetScreen> = () => {
   return (
     <PageBody centeralize>
       <Card>

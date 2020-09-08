@@ -1,13 +1,12 @@
 import React from 'react';
-import range from 'lodash/range';
-import shortId from 'shortid';
+
 import { Styles } from './styles';
 import { Text } from '../Text';
 import { SizedBox } from '../SizedBox';
 import { Colors } from '../../themes/colors';
 import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { Column } from '../Column';
-import { Row } from '../Row';
+import { UnitTextField } from './UnitTextField';
 
 export interface ITextField
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -20,8 +19,9 @@ export interface ITextField
   multiline?: boolean;
   verticalMargin?: boolean;
   as?: 'textarea' | 'input';
-  isUnit?: boolean;
+  multiUnits?: boolean;
   numberOfUnits?: number;
+  containerStyle?: React.CSSProperties;
 }
 
 export const TextField: React.FC<ITextField> = (props) => {
@@ -36,28 +36,22 @@ export const TextField: React.FC<ITextField> = (props) => {
     multiline,
     children,
     style,
-    isUnit,
-    numberOfUnits = 1,
+    multiUnits,
+    numberOfUnits,
+    containerStyle,
     ...inputProps
   } = props;
 
   const renderChildren = () => {
-    if (isUnit) {
-      const { onChange, ...unitProps } = inputProps;
-
+    if (multiUnits) {
       return (
-        <Row>
-          {range(numberOfUnits).map(() => (
-            <Styles.UnitTextField
-              hasError={Boolean(error)}
-              backgroundColor={backgroundColor}
-              disabled={!!inputProps.disabled}
-              key={shortId.generate()}
-            >
-              <Styles.Input {...unitProps} maxLength={1} />
-            </Styles.UnitTextField>
-          ))}
-        </Row>
+        <UnitTextField
+          error={error}
+          backgroundColor={backgroundColor}
+          disabled={!!inputProps.disabled}
+          numberOfUnits={numberOfUnits}
+          handleChange={inputProps.onChange}
+        />
       );
     }
 
@@ -66,6 +60,7 @@ export const TextField: React.FC<ITextField> = (props) => {
         hasError={Boolean(error)}
         backgroundColor={backgroundColor}
         disabled={!!inputProps.disabled}
+        style={style}
       >
         {leftIcon && <div className="inputIcon">{leftIcon}</div>}
         <Styles.Input {...inputProps} />
@@ -75,7 +70,10 @@ export const TextField: React.FC<ITextField> = (props) => {
   };
 
   return (
-    <Styles.TextFieldContainer style={style} verticalMargin={verticalMargin}>
+    <Styles.TextFieldContainer
+      style={containerStyle}
+      verticalMargin={verticalMargin}
+    >
       <Column>
         {label && (
           <label htmlFor="label">

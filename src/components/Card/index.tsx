@@ -21,7 +21,7 @@ export const Card: React.FC<{
         {cardHeader && (
           <SizedBox height={182}>
             <Styles.CardHeader>
-              <img src={appLogoBig} />
+              <img src={appLogoBig} alt="appLogoBig" />
               <Column>
                 {cardHeader.title && (
                   <Text size={32} style={{ fontWeight: 'bold' }}>

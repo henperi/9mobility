@@ -8,7 +8,7 @@ export interface IButtonProps
   fullWidth?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
-  loading?: boolean;
+  isLoading?: boolean;
   elevated?: boolean;
   rounded?: boolean;
   borderColor?: string;
@@ -16,10 +16,10 @@ export interface IButtonProps
 }
 
 export const Button: React.FC<IButtonProps> = (props) => {
-  const { children, variant = 'primary', loading, ...rest } = props;
+  const { children, variant = 'primary', isLoading, ...rest } = props;
   return (
-    <Styles.Button variant={variant} {...rest}>
-      {loading ? <Spinner size={20} /> : children}
+    <Styles.Button variant={variant} isLoading={isLoading} {...rest}>
+      {isLoading ? <Spinner size={20} /> : children}
     </Styles.Button>
   );
 };

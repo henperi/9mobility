@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
 import { backgroundColor, Colors } from '../../themes/colors';
 import { IButtonProps } from '.';
+import { rem } from '../../utils/rem';
 
 const Button = styled.button.attrs((props: IButtonProps) => ({
   borderColor: props.borderColor || 'transparent',
@@ -14,7 +15,8 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
       border: 1px solid #efefef;
     `};
 
-  padding: 20px 28px;
+  /* padding: 20px 28px; */
+  min-height: ${rem(56)};
   background-color: ${backgroundColor};
   color: ${({ variant }) => variant !== 'default' && Colors.white};
   font-weight: 500;
@@ -43,8 +45,8 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
     opacity: 0.4;
   }
 
-  ${({ loading }) =>
-    loading &&
+  ${({ isLoading }) =>
+    isLoading &&
     css`
       cursor: wait;
       opacity: 0.4;

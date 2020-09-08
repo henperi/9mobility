@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import { useHistory } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { PageBody } from '../../components/PageBody';
 import { Text } from '../../components/Text';
@@ -6,8 +10,90 @@ import { Column } from '../../components/Column';
 import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
+import { SetScreen } from '.';
 
-export const ConfirmOTP = () => {
+import { useUrlQuery } from '../../customHooks/useUrlQuery';
+import { logger } from '../../utils/logger';
+import { usePost } from '../../customHooks/useRequests';
+import { ErrorBox } from '../../components/ErrorBox';
+import { getFieldError } from '../../utils/formikHelper';
+import { useGlobalStore } from '../../store';
+import { setAuthUser } from '../../store/modules/auth/actions';
+
+interface OTPResponse {
+  result: {
+    expiresIn: Date;
+    accesssToken: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    hasWallet: boolean;
+    walletAccount: string;
+    refreshToken: string;
+  };
+  responseCode: number;
+  message: string;
+}
+
+export const ConfirmOTP: React.FC<SetScreen> = () => {
+  const query = useUrlQuery();
+  const mobileNumber = query.get('mobileNumber');
+  const trackingId = query.get('trackingId');
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>('');
+
+  const history = useHistory();
+  const { dispatch } = useGlobalStore();
+
+  const [verifyOTP] = usePost<OTPResponse>(
+    'Mobility.Onboarding/api/Verification/verifyotp',
+  );
+
+  const handleVerifyOTP = async (data: typeof formik.values) => {
+    try {
+      setLoading(true);
+      setErrorMessage('');
+
+      const r = true || false;
+
+      if (r) {
+        history.push(`/onboarding/register`);
+      } else history.push(`/dashboard`);
+
+      const result = await verifyOTP({ ...data, trackingId, mobileNumber });
+      setLoading(false);
+      dispatch(setAuthUser(result.data.result));
+
+      logger.log(result.data);
+      const { email } = result.data.result;
+
+      if (email) {
+        history.push(`/onboarding/register`);
+      } else history.push(`/dashboard`);
+    } catch (error) {
+      setLoading(false);
+      setErrorMessage((error as Error).message);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      otp: '',
+    },
+    validationSchema: Yup.object({
+      otp: Yup.string()
+        .min(4, 'Must be a 4 digit code')
+        .max(4, 'Must be a 4 digit code')
+        .required('This field is required'),
+    }),
+    onSubmit: (values) => {
+      handleVerifyOTP(values);
+    },
+  });
+
+  const { onChange, ...formikProps } = formik.getFieldProps('otp');
+
   return (
     <PageBody centeralize>
       <Card>
@@ -17,21 +103,36 @@ export const ConfirmOTP = () => {
           </Text>
           <SizedBox height={4} />
           <Text variant="lighter">
-            Enter code sent via sms to +234 909849803
+            Enter code sent via sms to {mobileNumber}
           </Text>
           <SizedBox height={78} />
-          <TextField
-            label="OTP"
-            isUnit
-            numberOfUnits={4}
+
+          {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+          <form
+            onSubmit={formik.handleSubmit}
             style={{
-              display: 'flex',
-              alignSelf: 'center',
-              width: 'max-content',
+              display: 'contents',
             }}
-          />
-          <SizedBox height={60} />
-          <Button fullWidth>Continue</Button>
+          >
+            <TextField
+              label="OTP"
+              multiUnits
+              numberOfUnits={4}
+              containerStyle={{
+                display: 'flex',
+                alignSelf: 'center',
+                width: 'min-content',
+              }}
+              required
+              onChange={(e) => formik.setFieldValue('otp', e.target.value)}
+              error={getFieldError(formik.errors.otp, formik.touched.otp)}
+              {...formikProps}
+            />
+            <SizedBox height={60} />
+            <Button type="submit" isLoading={loading} fullWidth>
+              Continue
+            </Button>
+          </form>
           <SizedBox height={32} />
           <Text alignment="center" size={15} variant="lighter">
             Resend OTP in 0:54

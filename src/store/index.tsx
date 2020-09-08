@@ -1,16 +1,16 @@
 import React, { createContext } from 'react';
 import { initialState } from './modules';
 
-import { dispatchHelper } from '../utils/dispatchHelper';
+// import { dispatchHelper } from '../utils/dispatchHelper';
 
 interface IStateDispatch {
   state: typeof initialState;
-  dispatch: React.Dispatch<any> | typeof dispatchHelper;
+  dispatch: React.Dispatch<any>;
 }
 
 const AppContext = createContext<IStateDispatch>({
   state: initialState,
-  dispatch: dispatchHelper,
+  dispatch: () => null,
 });
 
 const AppProvider: React.FC<IStateDispatch> = ({

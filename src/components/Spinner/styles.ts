@@ -22,13 +22,16 @@ const Spinner = styled.div.attrs({})<{
   ${(props) =>
     props.isFixed &&
     css`
-      position: fixed;
+      position: absolute;
       display: flex;
       z-index: 10;
       width: 100%;
       height: 100%;
+      left: 0;
+      top: 0;
       justify-content: center;
       align-items: center;
+      margin: 0;
     `}
 
   &::before {
@@ -36,7 +39,7 @@ const Spinner = styled.div.attrs({})<{
     position: absolute;
     height: inherit;
     width: inherit;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.25);
     z-index: 1;
   }
 
