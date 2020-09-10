@@ -74,46 +74,48 @@ export const ConfirmNumber: React.FC<SetScreen> = () => {
 
   return (
     <PageBody centeralize>
-      <Card>
-        <Column>
-          <Text variant="darker" size={32}>
-            Welcome
-          </Text>
-          <SizedBox height={4} />
-          <Text variant="lighter">
-            You’ll get an sms to confirm your number
-          </Text>
-          <SizedBox height={78} />
-          {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
-          <form onSubmit={formik.handleSubmit}>
-            <TextField
-              label="Phone Number"
-              leftIcon="+234"
-              placeholder="Enter phone number"
-              {...formik.getFieldProps('MobileNumber')}
-              type="tel"
-              minLength={11}
-              maxLength={11}
-              required
-              title="must be a valid phone number starting with 0 eg 08112322124"
-              error={getFieldError(
-                formik.errors.MobileNumber,
-                formik.touched.MobileNumber,
-              )}
-            />
-            <SizedBox height={60} />
-            <Button
-              isLoading={loading}
-              disabled={formik.touched && !formik.isValid}
-              type="submit"
-              fullWidth
-            >
-              Continue
-            </Button>
-          </form>
-          <SizedBox height={100} />
-        </Column>
-      </Card>
+      <Column xs={12} sm={10} md={8} lg={6} xl={5}>
+        <Card showOverlayedDesign fullWidth>
+          <Column>
+            <Text variant="darker" size={32}>
+              Welcome
+            </Text>
+            <SizedBox height={4} />
+            <Text variant="lighter">
+              You’ll get an sms to confirm your number
+            </Text>
+            <SizedBox height={78} />
+            {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                label="Phone Number"
+                leftIcon="+234"
+                placeholder="Enter phone number"
+                {...formik.getFieldProps('MobileNumber')}
+                type="tel"
+                minLength={11}
+                maxLength={11}
+                required
+                title="must be a valid phone number starting with 0 eg 08112322124"
+                error={getFieldError(
+                  formik.errors.MobileNumber,
+                  formik.touched.MobileNumber,
+                )}
+              />
+              <SizedBox height={60} />
+              <Button
+                isLoading={loading}
+                disabled={formik.touched && !formik.isValid}
+                type="submit"
+                fullWidth
+              >
+                Continue
+              </Button>
+            </form>
+            <SizedBox height={100} />
+          </Column>
+        </Card>
+      </Column>
     </PageBody>
   );
 };

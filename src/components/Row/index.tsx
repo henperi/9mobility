@@ -10,9 +10,22 @@ export interface IFlex extends HtmlHTMLAttributes<HTMLDivElement> {
     | 'space-envenly'
     | 'space-around';
   justifyContent?: IFlex['alignItems'];
+  wrap?: boolean | string;
+  childGap?: number;
+  useAppMargin?: boolean;
 }
 
 export const Row: React.FC<IFlex> = (props) => {
-  const { children, ...rest } = props;
-  return <Styles.Row {...rest}>{children}</Styles.Row>;
+  const { children, wrap, ...rest } = props;
+  return (
+    <Styles.Row wrap={wrap ? String(wrap) : ''} {...rest}>
+      {children}
+    </Styles.Row>
+  );
+};
+
+Row.defaultProps = {
+  wrap: true,
+  childGap: 0,
+  useAppMargin: false,
 };

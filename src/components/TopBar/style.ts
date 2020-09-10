@@ -1,6 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { ITopBar } from '.';
+import { Colors } from '../../themes/colors';
+import { ScreenSizes } from '../Column/styles';
 
-const TopBar = styled.div`
+const TopBar = styled.div<ITopBar>`
   width: 100%;
   background-color: #fff;
   box-shadow: 0 12px 20px 0 rgba(0, 0, 0, 0.05);
@@ -14,6 +17,12 @@ const TopBar = styled.div`
   justify-content: space-between;
   z-index: 10;
 
+  ${({ auth }) =>
+    auth &&
+    css`
+      background-color: ${Colors.lightGreen};
+    `}
+
   div {
     span,
     img {
@@ -21,7 +30,7 @@ const TopBar = styled.div`
     }
 
     .mobile-dowloads {
-      @media (max-width: 600px) {
+      @media (max-width: ${ScreenSizes.md}px) {
         position: fixed;
         bottom: 1%;
         right: 2%;

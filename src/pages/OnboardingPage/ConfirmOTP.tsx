@@ -89,51 +89,53 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
 
   return (
     <PageBody centeralize>
-      <Card>
-        <Column>
-          <Text variant="darker" size={32}>
-            OTP
-          </Text>
-          <SizedBox height={4} />
-          <Text variant="lighter">
-            Enter code sent via sms to {mobileNumber}
-          </Text>
-          <SizedBox height={78} />
+      <Column xs={12} sm={10} md={8} lg={6} xl={5}>
+        <Card showOverlayedDesign fullWidth>
+          <Column>
+            <Text variant="darker" size={32}>
+              OTP
+            </Text>
+            <SizedBox height={4} />
+            <Text variant="lighter">
+              Enter code sent via sms to {mobileNumber}
+            </Text>
+            <SizedBox height={78} />
 
-          {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
-          <form
-            onSubmit={formik.handleSubmit}
-            style={{
-              display: 'contents',
-            }}
-          >
-            <TextField
-              label="OTP"
-              multiUnits
-              numberOfUnits={4}
-              containerStyle={{
-                display: 'flex',
-                alignSelf: 'center',
-                width: 'min-content',
+            {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+            <form
+              onSubmit={formik.handleSubmit}
+              style={{
+                display: 'contents',
               }}
-              type="number"
-              required
-              onChange={(e) => formik.setFieldValue('otp', e.target.value)}
-              error={getFieldError(formik.errors.otp, formik.touched.otp)}
-              {...formikProps}
-            />
-            <SizedBox height={60} />
-            <Button type="submit" isLoading={loading} fullWidth>
-              Continue
-            </Button>
-          </form>
-          <SizedBox height={32} />
-          <Text alignment="center" size={15} variant="lighter">
-            Resend OTP in 0:54
-          </Text>
-          <SizedBox height={52} />
-        </Column>
-      </Card>
+            >
+              <TextField
+                label="OTP"
+                multiUnits
+                numberOfUnits={4}
+                containerStyle={{
+                  display: 'flex',
+                  alignSelf: 'center',
+                  width: 'min-content',
+                }}
+                type="number"
+                required
+                onChange={(e) => formik.setFieldValue('otp', e.target.value)}
+                error={getFieldError(formik.errors.otp, formik.touched.otp)}
+                {...formikProps}
+              />
+              <SizedBox height={60} />
+              <Button type="submit" isLoading={loading} fullWidth>
+                Continue
+              </Button>
+            </form>
+            <SizedBox height={32} />
+            <Text alignment="center" size={15} variant="lighter">
+              Resend OTP in 0:54
+            </Text>
+            <SizedBox height={52} />
+          </Column>
+        </Card>
+      </Column>
     </PageBody>
   );
 };

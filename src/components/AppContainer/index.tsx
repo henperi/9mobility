@@ -17,10 +17,10 @@ export const AppContainer: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
-        <Row>
+        <Row wrap={false}>
           {Boolean(hasValidAccess) && <NavBar />}
           <Column>
-            <TopBar />
+            <TopBar auth={Boolean(hasValidAccess)} />
             {children}
           </Column>
         </Row>

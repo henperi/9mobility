@@ -22,7 +22,7 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
   font-weight: 500;
 
   transition: all 300ms ease-in-out;
-  margin-right: 5px;
+  /* margin-right: 5px; */
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
   cursor: pointer;
   border-radius: 2px;

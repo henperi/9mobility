@@ -44,6 +44,7 @@ const TextField = styled.div.attrs((props: ITextField) => ({
   display: flex;
   align-items: center;
   width: 100%;
+  overflow: hidden;
 
   &:focus-within {
     border: 1px solid ${Colors.lightGreen};

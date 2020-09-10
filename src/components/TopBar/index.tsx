@@ -6,18 +6,29 @@ import GooglePlay from '../../assets/images/google-play.png';
 import AppStore from '../../assets/images/app-store.png';
 import { Row } from '../Row';
 
-export const TopBar: React.FC<HtmlHTMLAttributes<HTMLDivElement>> = () => {
+export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
+  auth: boolean;
+}
+
+export const TopBar: React.FC<ITopBar> = (props) => {
+  const { auth } = props;
   return (
-    <Styles.TopBar>
-      <Logo />
-      <Row alignItems="center">
-        <span>Home</span>
-        <span>FAQ</span>
-        <Row className="mobile-dowloads">
-          <img src={GooglePlay} alt="GooglePlay" />
-          <img src={AppStore} alt="AppStore" />
-        </Row>
-      </Row>
+    <Styles.TopBar auth={auth}>
+      {!auth ? (
+        <>
+          <Logo />
+          <Row alignItems="center">
+            <span>Home</span>
+            <span>FAQ</span>
+            <Row className="mobile-dowloads">
+              <img src={GooglePlay} alt="GooglePlay" />
+              <img src={AppStore} alt="AppStore" />
+            </Row>
+          </Row>
+        </>
+      ) : (
+        <></>
+      )}
     </Styles.TopBar>
   );
 };

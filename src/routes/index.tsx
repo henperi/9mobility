@@ -5,8 +5,7 @@ import { ConfirmOTP } from '../pages/OnboardingPage/ConfirmOTP';
 import { Register } from '../pages/OnboardingPage/Register';
 import { RegisterationComplete } from '../pages/OnboardingPage/RegisterationComplete';
 import { ProtectedRoute } from '../components/ProtectedRoute';
-
-const Dashboard = () => <span>Dashboard</span>;
+import { Dashboard } from '../pages/Dashboard';
 
 export const Routes = () => {
   return (

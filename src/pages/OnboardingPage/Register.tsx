@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -81,75 +81,85 @@ export const Register: React.FC<SetScreen> = () => {
     },
   });
 
+  const { state } = useGlobalStore();
+
+  useEffect(() => {
+    if (state.auth.isAuthenticated && state.auth.user?.email) {
+      history.push('/dashboard');
+    }
+  }, [history, state.auth]);
+
   return (
     <PageBody centeralize>
-      <Card>
-        <Column>
-          <Text variant="darker" size={32}>
-            Almost done
-          </Text>
-          <SizedBox height={4} />
-          <Text variant="lighter">
-            We’d like to know a little more about you
-          </Text>
-          <SizedBox height={36} />
+      <Column xs={12} sm={10} md={8} lg={6} xl={5}>
+        <Card showOverlayedDesign fullWidth>
+          <Column>
+            <Text variant="darker" size={32}>
+              Almost done
+            </Text>
+            <SizedBox height={4} />
+            <Text variant="lighter">
+              We’d like to know a little more about you
+            </Text>
+            <SizedBox height={36} />
 
-          {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+            {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
 
-          <form onSubmit={formik.handleSubmit}>
-            <TextField
-              label="Email"
-              placeholder="Enter email"
-              required
-              error={getFieldError(formik.errors.email, formik.touched.email)}
-              {...formik.getFieldProps('email')}
-            />
-            <SizedBox height={16} />
-            <TextField
-              label="First Name"
-              placeholder="Enter first name"
-              required
-              error={getFieldError(
-                formik.errors.firstName,
-                formik.touched.firstName,
-              )}
-              {...formik.getFieldProps('firstName')}
-            />
-            <SizedBox height={16} />
-            <TextField
-              label="Last Name"
-              placeholder="Enter last name"
-              required
-              error={getFieldError(
-                formik.errors.lastName,
-                formik.touched.lastName,
-              )}
-              {...formik.getFieldProps('lastName')}
-            />
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                label="Email"
+                placeholder="Enter email"
+                required
+                error={getFieldError(formik.errors.email, formik.touched.email)}
+                {...formik.getFieldProps('email')}
+              />
+              <SizedBox height={16} />
+              <TextField
+                label="First Name"
+                placeholder="Enter first name"
+                required
+                error={getFieldError(
+                  formik.errors.firstName,
+                  formik.touched.firstName,
+                )}
+                {...formik.getFieldProps('firstName')}
+              />
+              <SizedBox height={16} />
+              <TextField
+                label="Last Name"
+                placeholder="Enter last name"
+                required
+                error={getFieldError(
+                  formik.errors.lastName,
+                  formik.touched.lastName,
+                )}
+                {...formik.getFieldProps('lastName')}
+              />
+              <SizedBox height={24} />
+              <Button
+                disabled={formik.touched && !formik.isValid}
+                isLoading={loading}
+                fullWidth
+              >
+                Finish
+              </Button>
+            </form>
+
             <SizedBox height={24} />
-            <Button
-              disabled={formik.touched && !formik.isValid}
-              isLoading={loading}
-              fullWidth
-            >
-              Finish
+            <Text alignment="center" variant="lighter">
+              Or complete signup with social
+            </Text>
+            <SizedBox height={16} />
+            <Button border elevated={false} rounded variant="default" fullWidth>
+              Sign up with google
             </Button>
-          </form>
-
-          <SizedBox height={24} />
-          <Text alignment="center" variant="lighter">
-            Or complete signup with social
-          </Text>
-          <SizedBox height={16} />
-          <Button border elevated={false} rounded variant="default" fullWidth>
-            Sign up with google
-          </Button>
-          <SizedBox height={10} />
-          <Button border elevated={false} rounded variant="default" fullWidth>
-            Sign up with facebook
-          </Button>
-        </Column>
-      </Card>
+            <SizedBox height={10} />
+            <Button border elevated={false} rounded variant="default" fullWidth>
+              Sign up with facebook
+            </Button>
+          </Column>
+        </Card>
+      </Column>
     </PageBody>
   );
 };

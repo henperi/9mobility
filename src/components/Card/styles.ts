@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Colors } from '../../themes/colors';
 import { rem } from '../../utils/rem';
+import { ICardProps } from '.';
 
-const Card = styled.div.attrs({})<{}>`
+const Card = styled.div.attrs({})<ICardProps>`
   padding: 40px 7%;
   min-height: 1rem;
   width: fit-content;
@@ -14,6 +15,12 @@ const Card = styled.div.attrs({})<{}>`
   overflow: hidden;
   z-index: 1;
   display: flex;
+
+  ${({ fullWidth }) =>
+    fullWidth &&
+    css`
+      width: 100%;
+    `}
 `;
 
 const CardHeader = styled.div`

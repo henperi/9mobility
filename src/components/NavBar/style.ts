@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { rem } from '../../utils/rem';
 import { Colors } from '../../themes/colors';
+import { ScreenSizes } from '../Column/styles';
 
 const NavBar = styled.div`
   height: 100vh;
@@ -13,7 +14,7 @@ const NavBar = styled.div`
   left: 0;
   z-index: 10;
 
-  @media (max-width: 600px) {
+  @media (max-width: ${ScreenSizes.lg}px) {
     display: none;
   }
 `;

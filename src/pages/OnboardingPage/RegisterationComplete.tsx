@@ -52,40 +52,44 @@ export const RegisterationComplete: React.FC<SetScreen> = () => {
 
   return (
     <PageBody centeralize>
-      <Card
-        cardHeader={{ title: 'Welcome', subtitle: 'Registeration complete' }}
-      >
-        <Column>
-          <SizedBox style={{ maxWidth: '360px' }}>
-            <Text variant="lighter">Hi Paul,</Text>
-            <SizedBox height={25} />
+      <Column xs={12} sm={10} md={8} lg={6} xl={5}>
+        <Card
+          showOverlayedDesign
+          fullWidth
+          cardHeader={{ title: 'Welcome', subtitle: 'Registeration complete' }}
+        >
+          <Column>
+            <SizedBox style={{ maxWidth: '360px' }}>
+              <Text variant="lighter">Hi Paul,</Text>
+              <SizedBox height={25} />
 
-            <Text variant="lighter">
-              Welcome on board. Enjoy a whole new personal digital experience.
-            </Text>
-            <SizedBox height={25} />
+              <Text variant="lighter">
+                Welcome on board. Enjoy a whole new personal digital experience.
+              </Text>
+              <SizedBox height={25} />
 
-            <Text variant="lighter">Best Regards,</Text>
-            <SizedBox height={25} />
+              <Text variant="lighter">Best Regards,</Text>
+              <SizedBox height={25} />
 
-            <Text variant="lighter">9mobile</Text>
-            <SizedBox height={34} />
+              <Text variant="lighter">9mobile</Text>
+              <SizedBox height={34} />
 
-            {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+              {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
 
-            <Text variant="lighter">
-              <Checkbox onChange={(e) => setcreateWallet(e.target.value)}>
-                Automatically create a 9PSB wallet for me{' '}
-              </Checkbox>
-            </Text>
-          </SizedBox>
-          <SizedBox height={40} />
-          <Button onClick={handleCreateWallet} isLoading={loading} fullWidth>
-            Proceed to dashboard
-          </Button>
-          <SizedBox height={24} />
-        </Column>
-      </Card>
+              <Text variant="lighter">
+                <Checkbox onChange={(e) => setcreateWallet(e.target.value)}>
+                  Automatically create a 9PSB wallet for me{' '}
+                </Checkbox>
+              </Text>
+            </SizedBox>
+            <SizedBox height={40} />
+            <Button onClick={handleCreateWallet} isLoading={loading} fullWidth>
+              Proceed to dashboard
+            </Button>
+            <SizedBox height={24} />
+          </Column>
+        </Card>
+      </Column>
     </PageBody>
   );
 };
