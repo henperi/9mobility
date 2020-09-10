@@ -8,12 +8,17 @@ import { Column } from '../Column';
 import { useGlobalStore } from '../../store';
 
 export const AppContainer: React.FC = ({ children }) => {
-  const { state } = useGlobalStore();
+  const {
+    state: { auth },
+  } = useGlobalStore();
+
+  const hasValidAccess = auth.isAuthenticated && auth.user?.email;
+
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
         <Row>
-          {state.auth.isAuthenticated && <NavBar />}
+          {Boolean(hasValidAccess) && <NavBar />}
           <Column>
             <TopBar />
             {children}

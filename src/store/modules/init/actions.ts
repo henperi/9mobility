@@ -2,7 +2,6 @@
 import types from './types';
 import { setAuthUser } from '../auth/actions';
 import { AuthUser } from '../auth/interface';
-// import { setAuthUser } from '../auth/actions';
 
 /**
  * @description Method to start the app

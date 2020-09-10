@@ -3,6 +3,10 @@ import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import { ConfirmNumber } from '../pages/OnboardingPage/ConfirmNumber';
 import { ConfirmOTP } from '../pages/OnboardingPage/ConfirmOTP';
 import { Register } from '../pages/OnboardingPage/Register';
+import { RegisterationComplete } from '../pages/OnboardingPage/RegisterationComplete';
+import { ProtectedRoute } from '../components/ProtectedRoute';
+
+const Dashboard = () => <span>Dashboard</span>;
 
 export const Routes = () => {
   return (
@@ -21,9 +25,12 @@ export const Routes = () => {
         />
         <Route exact path="/onboarding/verifyOTP" component={ConfirmOTP} />
         <Route exact path="/onboarding/register" component={Register} />
-        {/* 
-          <ProtectedRoute exact path="/profile" component={Profile} /> 
-        */}
+        <Route
+          exact
+          path="/onboarding/successful"
+          component={RegisterationComplete}
+        />
+        <ProtectedRoute exact path="/dashboard" component={Dashboard} />
       </Switch>
     </BrowserRouter>
   );

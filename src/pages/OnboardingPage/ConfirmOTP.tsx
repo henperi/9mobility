@@ -10,17 +10,16 @@ import { Column } from '../../components/Column';
 import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
-import { SetScreen } from '.';
 
 import { useUrlQuery } from '../../customHooks/useUrlQuery';
-import { logger } from '../../utils/logger';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { getFieldError } from '../../utils/formikHelper';
 import { useGlobalStore } from '../../store';
 import { setAuthUser } from '../../store/modules/auth/actions';
+import { SetScreen } from '.';
 
-interface OTPResponse {
+export interface OnboardingAuthResponse {
   result: {
     expiresIn: Date;
     accesssToken: string;
@@ -46,7 +45,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
   const history = useHistory();
   const { dispatch } = useGlobalStore();
 
-  const [verifyOTP] = usePost<OTPResponse>(
+  const [verifyOTP] = usePost<OnboardingAuthResponse>(
     'Mobility.Onboarding/api/Verification/verifyotp',
   );
 
@@ -55,22 +54,16 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
       setLoading(true);
       setErrorMessage('');
 
-      const r = true || false;
-
-      if (r) {
-        history.push(`/onboarding/register`);
-      } else history.push(`/dashboard`);
-
       const result = await verifyOTP({ ...data, trackingId, mobileNumber });
       setLoading(false);
       dispatch(setAuthUser(result.data.result));
 
-      logger.log(result.data);
-      const { email } = result.data.result;
+      // logger.log(result.data);
+      const { email, firstName } = result.data.result;
 
-      if (email) {
-        history.push(`/onboarding/register`);
-      } else history.push(`/dashboard`);
+      if (email || firstName) {
+        history.push(`/dashboard`);
+      } else history.push(`/onboarding/register`);
     } catch (error) {
       setLoading(false);
       setErrorMessage((error as Error).message);
@@ -123,6 +116,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
                 alignSelf: 'center',
                 width: 'min-content',
               }}
+              type="number"
               required
               onChange={(e) => formik.setFieldValue('otp', e.target.value)}
               error={getFieldError(formik.errors.otp, formik.touched.otp)}

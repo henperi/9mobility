@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { PageBody } from '../../components/PageBody';
 import { Text } from '../../components/Text';
@@ -7,8 +8,48 @@ import { SizedBox } from '../../components/SizedBox';
 import { Button } from '../../components/Button';
 import { Checkbox } from '../../components/CheckBox';
 import { SetScreen } from '.';
+import { logger } from '../../utils/logger';
+import { usePost } from '../../customHooks/useRequests';
+import { OnboardingAuthResponse } from './ConfirmOTP';
+import { ErrorBox } from '../../components/ErrorBox';
+import { useGlobalStore } from '../../store';
+import { setAuthUser } from '../../store/modules/auth/actions';
 
 export const RegisterationComplete: React.FC<SetScreen> = () => {
+  const [createWalletRequest] = usePost<OnboardingAuthResponse>(
+    'Mobility.Onboarding/api/Onboarding/createwallet',
+  );
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>('');
+
+  const history = useHistory();
+
+  const [createWallet, setcreateWallet] = useState(false);
+  const { dispatch } = useGlobalStore();
+
+  const handleCreateWallet = async () => {
+    if (!createWallet) {
+      history.push(`/dashboard`);
+    } else {
+      try {
+        setLoading(true);
+        setErrorMessage('');
+
+        const result = await createWalletRequest();
+        setLoading(false);
+        dispatch(setAuthUser(result.data.result));
+
+        history.push(`/dashboard`);
+
+        logger.log(result.data);
+      } catch (error) {
+        setLoading(false);
+        setErrorMessage((error as Error).message);
+      }
+    }
+  };
+
   return (
     <PageBody centeralize>
       <Card
@@ -29,12 +70,19 @@ export const RegisterationComplete: React.FC<SetScreen> = () => {
 
             <Text variant="lighter">9mobile</Text>
             <SizedBox height={34} />
+
+            {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+
             <Text variant="lighter">
-              <Checkbox> Automatically create a 9PSB wallet for me </Checkbox>
+              <Checkbox onChange={(e) => setcreateWallet(e.target.value)}>
+                Automatically create a 9PSB wallet for me{' '}
+              </Checkbox>
             </Text>
           </SizedBox>
           <SizedBox height={40} />
-          <Button fullWidth>Proceed to dashboard</Button>
+          <Button onClick={handleCreateWallet} isLoading={loading} fullWidth>
+            Proceed to dashboard
+          </Button>
           <SizedBox height={24} />
         </Column>
       </Card>

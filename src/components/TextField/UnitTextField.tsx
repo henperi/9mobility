@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import range from 'lodash/range';
 
 import { Styles } from './styles';
@@ -38,6 +38,24 @@ export const UnitTextField: React.FC<IUnitTextFIeld> = (props) => {
 
   const ref = useRef(state);
 
+  const refs: React.RefObject<HTMLInputElement>[] = range(numberOfUnits).map(
+    () => {
+      return React.createRef();
+    },
+  );
+
+  const [currentIndex, setcurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (refs[currentIndex]) {
+      (refs[currentIndex].current as HTMLInputElement).focus();
+    }
+  }, [currentIndex, refs]);
+
+  const isEditable = (index: number) => {
+    return currentIndex >= index;
+  };
+
   return (
     <Row>
       {range(numberOfUnits).map((index) => (
@@ -51,16 +69,26 @@ export const UnitTextField: React.FC<IUnitTextFIeld> = (props) => {
             {...unitProps}
             maxLength={1}
             value={ref.current[index]}
+            ref={refs[index]}
+            disabled={!isEditable(index)}
             onChange={(e) => {
               e.persist();
               ref.current[index] = e.target.value;
+
+              // if (!e.target.value && index > 0) {
+              //   return setcurrentIndex(index - 1);
+              // }
 
               const value = Object.values(ref.current).join('');
               const event = {
                 target: { value },
               } as React.ChangeEvent<HTMLInputElement>;
 
-              handleChange(event);
+              if (refs[index + 1]) {
+                setcurrentIndex(index + 1);
+              }
+
+              return handleChange(event);
             }}
           />
         </Styles.UnitTextField>

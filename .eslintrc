@@ -50,12 +50,6 @@
         "commonjs": true
       }
     ],
-    "no-shadow": [
-      "error",
-      {
-        "allow": ["req", "res", "err"]
-      }
-    ],
     "valid-jsdoc": [
       "error",
       {
@@ -119,6 +113,8 @@
     "no-unused-vars": "error",
     "no-unused-expressions": "error",
     "import/no-cycle": "off",
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": ["error"]
   }
 }

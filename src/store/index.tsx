@@ -1,8 +1,6 @@
 import React, { createContext } from 'react';
 import { initialState } from './modules';
 
-// import { dispatchHelper } from '../utils/dispatchHelper';
-
 interface IStateDispatch {
   state: typeof initialState;
   dispatch: React.Dispatch<any>;
