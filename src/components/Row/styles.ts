@@ -8,6 +8,7 @@ const Row = styled.div.attrs({})<IFlex>`
   align-items: ${(props) => props.alignItems};
   justify-content: ${(props) => props.justifyContent};
   flex-flow: ${(props) => props.wrap && 'row wrap'};
+  /* width: 100%; */
 
   ${({ useAppMargin }) =>
     useAppMargin &&

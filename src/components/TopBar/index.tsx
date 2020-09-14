@@ -4,7 +4,10 @@ import { Styles } from './style';
 import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
 import GooglePlay from '../../assets/images/google-play.png';
 import AppStore from '../../assets/images/app-store.png';
+import { ReactComponent as PowerIcon } from '../../assets/images/power.svg';
 import { Row } from '../Row';
+import { useGlobalStore } from '../../store';
+import { removeAuthUser } from '../../store/modules/auth/actions';
 
 export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
   auth: boolean;
@@ -12,6 +15,12 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 
 export const TopBar: React.FC<ITopBar> = (props) => {
   const { auth } = props;
+  const { dispatch } = useGlobalStore();
+
+  const handleLogout = () => {
+    dispatch(removeAuthUser());
+  };
+
   return (
     <Styles.TopBar auth={auth}>
       {!auth ? (
@@ -27,7 +36,13 @@ export const TopBar: React.FC<ITopBar> = (props) => {
           </Row>
         </>
       ) : (
-        <></>
+        <Row
+          style={{ width: '100%' }}
+          alignItems="center"
+          justifyContent="flex-end"
+        >
+          <PowerIcon onClick={handleLogout} />
+        </Row>
       )}
     </Styles.TopBar>
   );

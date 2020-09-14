@@ -27,7 +27,9 @@ export const AppContainer: React.FC = ({ children }) => {
           <Column
             style={{
               width:
-                width > ScreenSizes.lg ? `calc(100% - ${rem(240)}` : '100%',
+                width > ScreenSizes.lg && hasValidAccess
+                  ? `calc(100% - ${rem(240)}`
+                  : '100%',
             }}
           >
             <TopBar auth={Boolean(hasValidAccess)} />
