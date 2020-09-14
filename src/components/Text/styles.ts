@@ -1,7 +1,20 @@
 import styled, { css } from 'styled-components';
 import { fontColor } from '../../themes/colors';
-import { TextProps } from '.';
 import { rem } from '../../utils/rem';
+
+export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
+  size?: number;
+  variant?: 'darker' | 'lighter' | 'white' | undefined;
+  color?: string;
+  alignment?: 'left' | 'right' | 'center' | 'justify';
+  casing?:
+    | 'capitalize'
+    | 'lowercase'
+    | 'uppercase'
+    | 'titleCase'
+    | 'sentenceCase';
+  weight?: string | number;
+}
 
 const Text = styled.span.attrs((props: TextProps) => ({
   size: props.size || 16,
@@ -18,6 +31,12 @@ const Text = styled.span.attrs((props: TextProps) => ({
     color &&
     css`
       color: ${color};
+    `};
+
+  ${({ weight }) =>
+    weight &&
+    css`
+      font-weight: ${weight};
     `};
 `;
 

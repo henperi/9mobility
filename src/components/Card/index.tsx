@@ -1,20 +1,9 @@
 import React, { HtmlHTMLAttributes } from 'react';
-import { Styles } from './styles';
+import { Styles, ICardProps } from './styles';
 import { Column } from '../Column';
 import { SizedBox } from '../SizedBox';
 import { Text } from '../Text';
 import appLogoBig from '../../assets/images/9mobile-logo-big.png';
-
-export interface ICardProps {
-  padding?: boolean;
-  margin?: number;
-  showOverlayedDesign?: boolean;
-  cardHeader?: {
-    title?: string;
-    subtitle?: string;
-  };
-  fullWidth?: boolean;
-}
 
 export const Card: React.FC<HtmlHTMLAttributes<HTMLDivElement> & ICardProps> = (
   props,
@@ -22,7 +11,7 @@ export const Card: React.FC<HtmlHTMLAttributes<HTMLDivElement> & ICardProps> = (
   const { children, cardHeader, showOverlayedDesign = false, ...rest } = props;
   return (
     <Styles.Card {...rest}>
-      <Column>
+      <Column fullHeight>
         {cardHeader && (
           <SizedBox height={182}>
             <Styles.CardHeader>

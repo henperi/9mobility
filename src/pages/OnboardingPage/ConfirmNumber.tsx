@@ -75,7 +75,7 @@ export const ConfirmNumber: React.FC<SetScreen> = () => {
   return (
     <PageBody centeralize>
       <Column xs={12} sm={10} md={8} lg={6} xl={5}>
-        <Card showOverlayedDesign fullWidth>
+        <Card showOverlayedDesign fullWidth padding="7% 12%">
           <Column>
             <Text variant="darker" size={32}>
               Welcome

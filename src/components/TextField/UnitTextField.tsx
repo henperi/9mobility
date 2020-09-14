@@ -71,6 +71,9 @@ export const UnitTextField: React.FC<IUnitTextFIeld> = (props) => {
             value={ref.current[index]}
             ref={refs[index]}
             disabled={!isEditable(index)}
+            onClick={() => {
+              // setcurrentIndex(index);
+            }}
             onChange={(e) => {
               e.persist();
               ref.current[index] = e.target.value;

@@ -13,6 +13,7 @@ const Row = styled.div.attrs({})<IFlex>`
     useAppMargin &&
     css`
       margin: 0 -${appMargin}%;
+      margin-bottom: -${appMargin * 2}%;
     `}
 
   ${({ childGap }) =>

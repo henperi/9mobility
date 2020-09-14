@@ -12,9 +12,10 @@ export const Routes = () => {
     <BrowserRouter>
       {/* <Toaster /> */}
       <Switch>
+        <Route exact path="/" render={() => <Redirect to="/onboarding" />} />
         <Route
           exact
-          path="/"
+          path="/onboarding"
           render={() => <Redirect to="/onboarding/confirmNumber" />}
         />
         <Route

@@ -52,13 +52,14 @@ export const RegisterationComplete: React.FC<SetScreen> = () => {
 
   return (
     <PageBody centeralize>
-      <Column xs={12} sm={10} md={8} lg={6} xl={5}>
+      <Column xs={12} sm={10} md={8} lg={6} xl={5} fullHeight>
         <Card
-          showOverlayedDesign
           fullWidth
+          padding="7% 15%"
+          showOverlayedDesign
           cardHeader={{ title: 'Welcome', subtitle: 'Registeration complete' }}
         >
-          <Column>
+          <Column fullHeight>
             <SizedBox style={{ maxWidth: '360px' }}>
               <Text variant="lighter">Hi Paul,</Text>
               <SizedBox height={25} />

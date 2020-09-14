@@ -18,6 +18,7 @@ import { getFieldError } from '../../utils/formikHelper';
 import { useGlobalStore } from '../../store';
 import { setAuthUser } from '../../store/modules/auth/actions';
 import { SetScreen } from '.';
+// import { useCountdown } from '../../customHooks/useCountdown';
 
 export interface OnboardingAuthResponse {
   result: {
@@ -48,6 +49,8 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
   const [verifyOTP] = usePost<OnboardingAuthResponse>(
     'Mobility.Onboarding/api/Verification/verifyotp',
   );
+
+  const countdown = 50;
 
   const handleVerifyOTP = async (data: typeof formik.values) => {
     try {
@@ -90,7 +93,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
   return (
     <PageBody centeralize>
       <Column xs={12} sm={10} md={8} lg={6} xl={5}>
-        <Card showOverlayedDesign fullWidth>
+        <Card showOverlayedDesign fullWidth padding="7% 12%">
           <Column>
             <Text variant="darker" size={32}>
               OTP
@@ -115,7 +118,6 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
                 containerStyle={{
                   display: 'flex',
                   alignSelf: 'center',
-                  width: 'min-content',
                 }}
                 type="number"
                 required
@@ -130,7 +132,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
             </form>
             <SizedBox height={32} />
             <Text alignment="center" size={15} variant="lighter">
-              Resend OTP in 0:54
+              Resend OTP in {countdown}s
             </Text>
             <SizedBox height={52} />
           </Column>

@@ -1,13 +1,23 @@
 import styled, { css } from 'styled-components';
 import { Colors } from '../../themes/colors';
 import { rem } from '../../utils/rem';
-import { ICardProps } from '.';
+
+export interface ICardProps {
+  padding?: string;
+  margin?: number;
+  showOverlayedDesign?: boolean;
+  cardHeader?: {
+    title?: string;
+    subtitle?: string;
+  };
+  fullWidth?: boolean;
+  fullHeight?: boolean;
+}
 
 const Card = styled.div.attrs({})<ICardProps>`
-  padding: 40px 7%;
-  min-height: 1rem;
+  padding: ${({ padding }) => padding || '7%'};
+  min-height: 2.5rem;
   width: fit-content;
-  height: fit-content;
   border-radius: 4px;
   background-color: ${Colors.white};
   box-shadow: 0 22px 115px -85px rgba(0, 0, 0, 0.7);
@@ -15,6 +25,7 @@ const Card = styled.div.attrs({})<ICardProps>`
   overflow: hidden;
   z-index: 1;
   display: flex;
+  height: ${({ fullHeight }) => (fullHeight ? '100%' : 'fit-content')};
 
   ${({ fullWidth }) =>
     fullWidth &&

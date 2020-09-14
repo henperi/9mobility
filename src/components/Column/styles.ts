@@ -7,6 +7,21 @@ export interface IColumn extends React.HTMLAttributes<HTMLDivElement> {
   lg?: IResponsive['size'];
   xl?: IResponsive['size'];
   useAppMargin?: boolean;
+  fullHeight?: boolean;
+  alignItems?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-envenly'
+    | 'space-around';
+  justifyContent?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-envenly'
+    | 'space-around';
 }
 
 export enum ScreenSizes {
@@ -65,7 +80,20 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: fit-content;
+  /* height: fit-content; */
+  height: ${({ fullHeight }) => (fullHeight ? 'inherit' : 'fit-content')};
+
+  ${({ alignItems }) =>
+    alignItems &&
+    css`
+      justify-content: ${alignItems};
+    `};
+
+  ${({ justifyContent }) =>
+    justifyContent &&
+    css`
+      align-items: ${justifyContent};
+    `};
 
   ${({ xs, useAppMargin }) =>
     xs &&
@@ -74,7 +102,6 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
       media: ScreenSizes.xs,
       useAppMargin,
     })}
-
   ${({ sm, useAppMargin }) =>
     sm &&
     makeResponsive({
@@ -82,7 +109,6 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
       media: ScreenSizes.sm,
       useAppMargin,
     })}
-
     ${({ md, useAppMargin }) =>
     md &&
     makeResponsive({
@@ -90,7 +116,6 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
       media: ScreenSizes.md,
       useAppMargin,
     })}
-
     ${({ lg, useAppMargin }) =>
     lg &&
     makeResponsive({
@@ -98,14 +123,13 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
       media: ScreenSizes.lg,
       useAppMargin,
     })}
-
     ${({ xl, useAppMargin }) =>
     xl &&
     makeResponsive({
       size: xl,
       media: ScreenSizes.xl,
       useAppMargin,
-    })}
+    })};
 `;
 
 const Styles = {

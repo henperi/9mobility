@@ -3,9 +3,11 @@ import { rem } from '../../utils/rem';
 import { Colors } from '../../themes/colors';
 import { ScreenSizes } from '../Column/styles';
 
-const NavBar = styled.div`
+const SideBar = styled.div`
   height: 100vh;
-  min-width: ${rem(240)};
+  /* min-width: ${rem(240)};
+  max-width: ${rem(240)}; */
+  width: fill-available;
   background-color: ${Colors.white};
   padding: ${rem(32)} ${rem(16)};
   padding-left: 0;
@@ -20,5 +22,5 @@ const NavBar = styled.div`
 `;
 
 export const Styles = {
-  NavBar,
+  SideBar,
 };

@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 import { backgroundColor, Colors } from '../../themes/colors';
 import { IButtonProps } from '.';
 import { rem } from '../../utils/rem';
+import { Styles as StackStyles } from '../Stack/style';
 
 const Button = styled.button.attrs((props: IButtonProps) => ({
   borderColor: props.borderColor || 'transparent',
@@ -53,8 +54,45 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
     `}
 `;
 
+const DropDownStack = styled(StackStyles.Stack)`
+  position: relative;
+  width: fit-content;
+`;
+
+const DropDownContainer = styled(StackStyles.StackChild)`
+  position: absolute;
+  top: calc(100%);
+  z-index: 1;
+  height: fit-content;
+  background: #ffffff;
+  border: 1px solid #efefef;
+  box-sizing: border-box;
+  box-shadow: 0px 5px 20px rgba(219, 219, 219, 0.25);
+  border-radius: 4px;
+  max-height: 300px;
+  overflow: auto;
+  min-width: 100%;
+`;
+
+const DropDownItem = styled(StackStyles.Stack)`
+  cursor: pointer;
+  padding: 8px;
+  cursor: pointer;
+  color: #344563;
+  display: block;
+  text-decoration: none;
+
+  &:hover {
+    background: #f4f5f7;
+    border-radius: 4px;
+  }
+`;
+
 const Styles = {
   Button,
+  DropDownStack,
+  DropDownContainer,
+  DropDownItem,
 };
 
 export { Styles };

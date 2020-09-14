@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageBody } from '../../components/PageBody';
 import { SizedBox } from '../../components/SizedBox';
 import { Text } from '../../components/Text';
@@ -8,6 +8,8 @@ import { Card } from '../../components/Card';
 import { useGlobalStore } from '../../store';
 import { Button } from '../../components/Button';
 import { Colors } from '../../themes/colors';
+import { DropDownButton } from '../../components/Button/DropdownButton';
+import { Scrollable } from '../../components/Scrollable';
 
 export interface OnboardingAuthResponse {
   result: {
@@ -29,29 +31,48 @@ export const Dashboard: React.FC<any> = () => {
     state: { auth },
   } = useGlobalStore();
 
+  const [mobile, setmobile] = useState('08091234567A');
+
   return (
     <PageBody>
       <SizedBox height={40} />
       <Text>Hello {auth.user?.firstName}, Good morning</Text>
       <SizedBox height={24} />
       <Row useAppMargin>
-        <Column xs={12} md={6} lg={4} xl={4} useAppMargin>
-          <Card fullWidth>
-            <Column>
-              <Text size={18} color={Colors.darkGreen}>
-                08091234567
-              </Text>
+        <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
+          <Card fullWidth fullHeight>
+            <Column fullHeight alignItems="space-between">
+              <DropDownButton
+                dropdownOptions={[
+                  { id: '08091234567', name: '08091234567A' },
+                  { id: '08091234567', name: '08091234567B' },
+                ]}
+                useDefaultName={false}
+                variant="default"
+                dropDownChange={(e) => setmobile(e.name)}
+                style={{
+                  minWidth: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  minHeight: 'unset',
+                }}
+              >
+                <Text size={18} color={Colors.darkGreen} weight={500}>
+                  {mobile}
+                </Text>
+              </DropDownButton>
               <SizedBox height={20} />
               <Row>
                 <Column xs={6}>
                   <Text>Airtime Balance</Text>
-                  <Text size={18} color={Colors.darkGreen}>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
                     ₦850.59
                   </Text>
                 </Column>
                 <Column xs={6}>
                   <Text>Data Balance</Text>
-                  <Text size={18} color={Colors.darkGreen}>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
                     550MB
                   </Text>
                 </Column>
@@ -74,40 +95,93 @@ export const Dashboard: React.FC<any> = () => {
           </Card>
         </Column>
 
-        <Column xs={12} md={6} lg={4} xl={4} useAppMargin>
-          <Card fullWidth>
-            <Column>
-              <Text size={18} color={Colors.darkGreen}>
+        <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
+          <Card fullWidth fullHeight>
+            <Column fullHeight alignItems="space-between">
+              <Text size={18} color={Colors.darkGreen} weight={500}>
                 Subscribed services
               </Text>
               <SizedBox height={20} />
               <Row>
-                <Text>As of 11:04AM, 26th March 2019</Text>
-                <Text>14 Services</Text>
+                <Column>
+                  <Text>As of 11:04AM, 26th March 2019</Text>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
+                    14 Services
+                  </Text>
+                </Column>
               </Row>
               <SizedBox height={35} />
-              <Row useAppMargin justifyContent="space-between">
-                <Column useAppMargin xs={4}>
-                  <Card style={{ background: 'grey' }} fullWidth />
-                </Column>
-                <Column useAppMargin xs={4}>
-                  <Card style={{ background: 'grey' }} fullWidth />
-                </Column>
-                <Column useAppMargin xs={4}>
-                  <Card style={{ background: 'grey' }} fullWidth />
-                </Column>
-              </Row>
-              <SizedBox height={5} />
+              <Scrollable
+                style={{ width: '95%', marginLeft: '2.5%' }}
+                arrowStyles={{
+                  width: '25px',
+                  height: '25px',
+                  padding: '5px',
+                }}
+              >
+                <Card
+                  style={{
+                    background: '#EDF6F8',
+                    minWidth: '92px',
+                    marginRight: '2.5%',
+                  }}
+                >
+                  <Column justifyContent="center">
+                    <Text size={12} color={Colors.darkGreen} weight={700}>
+                      MoreCredit
+                    </Text>
+                    <SizedBox height={7} />
+                    <Text size={12} color={Colors.darkGreen} weight={500}>
+                      N300
+                    </Text>
+                  </Column>
+                </Card>
+                <Card
+                  style={{
+                    background: '#EDF6F8',
+                    minWidth: '92px',
+                    marginRight: '2.5%',
+                  }}
+                >
+                  <Column justifyContent="center">
+                    <Text size={12} color={Colors.darkGreen} weight={700}>
+                      MoreCredit
+                    </Text>
+                    <SizedBox height={7} />
+                    <Text size={12} color={Colors.darkGreen} weight={500}>
+                      N300
+                    </Text>
+                  </Column>
+                </Card>
+                <Card
+                  style={{
+                    background: '#EDF6F8',
+                    minWidth: '92px',
+                    marginRight: '2.5%',
+                  }}
+                >
+                  <Column justifyContent="center">
+                    <Text size={12} color={Colors.darkGreen} weight={700}>
+                      MoreCredit
+                    </Text>
+                    <SizedBox height={7} />
+                    <Text size={12} color={Colors.darkGreen} weight={500}>
+                      N300
+                    </Text>
+                  </Column>
+                </Card>
+              </Scrollable>
+              <SizedBox height={15} />
               <Row>
                 <Button fullWidth>View all subscribed services</Button>
               </Row>
             </Column>
           </Card>
         </Column>
-        <Column xs={12} md={6} lg={4} xl={4} useAppMargin>
-          <Card fullWidth>
-            <Column>
-              <Text size={18} color={Colors.darkGreen}>
+        <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
+          <Card fullWidth fullHeight>
+            <Column fullHeight alignItems="space-between">
+              <Text size={18} color={Colors.darkGreen} weight={500}>
                 Wallet
               </Text>
 
@@ -122,16 +196,166 @@ export const Dashboard: React.FC<any> = () => {
           </Card>
         </Column>
       </Row>
+
       <SizedBox height={36} />
       <Text>Quick Services</Text>
       <SizedBox height={24} />
-      <Row justifyContent="space-between">
-        <Card style={{ minWidth: '240px' }} />
-        <Card style={{ minWidth: '240px' }} />
-        <Card style={{ minWidth: '240px' }} />
-        <Card style={{ minWidth: '240px' }} />
-        <Card style={{ minWidth: '240px' }} />
-      </Row>
+      <Scrollable
+        arrowContainerStyle={{
+          bottom: '100%',
+          right: '0%',
+          width: 'unset',
+          height: 'unset',
+        }}
+        arrowStyles={{
+          margin: '5px',
+        }}
+      >
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+        <Card
+          style={{
+            minWidth: '240px',
+            marginRight: '3%',
+          }}
+        >
+          <Column justifyContent="center">
+            <Text size={12} color={Colors.darkGreen} weight={700}>
+              MoreCredit
+            </Text>
+            <SizedBox height={7} />
+            <Text size={12} color={Colors.darkGreen} weight={500}>
+              N300
+            </Text>
+          </Column>
+        </Card>
+      </Scrollable>
     </PageBody>
   );
 };
