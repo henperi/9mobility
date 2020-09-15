@@ -6,7 +6,7 @@ import { initialiseStore } from './store/modules/init/actions';
 
 import { AppContainer } from './components/AppContainer';
 import { Spinner } from './components/Spinner';
-import { useTokenRefresher } from './customHooks/useTokenHandler';
+// import { useTokenRefresher } from './customHooks/useTokenHandler';
 
 /**
  * The App Component
@@ -15,11 +15,6 @@ import { useTokenRefresher } from './customHooks/useTokenHandler';
  */
 export function App() {
   const [state, dispatch] = React.useReducer(rootReducer, initialState);
-  const [refresh] = useTokenRefresher(state);
-
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
 
   useEffect(() => {
     initialiseStore(dispatch);

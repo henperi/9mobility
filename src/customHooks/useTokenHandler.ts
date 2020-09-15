@@ -28,7 +28,7 @@ export const useTokenRefresher = (state: typeof initialState) => {
   }, [state.auth.user]);
 
   const refresh = useCallback(async () => {
-    if (state.auth.user && timeRemaining > 100) {
+    if (state.auth.user && timeRemaining) {
       // logger.log('timeRemaining', timeRemaining);
 
       if (new Date(Date.now()) > new Date(state.auth.user.expiresIn)) {

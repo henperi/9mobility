@@ -1,4 +1,4 @@
-import React, { HtmlHTMLAttributes } from 'react';
+import React, { HtmlHTMLAttributes, useEffect } from 'react';
 import { Styles } from './style';
 
 import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
@@ -8,6 +8,7 @@ import { ReactComponent as PowerIcon } from '../../assets/images/power.svg';
 import { Row } from '../Row';
 import { useGlobalStore } from '../../store';
 import { removeAuthUser } from '../../store/modules/auth/actions';
+import { useTokenRefresher } from '../../customHooks/useTokenHandler';
 
 export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
   auth: boolean;
@@ -15,7 +16,13 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 
 export const TopBar: React.FC<ITopBar> = (props) => {
   const { auth } = props;
-  const { dispatch } = useGlobalStore();
+  const { dispatch, state } = useGlobalStore();
+
+  const [refresh] = useTokenRefresher(state);
+
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
 
   const handleLogout = () => {
     dispatch(removeAuthUser());

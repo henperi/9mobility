@@ -26,6 +26,7 @@ const Scrollable = styled.div.attrs({})<IScrollableProps>`
   width: 100%;
   scroll-behavior: smooth;
   align-items: center;
+  height: 100%;
 
   ${({ hideScrollBar }) =>
     hideScrollBar &&
