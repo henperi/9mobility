@@ -29,7 +29,7 @@ export const useTokenRefresher = (state: typeof initialState) => {
 
   useEffect(() => {
     if (state.auth.user) {
-      logger.log(timeRemaining);
+      // logger.log(timeRemaining);
     }
   }, [state.auth.user, timeRemaining]);
 

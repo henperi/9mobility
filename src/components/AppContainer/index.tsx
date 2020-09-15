@@ -16,6 +16,7 @@ export const AppContainer: React.FC = ({ children }) => {
   } = useGlobalStore();
 
   const { width } = useScreenSize();
+  const isOnboardingRoute = window.location.pathname.includes('onboarding');
 
   const hasValidAccess = auth.isAuthenticated && auth.user?.email;
 
@@ -23,13 +24,13 @@ export const AppContainer: React.FC = ({ children }) => {
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
         <Row wrap={false}>
-          {Boolean(hasValidAccess) && (
+          {Boolean(hasValidAccess) && !isOnboardingRoute && (
             <SideBar style={{ maxWidth: rem(240) }} />
           )}
           <Column
             style={{
               width:
-                width > ScreenSizes.lg && hasValidAccess
+                width > ScreenSizes.lg && hasValidAccess && !isOnboardingRoute
                   ? `calc(100% - ${rem(240)}`
                   : '100%',
             }}
