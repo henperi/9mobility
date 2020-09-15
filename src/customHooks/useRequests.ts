@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import httpService from '../services/htttpService';
 import { handleAxiosError } from '../utils/handleAxiosError';
@@ -29,18 +29,24 @@ export function useFetch<T>(url: string) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState();
 
-  useEffect(() => {
-    httpService
-      .get(url)
-      .then((result: AxiosResponse<T>) => {
-        setLoading(false);
-        setData(result.data);
-      })
-      .catch((err) => setError(err));
+  const refetch = useCallback(
+    () =>
+      httpService
+        .get(url)
+        .then((result: AxiosResponse<T>) => {
+          setLoading(false);
+          setData(result.data);
+        })
+        .catch((err) => setError(err)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [url]);
+    [url],
+  );
 
-  return { loading, data, error };
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  return { loading, data, error, refetch };
 }
 
 /**

@@ -6,7 +6,7 @@ import { OnboardingAuthResponse } from '../pages/OnboardingPage/ConfirmOTP';
 import { setAuthUser } from '../store/modules/auth/actions';
 import { initialState } from '../store/modules';
 import { useCountdown } from './useCountdown';
-// import { logger } from '../utils/logger';
+import { logger } from '../utils/logger';
 
 export const useTokenRefresher = (state: typeof initialState) => {
   const { dispatch } = useGlobalStore();
@@ -27,18 +27,31 @@ export const useTokenRefresher = (state: typeof initialState) => {
     }
   }, [state.auth.user]);
 
-  const refresh = useCallback(async () => {
-    if (state.auth.user && timeRemaining) {
-      // logger.log('timeRemaining', timeRemaining);
-
-      if (new Date(Date.now()) > new Date(state.auth.user.expiresIn)) {
-        const result = await refreshToken({
-          refreshToken: state.auth.user?.refreshToken,
-        });
-        dispatch(setAuthUser(result.data.result));
-      }
+  useEffect(() => {
+    if (state.auth.user) {
+      logger.log(timeRemaining);
     }
-  }, [dispatch, refreshToken, state.auth.user, timeRemaining]);
+  }, [state.auth.user, timeRemaining]);
+
+  const refresh = useCallback(async () => {
+    if (!timeRemaining) {
+      // dispatch(removeAuthUser());
+    }
+
+    if (
+      state.auth.user?.refreshToken &&
+      new Date(Date.now()).getTime() -
+        new Date(state.auth.user.expiresIn).getTime() >
+        -100 &&
+      timeRemaining < 100
+    ) {
+      logger.log('timeRemaining', timeRemaining, state.auth);
+      const result = await refreshToken({
+        refreshToken: state.auth.user?.refreshToken,
+      });
+      dispatch(setAuthUser(result.data.result));
+    }
+  }, [dispatch, refreshToken, state.auth, timeRemaining]);
 
   return [refresh];
 };

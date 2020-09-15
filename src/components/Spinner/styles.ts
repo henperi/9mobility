@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { Colors } from '../../themes/colors';
 
 const spin = keyframes`
   from {
@@ -49,7 +50,7 @@ const Spinner = styled.div.attrs({})<{
     height: ${(props) => props.size}px;
     width: ${(props) => props.size}px;
     border: solid ${(props) => props.size / 10}px #fff;
-    border-bottom-color: #747be5;
+    border-bottom-color: ${Colors.darkGreen};
     border-radius: 50%;
     will-change: animation;
     animation: 1.35s linear infinite ${spin};

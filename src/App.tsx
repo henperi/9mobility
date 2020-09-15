@@ -6,7 +6,6 @@ import { initialiseStore } from './store/modules/init/actions';
 
 import { AppContainer } from './components/AppContainer';
 import { Spinner } from './components/Spinner';
-// import { useTokenRefresher } from './customHooks/useTokenHandler';
 
 /**
  * The App Component
