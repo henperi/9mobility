@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -15,6 +15,7 @@ import { getFieldError } from '../../utils/formikHelper';
 import { logger } from '../../utils/logger';
 import { ErrorBox } from '../../components/ErrorBox';
 import { SetScreen } from '.';
+import { useGlobalStore } from '../../store';
 
 interface Response {
   result: {
@@ -71,6 +72,14 @@ export const ConfirmNumber: React.FC<SetScreen> = () => {
       handleVerifyNumber(values);
     },
   });
+
+  const { state } = useGlobalStore();
+
+  useEffect(() => {
+    if (state.auth.isAuthenticated && state.auth.user?.email) {
+      history.push('/dashboard');
+    }
+  }, [history, state.auth]);
 
   return (
     <PageBody centeralize>
