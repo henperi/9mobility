@@ -8,6 +8,8 @@ export const Colors = {
   darkGreen: '#006848',
   lightGreen: '#00987B',
   yellowGreen: '#B4C404',
+  lightBlue: '#00839B',
+  orange: '#D87900',
   grey: '#DEDEDE',
   error: '#ff3e3ea6',
 };
@@ -16,8 +18,11 @@ export const backgroundColor = theme.variants('mode', 'variant', {
   default: { light: Colors.white },
   primary: { light: Colors.darkGreen },
   secondary: { light: Colors.yellowGreen },
-  Tertiary: { light: Colors.lightGreen },
-  Neutral: { light: Colors.grey },
+  tertiary: { light: Colors.lightGreen },
+  neutral: { light: Colors.grey },
+  blackGrey: { light: Colors.blackGrey },
+  lightBlue: { light: Colors.lightBlue },
+  orange: { light: Colors.orange },
 });
 
 export const fontColor = theme.variants('mode', 'variant', {

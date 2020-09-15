@@ -11,6 +11,12 @@ import { Colors } from '../../themes/colors';
 import { DropDownButton } from '../../components/Button/DropdownButton';
 import { Scrollable } from '../../components/Scrollable';
 
+import { ReactComponent as GetLoan } from '../../assets/images/getLoan.svg';
+import { ReactComponent as StreamMovies } from '../../assets/images/streamMovies.svg';
+import { ReactComponent as PlayMusic } from '../../assets/images/playMusic.svg';
+import { ReactComponent as PlayGames } from '../../assets/images/playGames.svg';
+import { ReactComponent as BuyPhone } from '../../assets/images/buyPhone.svg';
+
 export interface OnboardingAuthResponse {
   result: {
     expiresIn: Date;
@@ -88,7 +94,7 @@ export const Dashboard: React.FC<any> = () => {
                   <Button fullWidth>Airtime</Button>
                 </Column>
                 <Column useAppMargin xs={6}>
-                  <Button fullWidth>Data</Button>
+                  <Button fullWidth outline variant="secondary">Data</Button>
                 </Column>
               </Row>
             </Column>
@@ -208,151 +214,92 @@ export const Dashboard: React.FC<any> = () => {
           height: 'unset',
         }}
         arrowStyles={{
-          margin: '5px',
+          margin: '0 0 15px 15px',
         }}
       >
         <Card
           style={{
             minWidth: '240px',
-            marginRight: '3%',
+            marginRight: '2.5%',
+            padding: '25px',
           }}
         >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
+          <Column justifyContent="flex-start">
+            <GetLoan style={{ width: '100%' }} />
+            <SizedBox height={24} />
+            <Text>
+              Get a loan <br></br>in 60 seconds
             </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
+            <SizedBox height={16} />
+            <Button fullWidth outline>Apply Now</Button>
           </Column>
         </Card>
         <Card
           style={{
             minWidth: '240px',
-            marginRight: '3%',
+            marginRight: '2.5%',
+            padding: '25px',
           }}
         >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
+          <Column justifyContent="flex-start">
+            <StreamMovies style={{ width: '100%' }} />
+            <SizedBox height={24} />
+            <Text>
+              Stream movies, <br></br>shows & reality TV
             </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
+            <SizedBox height={16} />
+            <Button fullWidth outline variant="blackGrey">Apply Now</Button>
           </Column>
         </Card>
         <Card
           style={{
             minWidth: '240px',
-            marginRight: '3%',
+            marginRight: '2.5%',
+            padding: '25px',
           }}
         >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
+          <Column justifyContent="flex-start">
+            <PlayMusic style={{ width: '100%' }} />
+            <SizedBox height={24} />
+            <Text>
+              Play music <br></br> & rock ringback tunes
             </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
+            <SizedBox height={16} />
+            <Button fullWidth outline variant="lightBlue">Apply Now</Button>
           </Column>
         </Card>
         <Card
           style={{
             minWidth: '240px',
-            marginRight: '3%',
+            marginRight: '2.5%',
+            padding: '25px',
           }}
         >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
+          <Column justifyContent="flex-start">
+            <PlayGames style={{ width: '100%' }} />
+            <SizedBox height={24} />
+            <Text>
+              Get a loan <br></br>in 60 seconds
             </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
+            <SizedBox height={16} />
+            <Button fullWidth outline variant="orange">Apply Now</Button>
           </Column>
         </Card>
         <Card
           style={{
             minWidth: '240px',
-            marginRight: '3%',
+            marginRight: '2.5%',
+            padding: '25px',
           }}
         >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
+          <Column justifyContent="flex-start">
+            <BuyPhone style={{ width: '100%' }} />
+            <SizedBox height={24} />
+            <Text>
+              Get a loan <br></br>in 60 seconds
             </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
-          </Column>
-        </Card>
-        <Card
-          style={{
-            minWidth: '240px',
-            marginRight: '3%',
-          }}
-        >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
-            </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
-          </Column>
-        </Card>
-        <Card
-          style={{
-            minWidth: '240px',
-            marginRight: '3%',
-          }}
-        >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
-            </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
-          </Column>
-        </Card>
-        <Card
-          style={{
-            minWidth: '240px',
-            marginRight: '3%',
-          }}
-        >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
-            </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
-          </Column>
-        </Card>
-        <Card
-          style={{
-            minWidth: '240px',
-            marginRight: '3%',
-          }}
-        >
-          <Column justifyContent="center">
-            <Text size={12} color={Colors.darkGreen} weight={700}>
-              MoreCredit
-            </Text>
-            <SizedBox height={7} />
-            <Text size={12} color={Colors.darkGreen} weight={500}>
-              N300
-            </Text>
+            <SizedBox height={16} />
+            <Button fullWidth outline>Apply Now</Button>
           </Column>
         </Card>
       </Scrollable>

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Styles } from './styles';
 
-export const SizedBox: React.FC<
-  {
-    height?: number;
-    width?: number;
-  } & React.HTMLAttributes<HTMLDivElement>
-> = (props) => {
+export type ISizedBox = {
+  height?: number;
+  width?: number;
+  percent?: boolean;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+export const SizedBox: React.FC<ISizedBox> = (props) => {
   const { children, ...rest } = props;
   return <Styles.SizedBox {...rest}>{children}</Styles.SizedBox>;
 };

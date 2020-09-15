@@ -17,7 +17,7 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
     `};
 
   /* padding: 20px 28px; */
-  min-height: ${rem(56)};
+  min-height: ${rem(45)};
   background-color: ${backgroundColor};
   color: ${({ variant }) => variant !== 'default' && Colors.white};
   font-weight: 500;
@@ -26,8 +26,16 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
   /* margin-right: 5px; */
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'fit-content')};
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: 5px;
   font-family: inherit;
+
+  ${({ outline }) =>
+    outline &&
+    css`
+      background-color: unset;
+      border: 1px solid ${backgroundColor};
+      color: ${backgroundColor};
+    `}
 
   ${({ elevated }) =>
     elevated &&

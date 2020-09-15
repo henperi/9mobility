@@ -1,12 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { rem } from '../../utils/rem';
 import { Colors } from '../../themes/colors';
 import { ScreenSizes } from '../Column/styles';
 
 const SideBar = styled.div`
   height: 100vh;
-  /* min-width: ${rem(240)};
-  max-width: ${rem(240)}; */
   width: fill-available;
   background-color: ${Colors.white};
   padding: ${rem(32)} ${rem(16)};
@@ -21,6 +19,34 @@ const SideBar = styled.div`
   }
 `;
 
+const SideBarLink = styled.div<{ active?: boolean }>`
+  padding: ${rem(5)};
+  padding-left: ${rem(25)};
+  margin-top: ${rem(10)};
+  position: relative;
+  display: flex;
+  color: #627382;
+  font-size: ${rem(15)};
+
+  ${({ active }) =>
+    active &&
+    css`
+      font-weight: 600;
+      color: ${Colors.darkGreen};
+
+      &:before {
+        position: absolute;
+        content: '';
+        top: 0;
+        left: 0;
+        width: 6px;
+        height: 100%;
+        background-color: ${Colors.darkGreen};
+      }
+    `}
+`;
+
 export const Styles = {
   SideBar,
+  SideBarLink,
 };

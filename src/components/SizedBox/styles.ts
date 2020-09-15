@@ -1,9 +1,7 @@
 import styled, { css } from 'styled-components';
+import { ISizedBox } from '.';
 
-const SizedBox = styled.div.attrs({})<{
-  height?: number;
-  width?: number;
-}>`
+const SizedBox = styled.div.attrs({})<ISizedBox>`
   ${({ height }) =>
     height &&
     css`

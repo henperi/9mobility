@@ -4,7 +4,7 @@ import { Spinner } from '../Spinner';
 
 export interface IButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'primary' | 'secondary' | 'Tertiary' | 'Neutral';
+  variant?: 'default' | 'primary' | 'secondary' | 'tertiary' | 'neutral' | 'blackGrey' | 'lightBlue' | 'orange';
   fullWidth?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   disabled?: boolean;
@@ -13,6 +13,7 @@ export interface IButtonProps
   rounded?: boolean;
   borderColor?: string;
   border?: boolean;
+  outline?: boolean;
 }
 
 export const Button: React.FC<IButtonProps> = (props) => {

@@ -23,7 +23,7 @@ export const AppContainer: React.FC = ({ children }) => {
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
         <Row wrap={false}>
-          {Boolean(hasValidAccess) && <SideBar />}
+          {Boolean(hasValidAccess) && <SideBar style={{ maxWidth: rem(240)}} />}
           <Column
             style={{
               width:

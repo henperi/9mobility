@@ -13,7 +13,7 @@ interface IUnitTextFIeld extends React.InputHTMLAttributes<HTMLInputElement> {
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const UnitTextField: React.FC<IUnitTextFIeld> = (props) => {
+export const UnitTextField: React.FC<IUnitTextFIeld> = React.memo((props) => {
   const {
     backgroundColor,
     error,
@@ -98,4 +98,4 @@ export const UnitTextField: React.FC<IUnitTextFIeld> = (props) => {
       ))}
     </Row>
   );
-};
+});

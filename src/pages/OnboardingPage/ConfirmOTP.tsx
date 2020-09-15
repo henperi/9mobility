@@ -18,7 +18,7 @@ import { getFieldError } from '../../utils/formikHelper';
 import { useGlobalStore } from '../../store';
 import { setAuthUser } from '../../store/modules/auth/actions';
 import { SetScreen } from '.';
-// import { useCountdown } from '../../customHooks/useCountdown';
+import { useCountdown } from '../../customHooks/useCountdown';
 
 export interface OnboardingAuthResponse {
   result: {
@@ -50,7 +50,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
     'Mobility.Onboarding/api/Verification/verifyotp',
   );
 
-  const countdown = 50;
+  const countdown = useCountdown(50);
 
   const handleVerifyOTP = async (data: typeof formik.values) => {
     try {

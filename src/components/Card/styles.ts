@@ -12,6 +12,7 @@ export interface ICardProps {
   };
   fullWidth?: boolean;
   fullHeight?: boolean;
+  color?: string;
 }
 
 const Card = styled.div.attrs({})<ICardProps>`
@@ -19,7 +20,7 @@ const Card = styled.div.attrs({})<ICardProps>`
   min-height: 2.5rem;
   width: fit-content;
   border-radius: 4px;
-  background-color: ${Colors.white};
+  background-color: ${({ color }) => color || Colors.white};
   box-shadow: 0 22px 115px -85px rgba(0, 0, 0, 0.7);
   position: relative;
   overflow: hidden;
