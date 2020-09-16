@@ -18,7 +18,7 @@ import { getFieldError } from '../../utils/formikHelper';
 import { useGlobalStore } from '../../store';
 import { setAuthUser } from '../../store/modules/auth/actions';
 import { SetScreen } from '.';
-import { useCountdown } from '../../customHooks/useCountdown';
+import { ResendOTPIn } from '../../components/ResendOTP';
 
 export interface OnboardingAuthResponse {
   result: {
@@ -49,8 +49,6 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
   const [verifyOTP] = usePost<OnboardingAuthResponse>(
     'Mobility.Onboarding/api/Verification/verifyotp',
   );
-
-  const countdown = useCountdown(50);
 
   const handleVerifyOTP = async (data: typeof formik.values) => {
     try {
@@ -131,9 +129,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
               </Button>
             </form>
             <SizedBox height={32} />
-            <Text alignment="center" size={15} variant="lighter">
-              Resend OTP in {countdown}s
-            </Text>
+            <ResendOTPIn time={40} trackingId={trackingId} />
             <SizedBox height={52} />
           </Column>
         </Card>
