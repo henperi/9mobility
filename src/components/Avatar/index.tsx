@@ -5,10 +5,10 @@ interface IAvatar extends HtmlHTMLAttributes<HTMLDivElement> {
   image?: string;
   name?: string;
 }
-export const Avatar: React.FC<IAvatar> = (props) => {
+export const Avatar: React.FC<IAvatar> = ({ image, name, ...props }) => {
   return (
     <Styles.Avatar {...props}>
-      <img src={props.image} />
+      <img src={image} alt={name} />
     </Styles.Avatar>
   );
 };
