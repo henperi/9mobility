@@ -25,4 +25,4 @@ jobs:
         run: npm install -g surge
 
       - name: Deploy to Surge
-        run: npm run build && mv build/index.html build/200.html && surge build https://9mobility.surge.sh/
+        run: npm run deploy-surge
