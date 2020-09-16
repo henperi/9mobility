@@ -33,6 +33,7 @@ export const useTokenRefresher = (state: typeof initialState) => {
     }
   }, [state.auth.user, timeRemaining]);
 
+  // logger.log('timeRemaining', timeRemaining, state.auth);
   const refresh = useCallback(async () => {
     if (!timeRemaining) {
       // dispatch(removeAuthUser());

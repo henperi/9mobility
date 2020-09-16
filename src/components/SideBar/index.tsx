@@ -10,10 +10,16 @@ import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { SizedBox } from '../SizedBox';
 import { Row } from '../Row';
 import { Avatar } from '../Avatar';
+import { useGlobalStore } from '../../store';
 
 export const SideBar: React.FC<HtmlHTMLAttributes<HTMLDivElement>> = (
   props,
 ) => {
+  const {
+    state: {
+      auth: { user },
+    },
+  } = useGlobalStore();
   return (
     <Styles.SideBar {...props}>
       <Logo style={{ marginLeft: rem(20) }} />
@@ -26,9 +32,11 @@ export const SideBar: React.FC<HtmlHTMLAttributes<HTMLDivElement>> = (
               image="https://cdn.cnn.com/cnnnext/dam/assets/140217175126-15-mixed-biracial-black-horizontal-large-gallery.jpg"
             />
             <Column>
-              <Text size={14}>Gbenga Osinowo</Text>
+              <Text size={14}>
+                {user?.firstName} {user?.lastName}
+              </Text>
               <Text color={Colors.blackGrey} size={12}>
-                Gbengaosinowo@gmail
+                {user?.email}
               </Text>
             </Column>
           </Row>
