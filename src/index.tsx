@@ -23,6 +23,14 @@ ReactDOM.render(
 serviceWorker.unregister();
 
 // Attach root container
-debugContextDevtool(container, {
-  disable: process.env.NODE_ENV === 'production',
-});
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line no-underscore-dangle
+const hook = window.__REACT_CONTEXT_DEVTOOL_GLOBAL_HOOK;
+
+if (debugContextDevtool && hook) {
+  debugContextDevtool(container, {
+    disable: process.env.NODE_ENV === 'production',
+  });
+}

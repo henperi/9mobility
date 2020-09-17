@@ -40,7 +40,6 @@ export const Dashboard: React.FC<any> = () => {
 
   return (
     <PageBody>
-      <SizedBox height={40} />
       <Text>Hello {auth.user?.firstName}, Good morning</Text>
       <SizedBox height={24} />
       <Row useAppMargin>

@@ -17,9 +17,9 @@ import { ReactComponent as MobileBorrow } from '../../assets/images/mobileBorrow
 
 export const AirtimePage: React.FC = () => {
   return (
-    <PageBody style={{ padding: '4%' }}>
+    <PageBody>
       <CardStyles.CardHeader
-        style={{ height: '100%', position: 'relative', padding: '24px' }}
+        style={{ height: '100%', position: 'relative', padding: '28px' }}
       >
         <img src={appLogoBig} alt="appLogoBig" />
 

@@ -42,25 +42,52 @@ export const SideBar: React.FC<HtmlHTMLAttributes<HTMLDivElement>> = (
           </Row>
         </Card>
         <SizedBox height={10} />
-        <Styles.SideBarLink active>Dashboard</Styles.SideBarLink>
+        <Styles.SideBarLink
+          activeClassName="active-sidebar-link"
+          to="/dashboard"
+        >
+          Dashboard
+        </Styles.SideBarLink>
         <SizedBox height={20} />
 
-        <Styles.SideBarLink>
+        <Styles.SideBarLink
+          activeClassName="active-sidebar-link"
+          to="any"
+          onClick={(e) => e.preventDefault()}
+        >
           <Text size={12} color={Colors.blackGrey} weight={600}>
             Network & Subscriber services
           </Text>
         </Styles.SideBarLink>
         <SizedBox height={5} />
 
-        <Styles.SideBarLink>Airtime</Styles.SideBarLink>
-        <Styles.SideBarLink>Data</Styles.SideBarLink>
-        <Styles.SideBarLink>Call History</Styles.SideBarLink>
-        <Styles.SideBarLink>Data Usage</Styles.SideBarLink>
-        <Styles.SideBarLink>Transaction History</Styles.SideBarLink>
-        <Styles.SideBarLink>Prepaid Plans</Styles.SideBarLink>
-        <Styles.SideBarLink>Postpaid/Corporate</Styles.SideBarLink>
-        <Styles.SideBarLink>Roaming</Styles.SideBarLink>
-        <Styles.SideBarLink>My Subscribed Services</Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/airtime">
+          Airtime
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Data
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Call History
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Data Usage
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Transaction History
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Prepaid Plans
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Postpaid/Corporate
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          Roaming
+        </Styles.SideBarLink>
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+          My Subscribed Services
+        </Styles.SideBarLink>
       </Column>
     </Styles.SideBar>
   );

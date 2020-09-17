@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConfirmNumber } from '../pages/OnboardingPage/ConfirmNumber';
 import { ConfirmOTP } from '../pages/OnboardingPage/ConfirmOTP';
 import { Register } from '../pages/OnboardingPage/Register';
@@ -10,30 +10,23 @@ import { AirtimePage } from '../pages/Airtime';
 
 export const Routes = () => {
   return (
-    <BrowserRouter>
-      {/* <Toaster /> */}
-      <Switch>
-        <Route exact path="/" render={() => <Redirect to="/onboarding" />} />
-        <Route
-          exact
-          path="/onboarding"
-          render={() => <Redirect to="/onboarding/confirmNumber" />}
-        />
-        <Route
-          exact
-          path="/onboarding/confirmNumber"
-          component={ConfirmNumber}
-        />
-        <Route exact path="/onboarding/verifyOTP" component={ConfirmOTP} />
-        <Route exact path="/onboarding/register" component={Register} />
-        <Route
-          exact
-          path="/onboarding/successful"
-          component={RegisterationComplete}
-        />
-        <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-        <ProtectedRoute exact path="/airtime" component={AirtimePage} />
-      </Switch>
-    </BrowserRouter>
+    <Switch>
+      <Route exact path="/" render={() => <Redirect to="/onboarding" />} />
+      <Route
+        exact
+        path="/onboarding"
+        render={() => <Redirect to="/onboarding/confirmNumber" />}
+      />
+      <Route exact path="/onboarding/confirmNumber" component={ConfirmNumber} />
+      <Route exact path="/onboarding/verifyOTP" component={ConfirmOTP} />
+      <Route exact path="/onboarding/register" component={Register} />
+      <Route
+        exact
+        path="/onboarding/successful"
+        component={RegisterationComplete}
+      />
+      <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+      <ProtectedRoute exact path="/airtime" component={AirtimePage} />
+    </Switch>
   );
 };

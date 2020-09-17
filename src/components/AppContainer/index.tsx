@@ -1,5 +1,6 @@
 import React from 'react';
 import { ThemeProvider } from 'styled-components';
+import { BrowserRouter } from 'react-router-dom';
 import { Styles } from './style';
 import { TopBar } from '../TopBar';
 import { SideBar } from '../SideBar';
@@ -23,22 +24,24 @@ export const AppContainer: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
-        <Row wrap={false}>
-          {Boolean(hasValidAccess) && !isOnboardingRoute && (
-            <SideBar style={{ maxWidth: rem(240) }} />
-          )}
-          <Column
-            style={{
-              width:
-                width > ScreenSizes.lg && hasValidAccess && !isOnboardingRoute
-                  ? `calc(100% - ${rem(240)}`
-                  : '100%',
-            }}
-          >
-            <TopBar auth={Boolean(hasValidAccess)} />
-            {children}
-          </Column>
-        </Row>
+        <BrowserRouter>
+          <Row wrap={false}>
+            {Boolean(hasValidAccess) && !isOnboardingRoute && (
+              <SideBar style={{ maxWidth: rem(240) }} />
+            )}
+            <Column
+              style={{
+                width:
+                  width > ScreenSizes.lg && hasValidAccess && !isOnboardingRoute
+                    ? `calc(100% - ${rem(240)}`
+                    : '100%',
+              }}
+            >
+              <TopBar auth={Boolean(hasValidAccess)} />
+              {children}
+            </Column>
+          </Row>
+        </BrowserRouter>
       </Styles.AppContainer>
     </ThemeProvider>
   );

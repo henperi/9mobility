@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { NavLink } from 'react-router-dom';
 import { rem } from '../../utils/rem';
 import { Colors } from '../../themes/colors';
 import { ScreenSizes } from '../Column/styles';
@@ -19,7 +20,9 @@ const SideBar = styled.div`
   }
 `;
 
-const SideBarLink = styled.div<{ active?: boolean }>`
+// Link
+
+const SideBarLink = styled(NavLink)<{ active?: boolean }>`
   padding: ${rem(5)};
   padding-left: ${rem(25)};
   margin-top: ${rem(10)};
@@ -27,6 +30,22 @@ const SideBarLink = styled.div<{ active?: boolean }>`
   display: flex;
   color: #627382;
   font-size: ${rem(15)};
+  text-decoration: none;
+
+  &.active-sidebar-link {
+    font-weight: 600;
+    color: ${Colors.darkGreen};
+
+    &:before {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background-color: ${Colors.darkGreen};
+    }
+  }
 
   ${({ active }) =>
     active &&

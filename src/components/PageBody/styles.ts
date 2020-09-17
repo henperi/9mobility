@@ -12,7 +12,7 @@ const PageBody = styled.div.attrs({})<{
     `}
 
   min-height: calc(100vh - 96px);
-  padding: 20px 10%;
+  padding: 4%;
   position: relative;
   width: 100%;
   z-index: 1;
