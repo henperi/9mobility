@@ -6,6 +6,7 @@ import { Register } from '../pages/OnboardingPage/Register';
 import { RegisterationComplete } from '../pages/OnboardingPage/RegisterationComplete';
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Dashboard } from '../pages/Dashboard';
+import { AirtimePage } from '../pages/Airtime';
 
 export const Routes = () => {
   return (
@@ -31,6 +32,7 @@ export const Routes = () => {
           component={RegisterationComplete}
         />
         <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+        <ProtectedRoute exact path="/airtime" component={AirtimePage} />
       </Switch>
     </BrowserRouter>
   );
