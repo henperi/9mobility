@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { Routes } from './routes';
+import { AppProvider } from './store';
+import { rootReducer, initialState } from './store/modules';
+import { initialiseStore } from './store/modules/init/actions';
 
-function App() {
+import { AppContainer } from './components/AppContainer';
+import { Spinner } from './components/Spinner';
+
+/**
+ * The App Component
+ *
+ * @returns Jsx Element
+ */
+export function App() {
+  const [state, dispatch] = React.useReducer(rootReducer, initialState);
+
+  useEffect(() => {
+    initialiseStore(dispatch);
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppProvider state={state} dispatch={dispatch}>
+      <AppContainer>
+        {state.app.isReady ? <Routes /> : <Spinner isFixed />}
+      </AppContainer>
+    </AppProvider>
   );
 }
-
-export default App;
