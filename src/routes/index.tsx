@@ -7,6 +7,7 @@ import { RegisterationComplete } from '../pages/OnboardingPage/RegisterationComp
 import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Dashboard } from '../pages/Dashboard';
 import { AirtimePage } from '../pages/Airtime';
+import { BuyWithPin } from '../pages/Airtime/BuyWithPin';
 
 export const Routes = () => {
   return (
@@ -27,6 +28,11 @@ export const Routes = () => {
       />
       <ProtectedRoute exact path="/dashboard" component={Dashboard} />
       <ProtectedRoute exact path="/airtime" component={AirtimePage} />
+      <ProtectedRoute
+        exact
+        path="/airtime/buy-with-pin"
+        component={BuyWithPin}
+      />
     </Switch>
   );
 };

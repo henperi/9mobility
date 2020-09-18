@@ -56,35 +56,74 @@ export function useFetch<T>(url: string) {
  * @returns the lazy [method] to call
  */
 export function useLazyFetch<T>(url: string) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<T>();
+  const [errorResponse, setErrorResponse] = useState<{
+    responseCode: number;
+    message: string;
+  } | null>(null);
+
   const callService = async () => {
-    return httpService.get(url).then((result: AxiosResponse<T>) => {
-      return { loading: false, data: result.data };
-    });
-  };
+    setLoading(true);
+    setErrorResponse(null);
 
-  return [callService];
-}
-
-/**
- * This is a custom hook that is used to make a lazy api post request
- * @param url: the url to post to
- * @param data the data to post
- *
- * @returns the lazy [method] to call
- */
-export function usePost<T>(url: string, data?: any) {
-  const callService = async (serviceData?: any) => {
     return httpService
-      .post(url, data || serviceData)
+      .get(url)
       .then((result: AxiosResponse<T>) => {
-        return { loading: false, data: result.data };
+        setLoading(false);
+        setData(result.data);
+
+        return { loading: false, data: result.data, error: null };
       })
       .catch((error: AxiosError<Error1 | Error2>) => {
         const errorRes = handleAxiosError(error);
+        setErrorResponse(errorRes);
+        setLoading(false);
 
         throw errorRes;
       });
   };
 
-  return [callService];
+  const response = { loading, data, error: errorResponse };
+  return [callService, response] as const;
+}
+
+/**
+ * This is a custom hook that is used to make a lazy api post request
+ * @param url: the url to post to
+ * @param payload the data to post
+ *
+ * @returns the lazy [method] to call
+ */
+export function usePost<T>(url: string, payload?: any) {
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<T>();
+  const [errorResponse, setErrorResponse] = useState<{
+    responseCode: number;
+    message: string;
+  } | null>(null);
+
+  const callService = async (serviceData = payload) => {
+    setLoading(true);
+    setErrorResponse(null);
+
+    return httpService
+      .post(url, serviceData)
+      .then((result: AxiosResponse<T>) => {
+        setLoading(false);
+        setData(result.data);
+
+        return { loading: false, data: result.data, error: null };
+      })
+      .catch((error: AxiosError<Error1 | Error2>) => {
+        const errorRes = handleAxiosError(error);
+        setErrorResponse(errorRes);
+        setLoading(false);
+
+        throw errorRes;
+      });
+  };
+
+  const response = { loading, data, error: errorResponse };
+  return [callService, response] as const;
 }

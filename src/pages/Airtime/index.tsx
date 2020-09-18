@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { Styles as CardStyles } from '../../components/Card/styles';
 import { PageBody } from '../../components/PageBody';
@@ -16,6 +17,8 @@ import { ReactComponent as TransferForward } from '../../assets/images/transferF
 import { ReactComponent as MobileBorrow } from '../../assets/images/mobileBorrow.svg';
 
 export const AirtimePage: React.FC = () => {
+  const history = useHistory();
+
   return (
     <PageBody>
       <CardStyles.CardHeader
@@ -64,7 +67,11 @@ export const AirtimePage: React.FC = () => {
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={3} fullHeight>
-          <Card fullWidth fullHeight>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/airtime/buy-with-pin')}
+          >
             <NotePin />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
