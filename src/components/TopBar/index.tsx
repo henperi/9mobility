@@ -15,7 +15,7 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 }
 
 export const TopBar: React.FC<ITopBar> = (props) => {
-  const { auth } = props;
+  const { auth, ...rest } = props;
   const { dispatch, state } = useGlobalStore();
 
   const [refresh] = useTokenRefresher(state);
@@ -29,7 +29,7 @@ export const TopBar: React.FC<ITopBar> = (props) => {
   };
 
   return (
-    <Styles.TopBar auth={auth}>
+    <Styles.TopBar {...rest} auth={auth}>
       {!auth ? (
         <>
           <Logo />

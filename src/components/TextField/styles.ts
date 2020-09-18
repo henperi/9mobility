@@ -3,12 +3,9 @@ import { Colors } from '../../themes/colors';
 import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { ITextField } from '.';
 import { rem } from '../../utils/rem';
-// import { fontColor } from '../../themes/colors';
-// import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 
 const Input = styled.input.attrs({})`
   outline: none;
-  /* color: ${Colors.blackGrey}; */
   font: inherit;
   border: unset;
   background-color: transparent;
@@ -17,8 +14,8 @@ const Input = styled.input.attrs({})`
   margin: auto 0%;
   width: 100%;
   max-width: fill-available;
-  max-height: 50px;
-  min-height: 50px;
+  /* max-height: 50px; */
+  min-height: 40px;
   padding: 0 ${rem(10)};
 `;
 
@@ -38,6 +35,7 @@ const TextField = styled.div.attrs((props: ITextField) => ({
   backgroundColor?: string;
   hasError?: boolean;
   disabled?: boolean;
+  dropDown?: boolean;
 }>`
   background-color: ${(props) => props.backgroundColor};
   border-radius: ${rem(5)};
@@ -45,6 +43,7 @@ const TextField = styled.div.attrs((props: ITextField) => ({
   align-items: center;
   width: 100%;
   overflow: hidden;
+  position: relative;
 
   &:focus-within {
     border: 1px solid ${Colors.lightGreen};

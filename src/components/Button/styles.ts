@@ -62,12 +62,12 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
     `}
 `;
 
-const DropDownStack = styled(StackStyles.Stack)`
+export const DropDownStack = styled(StackStyles.Stack)`
   position: relative;
   width: fit-content;
 `;
 
-const DropDownContainer = styled(StackStyles.StackChild)`
+export const DropDownContainer = styled(StackStyles.StackChild)`
   position: absolute;
   top: calc(100%);
   z-index: 1;
@@ -82,7 +82,7 @@ const DropDownContainer = styled(StackStyles.StackChild)`
   min-width: 100%;
 `;
 
-const DropDownItem = styled(StackStyles.Stack)`
+export const DropDownItem = styled(StackStyles.Stack)`
   cursor: pointer;
   padding: 8px;
   cursor: pointer;

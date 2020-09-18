@@ -17,8 +17,8 @@ export const DropDownButton: React.FC<IDropDownButton> = (props) => {
     style,
     ...rest
   } = props;
-  const [showDropDown, setshowDropDown] = useState(false);
   const [name, setName] = useState(dropdownOptions[0].name);
+  const [showDropDown, setshowDropDown] = useState(false);
 
   const toggleDropDown = () => {
     setshowDropDown(!showDropDown);

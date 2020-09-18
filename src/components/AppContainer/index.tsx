@@ -37,7 +37,10 @@ export const AppContainer: React.FC = ({ children }) => {
                     : '100%',
               }}
             >
-              <TopBar auth={Boolean(hasValidAccess)} />
+              <TopBar
+                auth={Boolean(hasValidAccess)}
+                style={{ height: !isOnboardingRoute ? '72px' : '92px' }}
+              />
               {children}
             </Column>
           </Row>

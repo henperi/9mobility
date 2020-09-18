@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Styles } from './styles';
 import { Text } from '../Text';
@@ -7,6 +7,14 @@ import { Colors } from '../../themes/colors';
 import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { Column } from '../Column';
 import { UnitTextField } from './UnitTextField';
+
+import { ReactComponent as ArrowComponent } from '../../assets/images/arrowDown.svg';
+import {
+  DropDownContainer,
+  DropDownItem,
+  DropDownStack,
+} from '../Button/styles';
+import { generateShortId } from '../../utils/generateShortId';
 
 export interface ITextField
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -22,6 +30,11 @@ export interface ITextField
   multiUnits?: boolean;
   numberOfUnits?: number;
   containerStyle?: React.CSSProperties;
+  dropDown?: boolean;
+  dropDownOptions?: {
+    label: string;
+    value: string;
+  }[];
 }
 
 export const TextField: React.FC<ITextField> = (props) => {
@@ -39,8 +52,32 @@ export const TextField: React.FC<ITextField> = (props) => {
     multiUnits,
     numberOfUnits,
     containerStyle,
+    dropDown,
+    dropDownOptions,
     ...inputProps
   } = props;
+
+  const [showDropDown, setshowDropDown] = useState(false);
+  const [value, setValue] = useState({
+    label: '',
+    value: '',
+  });
+
+  const toggleDropDown = () => {
+    setshowDropDown(!showDropDown);
+  };
+
+  useEffect(() => {
+    const closeDropDown = () => {
+      if (showDropDown) {
+        setshowDropDown(false);
+      }
+    };
+
+    window.addEventListener('click', closeDropDown);
+
+    return () => window.removeEventListener('click', closeDropDown);
+  }, [showDropDown]);
 
   const renderChildren = () => {
     if (multiUnits) {
@@ -55,17 +92,66 @@ export const TextField: React.FC<ITextField> = (props) => {
       );
     }
 
+    const getDropDownProps = () => {
+      if (dropDown) {
+        return {
+          readOnly: true,
+          value: value.value,
+          onClick: toggleDropDown,
+        };
+      }
+      return null;
+    };
+
     return (
-      <Styles.TextField
-        hasError={Boolean(error)}
-        backgroundColor={backgroundColor}
-        disabled={!!inputProps.disabled}
-        style={style}
-      >
-        {leftIcon && <div className="inputIcon">{leftIcon}</div>}
-        <Styles.Input {...inputProps} />
-        {rightIcon && <div className="inputIcon">{rightIcon}</div>}
-      </Styles.TextField>
+      <>
+        <Styles.TextField
+          hasError={Boolean(error)}
+          backgroundColor={backgroundColor}
+          disabled={!!inputProps.disabled}
+          style={style}
+          dropDown={dropDown}
+        >
+          {leftIcon && <div className="inputIcon">{leftIcon}</div>}
+          <Styles.Input {...inputProps} {...getDropDownProps()} />
+          {rightIcon ||
+            (dropDown && (
+              <div className="inputIcon">
+                {rightIcon || <ArrowComponent onClick={toggleDropDown} />}
+              </div>
+            ))}
+        </Styles.TextField>
+
+        {dropDownOptions && showDropDown && (
+          <DropDownStack style={{ width: '100%' }}>
+            <DropDownContainer>
+              {dropDownOptions?.map((option) => {
+                return (
+                  <DropDownItem
+                    key={generateShortId()}
+                    onClick={() => {
+                      setValue(option);
+
+                      if (inputProps.onChange) {
+                        const e = {
+                          target: {
+                            value: option.value,
+                          },
+                        };
+
+                        inputProps.onChange(e as any);
+                      }
+                    }}
+                    role="presentation"
+                  >
+                    {option.label}
+                  </DropDownItem>
+                );
+              })}
+            </DropDownContainer>
+          </DropDownStack>
+        )}
+      </>
     );
   };
 
