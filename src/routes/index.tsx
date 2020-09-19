@@ -8,6 +8,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Dashboard } from '../pages/Dashboard';
 import { AirtimePage } from '../pages/Airtime';
 import { BuyWithPin } from '../pages/Airtime/BuyWithPin';
+import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
 
 export const Routes = () => {
   return (
@@ -32,6 +33,11 @@ export const Routes = () => {
         exact
         path="/airtime/buy-with-pin"
         component={BuyWithPin}
+      />
+      <ProtectedRoute
+        exact
+        path="/airtime/transfer"
+        component={TransferAirtime}
       />
     </Switch>
   );
