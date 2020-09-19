@@ -84,7 +84,11 @@ export const AirtimePage: React.FC = () => {
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={3} fullHeight>
-          <Card fullWidth fullHeight>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/airtime/transfer')}
+          >
             <TransferForward />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
