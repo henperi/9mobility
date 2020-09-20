@@ -184,8 +184,6 @@ export const BorrowAirtime: React.FC = () => {
         <Column>
           <Text>Hi {user?.firstName}</Text>
           <SizedBox height={15} />
-          <Text>Your request was successful</Text>
-          <SizedBox height={15} />
           {data?.message && <Text>{data?.message}</Text>}
           <SizedBox height={10} />
           <Button
