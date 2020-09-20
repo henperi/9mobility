@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
 import { Styles } from './style';
@@ -21,13 +21,30 @@ export const AppContainer: React.FC = ({ children }) => {
 
   const hasValidAccess = auth.isAuthenticated && auth.user?.email;
 
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  useEffect(() => {
+    const closeSidebar = () => {
+      if (showSidebar) {
+        setShowSidebar(false);
+      }
+    };
+
+    window.addEventListener('click', closeSidebar);
+
+    return () => window.removeEventListener('click', closeSidebar);
+  }, [showSidebar]);
+
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
         <BrowserRouter>
           <Row wrap={false}>
             {Boolean(hasValidAccess) && !isOnboardingRoute && (
-              <SideBar style={{ maxWidth: rem(240) }} />
+              <SideBar
+                style={{ maxWidth: rem(240) }}
+                showSidebar={showSidebar}
+              />
             )}
             <Column
               style={{
@@ -40,6 +57,7 @@ export const AppContainer: React.FC = ({ children }) => {
               <TopBar
                 auth={Boolean(hasValidAccess)}
                 style={{ height: !isOnboardingRoute ? '72px' : '92px' }}
+                setShowSidebar={setShowSidebar}
               />
               {children}
             </Column>

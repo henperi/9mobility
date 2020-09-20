@@ -4,7 +4,7 @@ import { rem } from '../../utils/rem';
 import { Colors } from '../../themes/colors';
 import { ScreenSizes } from '../Column/styles';
 
-const SideBar = styled.div`
+const SideBar = styled.div<{ showSidebar?: boolean }>`
   height: 100vh;
   width: fill-available;
   background-color: ${Colors.white};
@@ -16,7 +16,11 @@ const SideBar = styled.div`
   z-index: 10;
 
   @media (max-width: ${ScreenSizes.lg}px) {
-    display: none;
+    /* display: none; */
+    position: fixed;
+    transform: ${({ showSidebar }) =>
+      showSidebar ? 'translateX(0)' : 'translateX(-240rem)'};
+    transition: transform 600ms ease-in-out;
   }
 `;
 
