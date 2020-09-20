@@ -77,7 +77,11 @@ export const AirtimePage: React.FC = () => {
       <SizedBox height={40} />
       <Row useAppMargin>
         <Column useAppMargin md={6} lg={3} fullHeight>
-          <Card fullWidth fullHeight>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/airtime/buy-with-debit-card')}
+          >
             <CreditCard />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
