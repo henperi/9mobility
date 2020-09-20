@@ -10,7 +10,7 @@ const TopBar = styled.div<ITopBar>`
   height: 96px;
   display: flex;
   align-items: center;
-  padding: 0 10%;
+  padding: 0 4%;
   position: sticky;
   top: 0;
   display: flex;
@@ -52,6 +52,33 @@ const TopBar = styled.div<ITopBar>`
   }
 `;
 
+const HanburgerMenu = styled.div`
+  width: 15px;
+  height: 15px;
+  position: relative;
+
+  &:before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+
+  &:after {
+    position: absolute;
+    content: '';
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+`;
+
 export const Styles = {
   TopBar,
+  HanburgerMenu,
 };

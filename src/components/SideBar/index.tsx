@@ -12,14 +12,16 @@ import { Row } from '../Row';
 import { Avatar } from '../Avatar';
 import { useGlobalStore } from '../../store';
 
-export const SideBar: React.FC<HtmlHTMLAttributes<HTMLDivElement>> = (
-  props,
-) => {
+interface ISidebar extends HtmlHTMLAttributes<HTMLDivElement> {
+  showSidebar?: boolean;
+}
+export const SideBar: React.FC<ISidebar> = (props) => {
   const {
     state: {
       auth: { user },
     },
   } = useGlobalStore();
+
   return (
     <Styles.SideBar {...props}>
       <Logo style={{ marginLeft: rem(20) }} />
