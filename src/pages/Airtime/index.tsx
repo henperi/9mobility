@@ -15,9 +15,32 @@ import { ReactComponent as CreditCard } from '../../assets/images/creditCard.svg
 import { ReactComponent as NotePin } from '../../assets/images/notePin.svg';
 import { ReactComponent as TransferForward } from '../../assets/images/transferForward.svg';
 import { ReactComponent as MobileBorrow } from '../../assets/images/mobileBorrow.svg';
+import { useFetch } from '../../customHooks/useRequests';
+import { Spinner } from '../../components/Spinner';
+
+interface AirtimeDataResp {
+  result: {
+    mobileNumber: string;
+    airtimeModel: {
+      balance: string;
+      bonusBalance: string;
+    };
+    dataModel: {
+      balance: string;
+      bonusBalance: string;
+      isRollOver: boolean;
+      expiryDate: string;
+      bonusExpiryDate: string;
+    };
+  };
+}
 
 export const AirtimePage: React.FC = () => {
   const history = useHistory();
+
+  const { data, loading } = useFetch<AirtimeDataResp>(
+    'Mobility.Account/api/Balance/AirtimeAndData',
+  );
 
   return (
     <PageBody>
@@ -37,7 +60,7 @@ export const AirtimePage: React.FC = () => {
                 Airtime Balance
               </Text>
               <Text size={24} weight={500}>
-                ₦850.59
+                {loading ? <Spinner /> : data?.result.airtimeModel.balance}
               </Text>
             </Column>
             <Column useAppMargin xs={6} md={3} lg={2}>
@@ -45,7 +68,7 @@ export const AirtimePage: React.FC = () => {
                 Airtime Bonus
               </Text>
               <Text size={24} weight={500}>
-                ₦2,000
+                {loading ? <Spinner /> : data?.result.airtimeModel.bonusBalance}
               </Text>
             </Column>
           </Row>
@@ -101,7 +124,11 @@ export const AirtimePage: React.FC = () => {
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={3} fullHeight>
-          <Card fullWidth fullHeight>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/airtime/borrow')}
+          >
             <MobileBorrow />
             <SizedBox height={45} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
