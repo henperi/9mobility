@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { DropDownButton } from '../../components/Button/DropdownButton';
 import { Card } from '../../components/Card';
@@ -45,6 +46,8 @@ export const SimBalances: React.FC = () => {
       setmobile(data.result.mobileNumber);
     }
   }, [data]);
+
+  const history = useHistory();
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
@@ -93,10 +96,17 @@ export const SimBalances: React.FC = () => {
             <SizedBox height={25} />
             <Row useAppMargin>
               <Column useAppMargin xs={6}>
-                <Button fullWidth>Airtime</Button>
+                <Button onClick={() => history.push('/airtime')} fullWidth>
+                  Airtime
+                </Button>
               </Column>
               <Column useAppMargin xs={6}>
-                <Button fullWidth outline variant="secondary">
+                <Button
+                  onClick={() => history.push('/airtime')}
+                  fullWidth
+                  outline
+                  variant="secondary"
+                >
                   Data
                 </Button>
               </Column>

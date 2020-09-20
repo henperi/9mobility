@@ -9,6 +9,7 @@ import { Dashboard } from '../pages/Dashboard';
 import { AirtimePage } from '../pages/Airtime';
 import { BuyWithPin } from '../pages/Airtime/BuyWithPin';
 import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
+import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
 
 export const Routes = () => {
   return (
@@ -39,6 +40,7 @@ export const Routes = () => {
         path="/airtime/transfer"
         component={TransferAirtime}
       />
+      <ProtectedRoute exact path="/airtime/borrow" component={BorrowAirtime} />
     </Switch>
   );
 };
