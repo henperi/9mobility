@@ -14,6 +14,7 @@ const SideBar = styled.div<{ showSidebar?: boolean }>`
   top: 0;
   left: 0;
   z-index: 10;
+  overflow-y: auto;
 
   @media (max-width: ${ScreenSizes.lg}px) {
     /* display: none; */
