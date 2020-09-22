@@ -8,10 +8,11 @@ export const Spinner: React.FC<{
   size?: number;
   withLogo?: boolean;
 }> = (props) => {
-  const { isFixed = false, size = 50, withLogo } = props;
+  const { isFixed = false, size = 50, withLogo, children } = props;
   return (
     <Styles.Spinner isFixed={isFixed} size={size}>
       {withLogo && <Logo style={{ width: '100%' }} />}
+      {children}
     </Styles.Spinner>
   );
 };

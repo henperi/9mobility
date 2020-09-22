@@ -82,6 +82,7 @@ const Column = styled.div.attrs(() => ({}))<IColumn>`
   width: 100%;
   /* height: fit-content; */
   height: ${({ fullHeight }) => (fullHeight ? 'inherit' : 'fit-content')};
+  min-height: ${({ fullHeight }) => (fullHeight ? 'inherit' : 'fit-content')};
 
   ${({ alignItems }) =>
     alignItems &&

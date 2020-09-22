@@ -11,6 +11,7 @@ import { BuyWithPin } from '../pages/Airtime/BuyWithPin';
 import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
 import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
 import { BuyWithDebitCard } from '../pages/Airtime/BuyWithDebitCard';
+import { TransactionHistoryPage } from '../pages/TransactionHistory';
 
 export const Routes = () => {
   return (
@@ -46,6 +47,11 @@ export const Routes = () => {
         exact
         path="/airtime/buy-with-debit-card"
         component={BuyWithDebitCard}
+      />
+      <ProtectedRoute
+        exact
+        path="/transaction/history"
+        component={TransactionHistoryPage}
       />
     </Switch>
   );

@@ -18,13 +18,35 @@ interface Error2 {
   responseCode: number;
 }
 
+interface IParam {
+  [x: string]: string | number;
+}
+const concatParams = (params?: IParam) => {
+  let result = '';
+
+  if (params) {
+    const resultString = Object.keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join('&');
+
+    if (resultString) {
+      result = `?${resultString}`;
+    }
+  }
+
+  return result;
+};
+
+// concatParams();
+
 /**
  * This is a custom hook that is used to make api get requests
  * @param url
+ * @param params
  *
  * @returns an object containg error, loading and data
  */
-export function useFetch<T>(url: string) {
+export function useFetch<T>(url: string, params?: IParam) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<T>();
   const [error, setError] = useState();
@@ -32,14 +54,13 @@ export function useFetch<T>(url: string) {
   const refetch = useCallback(
     () =>
       httpService
-        .get(url)
+        .get(url + concatParams(params))
         .then((result: AxiosResponse<T>) => {
           setLoading(false);
           setData(result.data);
         })
         .catch((err) => setError(err)),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [url],
+    [params, url],
   );
 
   useEffect(() => {
@@ -52,10 +73,11 @@ export function useFetch<T>(url: string) {
 /**
  * This is a custom hook that is used to make a lazy api get requests
  * @param url
+ * @param params
  *
  * @returns the lazy [method] to call
  */
-export function useLazyFetch<T>(url: string) {
+export function useLazyFetch<T>(url: string, params?: IParam) {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<T>();
   const [errorResponse, setErrorResponse] = useState<{
@@ -68,7 +90,7 @@ export function useLazyFetch<T>(url: string) {
     setErrorResponse(null);
 
     return httpService
-      .get(url)
+      .get(url + concatParams(params))
       .then((result: AxiosResponse<T>) => {
         setLoading(false);
         setData(result.data);
@@ -82,7 +104,7 @@ export function useLazyFetch<T>(url: string) {
 
         throw errorRes;
       });
-  }, [url]);
+  }, [params, url]);
 
   const response = { loading, data, error: errorResponse };
   return [callService, response] as const;

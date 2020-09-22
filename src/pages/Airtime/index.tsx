@@ -55,22 +55,30 @@ export const AirtimePage: React.FC = () => {
           </Text>
           <SizedBox height={32} />
           <Row wrap useAppMargin>
-            <Column useAppMargin xs={6} md={3} lg={2}>
-              <Text size={12} weight={500} color={Colors.grey}>
-                Airtime Balance
-              </Text>
-              <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.airtimeModel.balance}
-              </Text>
-            </Column>
-            <Column useAppMargin xs={6} md={3} lg={2}>
-              <Text size={12} weight={500} color={Colors.grey}>
-                Airtime Bonus
-              </Text>
-              <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.airtimeModel.bonusBalance}
-              </Text>
-            </Column>
+            {loading ? (
+              <SizedBox height={50}>
+                <Spinner isFixed>Gathering your balances</Spinner>
+              </SizedBox>
+            ) : (
+              <>
+                <Column useAppMargin xs={6} md={3} lg={2}>
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Airtime Balance
+                  </Text>
+                  <Text size={24} weight={500}>
+                    {data?.result.airtimeModel.balance}
+                  </Text>
+                </Column>
+                <Column useAppMargin xs={6} md={3} lg={2}>
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Airtime Bonus
+                  </Text>
+                  <Text size={24} weight={500}>
+                    {data?.result.airtimeModel.bonusBalance}
+                  </Text>
+                </Column>
+              </>
+            )}
           </Row>
         </Column>
       </CardStyles.CardHeader>

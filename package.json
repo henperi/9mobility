@@ -17,6 +17,7 @@
     "axios": "^0.20.0",
     "formik": "^2.1.5",
     "lodash": "^4.17.20",
+    "luxon": "^1.25.0",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-context-devtool": "^2.0.0",
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.161",
+    "@types/luxon": "^1.25.0",
     "@types/react-router-dom": "^5.1.5",
     "@types/shortid": "0.0.29",
     "@types/styled-components": "^5.1.2",
