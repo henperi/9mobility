@@ -21,6 +21,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   responseCode: number;
@@ -63,11 +64,15 @@ export const TransferAirtime: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleTransferAirtime = async () => {
-    const response = await transferAirtime(formik.values);
+    try {
+      const response = await transferAirtime(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 

@@ -63,7 +63,7 @@ export function useLazyFetch<T>(url: string) {
     message: string;
   } | null>(null);
 
-  const callService = async () => {
+  const callService = useCallback(async () => {
     setLoading(true);
     setErrorResponse(null);
 
@@ -82,7 +82,7 @@ export function useLazyFetch<T>(url: string) {
 
         throw errorRes;
       });
-  };
+  }, [url]);
 
   const response = { loading, data, error: errorResponse };
   return [callService, response] as const;

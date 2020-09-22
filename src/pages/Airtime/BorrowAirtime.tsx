@@ -21,6 +21,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
+import { logger } from '../../utils/logger';
 
 interface BorrowEligibilityResp {
   result: {
@@ -125,11 +126,15 @@ export const BorrowAirtime: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleborrowAirtime = async () => {
-    const response = await borrowAirtime(formik.values);
+    try {
+      const response = await borrowAirtime(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 

@@ -72,10 +72,10 @@ export const Wallet: React.FC = () => {
       return (
         <Column fullHeight alignItems="space-between">
           <DropDownButton
-            dropdownOptions={[{ id: mobile, name: mobile }]}
+            dropdownOptions={[{ value: mobile, label: mobile }]}
             useDefaultName={false}
             variant="default"
-            dropDownChange={(e) => setmobile(e.name)}
+            dropDownChange={(e) => setmobile(e.value)}
             style={{
               minWidth: '180px',
               display: 'flex',

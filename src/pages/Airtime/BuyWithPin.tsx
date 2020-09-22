@@ -21,9 +21,8 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-// import { handleAxiosError } from '../../utils/handleAxiosError';
-// import { logger } from '../../utils/logger';
-// import { logger } from '../../utils/logger';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   responseCode: number;
@@ -36,6 +35,8 @@ export const BuyWithPin: React.FC = () => {
   const [rechargeWithPin, { loading, data, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Airtime/RechargeWithPin',
   );
+
+  const { mobileNumbers } = useGetMobileNumbers();
 
   const {
     state: {
@@ -74,11 +75,15 @@ export const BuyWithPin: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleRechargeWithPin = async () => {
-    const response = await rechargeWithPin(formik.values);
+    try {
+      const response = await rechargeWithPin(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 
@@ -211,10 +216,7 @@ export const BuyWithPin: React.FC = () => {
                   label="Select Phone Number"
                   placeholder="Select Phone"
                   dropDown
-                  dropDownOptions={[
-                    { label: '09095017151', value: '09095017151' },
-                    { label: '09091881282', value: '09091881282' },
-                  ]}
+                  dropDownOptions={mobileNumbers}
                   value={formik.values.recipientMobileNumber}
                   onChange={(e) =>
                     formik.setFieldValue(

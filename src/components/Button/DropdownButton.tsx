@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Button, IButtonProps } from '.';
+import { generateShortId } from '../../utils/generateShortId';
 import { Styles } from './styles';
 
 type IDropDownButton = Omit<IButtonProps, 'dropDownchange'> & {
-  dropdownOptions: { id: string; name: string }[];
-  dropDownChange?: ({ id, name }: { id: string; name: string }) => any;
+  dropdownOptions?: { label: string; value: string }[];
+  dropDownChange?: ({ value, label }: { value: string; label: string }) => any;
   useDefaultName?: boolean;
 };
 
 export const DropDownButton: React.FC<IDropDownButton> = (props) => {
   const {
-    dropdownOptions,
+    dropdownOptions = [],
     dropDownChange,
     children,
     useDefaultName = true,
     style,
     ...rest
   } = props;
-  const [name, setName] = useState(dropdownOptions[0].name);
+  const [name, setName] = useState(
+    dropdownOptions ? dropdownOptions[0]?.label : '',
+  );
   const [showDropDown, setshowDropDown] = useState(false);
 
   const toggleDropDown = () => {
@@ -36,10 +39,11 @@ export const DropDownButton: React.FC<IDropDownButton> = (props) => {
     return () => window.removeEventListener('click', closeDropDown);
   }, [showDropDown]);
 
-  const handleDropdownClick = (selectionName: string, id = '') => {
-    setName(selectionName);
+  const handleDropdownClick = (value: string, label = '') => {
+    setName(label || value);
+
     if (dropDownChange) {
-      dropDownChange({ id, name: selectionName });
+      dropDownChange({ value, label });
     }
   };
 
@@ -78,15 +82,15 @@ export const DropDownButton: React.FC<IDropDownButton> = (props) => {
 
       {showDropDown && (
         <Styles.DropDownContainer>
-          {dropdownOptions?.map(({ id, name: selectedItem }) => {
+          {dropdownOptions?.map(({ label, value }) => {
             return (
               <Styles.DropDownItem
-                key={id}
-                onClick={() => handleDropdownClick(selectedItem, id)}
-                onKeyPress={() => handleDropdownClick(selectedItem, id)}
+                key={generateShortId()}
+                onClick={() => handleDropdownClick(value, label)}
+                onKeyPress={() => handleDropdownClick(value, label)}
                 role="presentation"
               >
-                {selectedItem}
+                {label || value}
               </Styles.DropDownItem>
             );
           })}
