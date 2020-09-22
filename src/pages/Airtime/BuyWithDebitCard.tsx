@@ -252,9 +252,7 @@ export const BuyWithDebitCard: React.FC = () => {
                 label="Amount"
                 placeholder="Enter an amount e.g 500"
                 {...formik.getFieldProps('amount')}
-                type="text"
-                minLength={16}
-                maxLength={16}
+                type="number"
                 error={getFieldError(
                   formik.errors.amount,
                   formik.touched.amount,
