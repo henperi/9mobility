@@ -72,7 +72,10 @@ export const SideBar: React.FC<ISidebar> = (props) => {
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
           Call History
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+        <Styles.SideBarLink
+          activeClassName="active-sidebar-link"
+          to="/data-usage/history"
+        >
           Data Usage
         </Styles.SideBarLink>
         <Styles.SideBarLink

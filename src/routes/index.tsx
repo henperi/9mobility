@@ -12,6 +12,7 @@ import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
 import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
 import { BuyWithDebitCard } from '../pages/Airtime/BuyWithDebitCard';
 import { TransactionHistoryPage } from '../pages/TransactionHistory';
+import { DataUsagePage } from '../pages/DataUsage';
 
 export const Routes = () => {
   return (
@@ -52,6 +53,11 @@ export const Routes = () => {
         exact
         path="/transaction/history"
         component={TransactionHistoryPage}
+      />
+      <ProtectedRoute
+        exact
+        path="/data-usage/history"
+        component={DataUsagePage}
       />
     </Switch>
   );
