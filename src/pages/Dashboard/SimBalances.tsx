@@ -8,8 +8,8 @@ import { Row } from '../../components/Row';
 import { SizedBox } from '../../components/SizedBox';
 import { Spinner } from '../../components/Spinner';
 import { Text } from '../../components/Text';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { useFetch } from '../../customHooks/useRequests';
-// import { useGlobalStore } from '../../store';
 import { Colors } from '../../themes/colors';
 
 interface AirtimeDataResp {
@@ -29,10 +29,12 @@ interface AirtimeDataResp {
   };
 }
 
-export const SimBalances: React.FC = () => {
+export const SimBalances: React.FC = (props) => {
   const { data, loading } = useFetch<AirtimeDataResp>(
     'Mobility.Account/api/Balance/AirtimeAndData',
   );
+
+  const { mobileNumbers } = useGetMobileNumbers();
 
   const [mobile, setmobile] = useState('');
 
@@ -57,10 +59,10 @@ export const SimBalances: React.FC = () => {
         ) : (
           <Column fullHeight alignItems="space-between">
             <DropDownButton
-              dropdownOptions={[{ id: mobile, name: mobile }]}
+              dropdownOptions={mobileNumbers}
               useDefaultName={false}
               variant="default"
-              dropDownChange={(e) => setmobile(e.name)}
+              dropDownChange={(e) => setmobile(e.value)}
               style={{
                 minWidth: '180px',
                 display: 'flex',

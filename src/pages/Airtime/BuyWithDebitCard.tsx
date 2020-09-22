@@ -22,6 +22,8 @@ import { ErrorBox } from '../../components/ErrorBox';
 // import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   result: {
@@ -43,6 +45,8 @@ export const BuyWithDebitCard: React.FC = () => {
       auth: { user },
     },
   } = useGlobalStore();
+
+  const { mobileNumbers } = useGetMobileNumbers();
 
   const formik = useFormik({
     initialValues: {
@@ -73,12 +77,16 @@ export const BuyWithDebitCard: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleBuyWithDebitCard = async () => {
-    const response = await buyWithDebitCard(formik.values);
+    try {
+      const response = await buyWithDebitCard(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
+      if (response.data) {
+        setShowConfirmationModal(false);
 
-      window.open(response.data.result.paymentLink, '_blank');
+        window.open(response.data.result.paymentLink, '_blank');
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 
@@ -211,10 +219,7 @@ export const BuyWithDebitCard: React.FC = () => {
                   label="Select Phone Number"
                   placeholder="Select Phone"
                   dropDown
-                  dropDownOptions={[
-                    { label: '09095017151', value: '09095017151' },
-                    { label: '09091881282', value: '09091881282' },
-                  ]}
+                  dropDownOptions={mobileNumbers}
                   value={formik.values.mobileNumber}
                   onChange={(e) =>
                     formik.setFieldValue('mobileNumber', e.target.value)
