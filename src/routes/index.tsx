@@ -13,6 +13,11 @@ import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
 import { BuyWithDebitCard } from '../pages/Airtime/BuyWithDebitCard';
 import { TransactionHistoryPage } from '../pages/TransactionHistory';
 import { DataUsagePage } from '../pages/DataUsage';
+import { DataPage } from '../pages/Data';
+import {BuyDataWithCard} from '../pages/Data/BuyDataWithCard';
+import {BuyDataWithAirtime} from '../pages/Data/BuyDataWithAirtime';
+import {TransferData} from '../pages/Data/TransferData';
+import {BorrowData} from '../pages/Data/BorrowData';
 
 export const Routes = () => {
   return (
@@ -33,6 +38,12 @@ export const Routes = () => {
       />
       <ProtectedRoute exact path="/dashboard" component={Dashboard} />
       <ProtectedRoute exact path="/airtime" component={AirtimePage} />
+
+      <ProtectedRoute
+        exact
+        path="/airtime/buy-with-debit-card"
+        component={BuyWithDebitCard}
+      />
       <ProtectedRoute
         exact
         path="/airtime/buy-with-pin"
@@ -44,10 +55,12 @@ export const Routes = () => {
         component={TransferAirtime}
       />
       <ProtectedRoute exact path="/airtime/borrow" component={BorrowAirtime} />
+
+      <ProtectedRoute exact path="/data" component={DataPage} />
       <ProtectedRoute
         exact
-        path="/airtime/buy-with-debit-card"
-        component={BuyWithDebitCard}
+        path="/data/buy-with-debit-card"
+        component={BuyDataWithCard}
       />
       <ProtectedRoute
         exact
@@ -59,6 +72,15 @@ export const Routes = () => {
         path="/data-usage/history"
         component={DataUsagePage}
       />
+
+      <ProtectedRoute
+        exact
+        path="/data/buy-with-airtime"
+        component={BuyDataWithAirtime}
+      />
+
+      <ProtectedRoute exact path="/data/transfer" component={TransferData} />
+      <ProtectedRoute exact path="/data/borrow" component={BorrowData} />
     </Switch>
   );
 };
