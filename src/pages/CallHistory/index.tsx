@@ -36,6 +36,7 @@ import { Button } from '../../components/Button';
 
 export const CallHistory: React.FC = () => {
   const history = useHistory();
+
   const handleSubmit = () => {
     history.push('/call/history');
   };

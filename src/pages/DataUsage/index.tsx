@@ -31,15 +31,17 @@ interface TransactionHistorryResp {
     totalNumberOfRecords: number;
     nextPageUrl: string;
     prevPageUrl: string;
-    results: {
-      transactionAmount: string;
-      createdDate: Date | string;
-      dateCreated: string;
-      timeCreated: string;
-      transactionType: number;
-      transactionSource: number;
-      id: number;
-    }[];
+    results:
+      | {
+          transactionAmount: string;
+          createdDate: Date | string;
+          dateCreated: string;
+          timeCreated: string;
+          transactionType: number;
+          transactionSource: number;
+          id: number;
+        }[]
+      | null;
   };
 }
 
@@ -67,17 +69,17 @@ export const DataUsagePage: React.FC = () => {
 
   const start = DateTime.fromISO(formik.values.startDate, {
     locale: 'fr',
-  }).toLocaleString();
+  }).toISODate();
   const end = DateTime.fromISO(formik.values.endDate, {
     locale: 'fr',
-  }).toLocaleString();
+  }).toISODate();
 
   const [getTransactionHistory, { data, loading }] = useLazyFetch<
     TransactionHistorryResp
   >(`Mobility.Account/api/Data/getdatausage/${start}/${end}`);
 
   const renderTable = () =>
-    data?.result.results.length ? (
+    data?.result?.results?.length ? (
       <>
         <Text color={Colors.darkGreen} weight={700} variant="lighter">
           Data Usage Chart
