@@ -61,7 +61,7 @@ export const DataPage: React.FC = () => {
               </Text>
 
               <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.airtimeModel.balance}
+                {loading ? <Spinner /> : data?.result.dataModel.balance}
               </Text>
               <SizedBox height={10} />
 
@@ -79,7 +79,7 @@ export const DataPage: React.FC = () => {
                 Data Bonus
               </Text>
               <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.airtimeModel.bonusBalance}
+                {loading ? <Spinner /> : data?.result.dataModel.bonusBalance}
               </Text>
               <SizedBox height={10} />
 
