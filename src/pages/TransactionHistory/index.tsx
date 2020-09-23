@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 // import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -14,13 +14,12 @@ import { Row } from '../../components/Row';
 import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
 import { useLazyFetch } from '../../customHooks/useRequests';
-// import { Spinner } from '../../components/Spinner';
 
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-// import { logger } from '../../utils/logger';
 import { getFieldError } from '../../utils/formikHelper';
 import { Spinner } from '../../components/Spinner';
+import { TableExample } from '../../components/Table';
 
 interface TransactionHistorryResp {
   result: {
@@ -32,7 +31,7 @@ interface TransactionHistorryResp {
     prevPageUrl: string;
     results: {
       transactionAmount: string;
-      createdDate: Date | string;
+      createdDate: string;
       dateCreated: string;
       timeCreated: string;
       transactionType: number;
@@ -75,13 +74,33 @@ export const TransactionHistoryPage: React.FC = () => {
     pageSize,
   });
 
+  const [tableData, setTableData] = useState<(string | number)[][]>();
+
+  useEffect(() => {
+    if (data?.result) {
+      const tableResults = data.result.results.map((result, i) => {
+        return Object.values({
+          'S/N': i + 1,
+          Type: result.transactionType,
+          Source: result.transactionSource,
+          Amount: result.transactionAmount,
+          Date: DateTime.fromISO(result.createdDate, {
+            locale: 'fr',
+          }).toLocaleString(),
+          Time: result.timeCreated,
+        });
+      });
+
+      setTableData(tableResults);
+    }
+  }, [data]);
+
   const renderTable = () =>
     data?.result.results.length ? (
-      <>
-        <Text color={Colors.darkGreen} weight={700} variant="lighter">
-          Table Data
-        </Text>
-      </>
+      <TableExample
+        columns={['S/N', 'Type', 'Source', 'Amount', 'Date', 'Time']}
+        data={tableData}
+      />
     ) : (
       <Text variant="lighter">No transaction histories at the moment</Text>
     );
@@ -109,7 +128,7 @@ export const TransactionHistoryPage: React.FC = () => {
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
-            <Row useAppMargin alignItems="flex-end">
+            <Row useAppMargin>
               <Column useAppMargin md={4} lg={3}>
                 <TextField
                   type="date"
@@ -140,7 +159,7 @@ export const TransactionHistoryPage: React.FC = () => {
                 xs={6}
                 md={4}
                 lg={3}
-                style={{ marginLeft: 'auto' }}
+                style={{ marginLeft: 'auto', marginTop: '20px' }}
               >
                 <Button type="submit" fullWidth>
                   Apply
@@ -162,9 +181,7 @@ export const TransactionHistoryPage: React.FC = () => {
           {loading ? (
             <Spinner isFixed />
           ) : (
-            <Column fullHeight alignItems="center">
-              {renderTable()}
-            </Column>
+            <Column fullHeight>{renderTable()}</Column>
           )}
         </Card>
       </Column>
