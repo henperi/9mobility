@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -20,11 +20,12 @@ import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
 import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
-import { usePost } from '../../customHooks/useRequests';
+import { useFetch, usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 // import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
+import useRadioInput from '../../components/RadioInput/useRadioInput';
 
 interface SuccessResp {
   result: {
@@ -34,12 +35,95 @@ interface SuccessResp {
   message: string;
 }
 
+interface bundlesResp {
+  result: {
+    id: string;
+    bundle: string;
+    cost: string;
+    dataValue: string;
+    validityDays: number;
+    isActive: boolean;
+    description: string;
+    dataPlanId: number;
+    categoryName: string;
+  }[];
+}
+
+interface BorrowEligibilityResp {
+  result: {
+    borrowingOptions: {
+      mobileNumber: string;
+      borrowingAmounts: {
+        id: number;
+        amount: number;
+        interest: number;
+      }[];
+    }[];
+  };
+}
+
 export const BuyDataWithCard: React.FC = () => {
+  const {
+    RadioInput: SelectBundleRadio,
+    checked: selectBundle,
+    setChecked: setSelectBundle,
+  } = useRadioInput(true);
+  const {
+    RadioInput: CustomizeBundleRadio,
+    checked: customizeBundle,
+    setChecked: setCustomizeBundle,
+  } = useRadioInput(false);
   const [activeTab, setactiveTab] = useState(1);
 
   const [buyWithDebitCard, { loading, error }] = usePost<SuccessResp>(
-    'Mobility.Account/api/Airtime/BuyAirtimeFromDebitCard',
+    'Mobility.Account/api/data/BuyDataFromDebitCard',
   );
+
+  const { data: dataEligibility } = useFetch<
+    BorrowEligibilityResp
+  >('Mobility.Account/api/data/GetBorrowingEligibility');
+
+  const { data: bundlesData } = useFetch<bundlesResp>(
+    'Mobility.Account/api/Data/GetBundle',
+  );
+
+  const [dataPlans, setDataPlans] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (bundlesData) {
+      const plansResults = bundlesData?.result?.map((option) => ({
+        label: option.description,
+        value: option.cost,
+      }));
+
+      setDataPlans(plansResults);
+    }
+  }, [bundlesData]);
+
+  const [mobileNumbers, setMobileNumbers] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (dataEligibility) {
+      const mobileResults = dataEligibility.result.borrowingOptions.map(
+        (option) => ({
+          label: option.mobileNumber,
+          value: option.mobileNumber,
+        }),
+      );
+
+      setMobileNumbers(mobileResults);
+    }
+  }, [dataEligibility]);
 
   const {
     state: {
@@ -51,14 +135,16 @@ export const BuyDataWithCard: React.FC = () => {
     initialValues: {
       mobileNumber: '',
       amount: '',
+      email: user?.email,
       dataBundle: '',
-      dataValue:''
+      dataValue: '',
     },
     validationSchema: Yup.object({
       mobileNumber: Yup.string()
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
       amount: Yup.number().required('This field is required'),
+      dataBundle: Yup.number().required('This field is required'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -100,8 +186,9 @@ export const BuyDataWithCard: React.FC = () => {
           <Text>Hi {user?.firstName}</Text>
           <SizedBox height={15} />
           <Text>
-            You are about to purchase
-            <Text variant="darker">N{formik.values.amount}</Text> airtime for
+            You are about to purchase &nbsp;
+            <Text variant="darker">N{formik.values.amount}</Text> data for
+            &nbsp;
             <Text variant="darker">{formik.values.mobileNumber}</Text> with your
             debit card
           </Text>
@@ -155,6 +242,16 @@ export const BuyDataWithCard: React.FC = () => {
     </>
   );
 
+  const bundleHandler = () => {
+    if (selectBundle) {
+      setCustomizeBundle(true);
+      setSelectBundle(false);
+    } else {
+      setCustomizeBundle(false);
+      setSelectBundle(true);
+    }
+  };
+
   return (
     <>
       <PageBody centeralize>
@@ -206,6 +303,7 @@ export const BuyDataWithCard: React.FC = () => {
                 </Button>
               </Column>
             </Row>
+
             <SizedBox height={24} />
             {error && <ErrorBox>{error.message}</ErrorBox>}
 
@@ -215,10 +313,7 @@ export const BuyDataWithCard: React.FC = () => {
                   label="Select Phone Number"
                   placeholder="Select Phone"
                   dropDown
-                  dropDownOptions={[
-                    { label: '09095017151', value: '09095017151' },
-                    { label: '09091881282', value: '09091881282' },
-                  ]}
+                  dropDownOptions={mobileNumbers}
                   value={formik.values.mobileNumber}
                   onChange={(e) =>
                     formik.setFieldValue('mobileNumber', e.target.value)
@@ -232,6 +327,7 @@ export const BuyDataWithCard: React.FC = () => {
                   )}
                 />
               )}
+
               {activeTab === 2 && (
                 <TextField
                   label="Recipient phone number"
@@ -246,26 +342,45 @@ export const BuyDataWithCard: React.FC = () => {
                   )}
                 />
               )}
+
               <SizedBox height={16} />
-              {activeTab === 1 && (
+
+              <Row justifyContent="flex-start">
+                <Column xs={12} md={5}>
+                  <Text variant="lighter">
+                    <SelectBundleRadio
+                      onClick={() => bundleHandler()}
+                      onKeyDown={() => bundleHandler()}
+                    >
+                      Select bundle
+                    </SelectBundleRadio>
+                  </Text>
+                </Column>
+
+                <Column xs={12} md={6}>
+                  <Text variant="lighter">
+                    <CustomizeBundleRadio
+                      onClick={() => bundleHandler()}
+                      onKeyDown={() => bundleHandler()}
+                    >
+                      Customize bundle
+                    </CustomizeBundleRadio>
+                  </Text>
+                </Column>
+              </Row>
+
+              <SizedBox height={16} />
+              {selectBundle && (
                 <TextField
                   label="Data Bundle"
                   placeholder="Select Data Bundle"
                   dropDown
-                  dropDownOptions={[
-                    {
-                      label: '1GB Daily(300 NGN)',
-                      value: '1GB Daily(300 NGN)',
-                    },
-                    {
-                      label: '1GB Daily(300 NGN)',
-                      value: '1GB Daily(300 NGN)',
-                    },
-                  ]}
+                  dropDownOptions={dataPlans}
                   value={formik.values.dataBundle}
-                  onChange={(e) =>
-                    formik.setFieldValue('dataBundle', e.target.value)
-                  }
+                  onChange={(e) => {
+                    formik.setFieldValue('dataBundle', e.target.value);
+                    formik.setFieldValue('amount', e.target.value);
+                  }}
                   type="tel"
                   minLength={11}
                   maxLength={11}
@@ -276,7 +391,7 @@ export const BuyDataWithCard: React.FC = () => {
                 />
               )}
 
-              {activeTab === 2 && (
+              {customizeBundle && (
                 <Row justifyContent="space-between">
                   <Column xs={12} md={6}>
                     <TextField
