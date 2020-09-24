@@ -1,25 +1,17 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import { ProtectedRoute } from '../../components/ProtectedRoute';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Card } from '../../components/Card';
-import { Styles as CardStyles } from '../../components/Card/styles';
-import { PageBody } from '../../components/PageBody';
 import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import { getFieldError } from '../../utils/formikHelper';
-import appLogoBig from '../../assets/images/9mobile-logo-big.png';
 import { Column } from '../../components/Column';
 import { Text } from '../../components/Text';
-import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
 import { usePost } from '../../customHooks/useRequests';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-import { CallHistoryNumberCheck } from './CallHistoryNumberCheck';
-import { CallHistoryConfirmOTP } from './CallHistoryConfirmOTP';
-import { CallHistoryTable } from './CallHistoryTable';
+
 
 
 
@@ -38,10 +30,9 @@ export interface OtpVerificationResponse {
   message: string;
 }
 
-export const CallHistory: React.FC = () => {
+export const CallHistoryConfirmOTP: React.FC = () => {
   const history = useHistory();
   const query = useUrlQuery();
-  let { path, url } = useRouteMatch();
   const mobileNumber = query.get('mobileNumber');
   const trackingId = query.get('trackingId');
 
@@ -86,30 +77,44 @@ export const CallHistory: React.FC = () => {
   });
 
   return (
-    <PageBody>
-      <CardStyles.CardHeader
-        style={{ height: '100%', position: 'relative', padding: '28px' }}
-      >
-        <img src={appLogoBig} alt="appLogoBig" />
-
-        <Column>
-          <SizedBox height={10} />
-          <Text size={32} weight={500}>
-            Call History
-          </Text>
-          <SizedBox height={5} />
-          <Text weight={500} color={Colors.grey}>
-            Your airtime spending history
-          </Text>
-          <SizedBox height={30} />
-        </Column>
-      </CardStyles.CardHeader>
-      <SizedBox height={40} />
-      <div>
-        <Route exact path={path} component={CallHistoryNumberCheck} />
-        <Route path={`${path}/confirm-opt`} component={CallHistoryConfirmOTP} />
-        <Route path={`${path}/history`} component={CallHistoryTable} />
-      </div>
-    </PageBody>
+      <Column>
+        <form onSubmit={formik.handleSubmit}>
+          <Card
+            fullWidth
+            fullHeight
+            padding="40px"
+            style={{ minHeight: '300px' }}
+          >
+            <Column
+              xs={12}
+              sm={10}
+              md={8}
+              lg={6}
+              xl={5}
+              style={{ margin: '0 auto' }}
+            >
+              <SizedBox height={20} />
+              <Text size={18} weight={700} alignment="center">
+                We sent you an SMS with a code
+              </Text>
+              <SizedBox height={6} />
+              <Text weight={300} alignment="center">
+                To access your call history, kindly enter the OPT sent to your
+                registered number
+              </Text>
+              <SizedBox height={36} />
+              <TextField 
+                placeholder="Enter OTP"
+                onChange={(e) => formik.setFieldValue('otp', e.target.value)}
+                error={getFieldError(formik.errors.otp, formik.touched.otp)}
+              />
+              <SizedBox height={36} />
+              <Button type="submit" fullWidth>
+                Continue
+              </Button>
+            </Column>
+          </Card>
+        </form>
+      </Column>
   );
 };

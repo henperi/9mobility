@@ -1,44 +1,63 @@
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
+import { DateTime } from 'luxon';
 import { useFormik } from 'formik';
+import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import * as Yup from 'yup';
 import { Card } from '../../components/Card';
 import { Styles as CardStyles } from '../../components/Card/styles';
 import { PageBody } from '../../components/PageBody';
-
+import { useLazyFetch } from '../../customHooks/useRequests';
 import appLogoBig from '../../assets/images/9mobile-logo-big.png';
 import { Column } from '../../components/Column';
 import { Text } from '../../components/Text';
 import { Row } from '../../components/Row';
 import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
-
+import { TableExample } from '../../components/Table';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 import { getFieldError } from '../../utils/formikHelper';
 
-// interface TransactionHistorryResp {
-//   result: {
-//     pageNumber: number;
-//     pageSize: number;
-//     totalNumberOfPages: number;
-//     totalNumberOfRecords: number;
-//     nextPageUrl: string;
-//     prevPageUrl: string;
-//     results: {
-//       transactionAmount: string;
-//       createdDate: Date | string;
-//       dateCreated: string;
-//       timeCreated: string;
-//       transactionType: number;
-//       transactionSource: number;
-//       id: number;
-//     }[];
-//   };
+interface CallHistoryResp {
+  result: {
+    responseCode: number,
+    message: string;
+    results: {
+      recipientNumber: string;
+      callDate: Date | string;
+      timeSpent: string;
+      status: number
+      endDate: string;
+      charge: string;
+      type: string;
+      id: string;
+    }[];
+  };
+}
+
+// {
+//   "result": {
+//     "id": "string",
+//     "recipientNumber": "string",
+//     "type": "string",
+//     "charge": "string",
+//     "callDate": "2020-09-23T21:00:51.689Z",
+//     "endDate": "2020-09-23T21:00:51.689Z",
+//     "timeSpent": "string",
+//     "status": 1
+//   },
+//   "responseCode": 0,
+//   "message": "string"
 // }
 
 export const CallHistoryTable: React.FC = () => {
   // const history = useHistory();
+  const query = useUrlQuery();
+  const trackingId = query.get('trackingId');
+  const [tableData, setTableData] = useState<(string | number)[][]>();
+  const [pageNumber] = useState(1);
+  const [pageSize] = useState(15);
+
 
   const formik = useFormik({
     initialValues: {
@@ -50,44 +69,57 @@ export const CallHistoryTable: React.FC = () => {
       endDate: Yup.date().required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      // await getTransactionHistory();
+      // await getCallHistory()
     },
   });
+
+  const date = {
+    start: DateTime.fromISO(formik.values.startDate, {
+      locale: 'fr',
+    }).toLocaleString(),
+    end: DateTime.fromISO(formik.values.endDate, {
+      locale: 'fr',
+    }).toLocaleString(),
+  }
+
+  const [getCallHistory, { data, loading }] = useLazyFetch<
+  CallHistoryResp
+  >(`Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`);
+
+  useEffect(() => {
+    if (data?.result) {
+      const tableResults = data.result.results.map((result, i) => {
+        return Object.values({
+          'S/N': i + 1,
+         'Phone Number': result.recipientNumber,
+          Type: result.type,
+          Charge: result.charge,
+          Date: DateTime.fromISO(result.endDate, {
+            locale: 'fr',
+          }).toLocaleString(),
+          Time: result.timeSpent,
+        });
+      });
+
+      // setTableData(tableResults);
+    }
+  }, [data]);
 
   // const [pageNumber] = useState(1);
   // const [pageSize] = useState(15);
 
-  // const renderTable = () =>
-  //   data?.result.results.length ? (
-  //     <>
-  //       <Text color={Colors.darkGreen} weight={700} variant="lighter">
-  //         Table Data
-  //       </Text>
-  //     </>
-  //   ) : (
-  //     <Text variant="lighter">No transaction histories at the moment</Text>
-  //   );
+  const renderTable = () =>
+    data?.result.results.length ? (
+      <TableExample
+        columns={['S/N', 'Phone Number', 'Type', 'Charge', 'Date', 'Time']}
+        data={tableData}
+      />
+    ) : (
+      <Text variant="lighter">No transaction histories at the moment</Text>
+    );
 
   return (
-    <PageBody>
-      <CardStyles.CardHeader
-        style={{ height: '100%', position: 'relative', padding: '28px' }}
-      >
-        <img src={appLogoBig} alt="appLogoBig" />
-
-        <Column>
-          <SizedBox height={10} />
-          <Text size={32} weight={500}>
-            Call History
-          </Text>
-          <SizedBox height={5} />
-          <Text weight={500} color={Colors.grey}>
-            Your airtime spending history
-          </Text>
-          <SizedBox height={30} />
-        </Column>
-      </CardStyles.CardHeader>
-      <SizedBox height={40} />
+    <div>
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
@@ -161,6 +193,7 @@ export const CallHistoryTable: React.FC = () => {
           )} */}
         </Card>
       </Column>
-    </PageBody>
+    </div>
+
   );
 };

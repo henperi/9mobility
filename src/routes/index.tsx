@@ -83,7 +83,7 @@ export const Routes = () => {
 
       <ProtectedRoute exact path="/data/transfer" component={TransferData} />
       <ProtectedRoute exact path="/data/borrow" component={BorrowData} />
-      <ProtectedRoute exact path="/call" component={CallHistory} />
+      <ProtectedRoute path="/call" component={CallHistory} />
       <ProtectedRoute exact path="/call/history" component={CallHistoryTable} />
     </Switch>
   );
