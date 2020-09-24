@@ -26,7 +26,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
-import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
+import { BorrowEligibilityResp, BundlesResp } from './Interface';
 import { logger } from '../../utils/logger';
 
 interface SuccessResp {
@@ -58,7 +58,7 @@ export const BuyDataWithCard: React.FC = () => {
     'Mobility.Account/api/data/GetBorrowingEligibility',
   );
 
-  const { data: bundlesData } = useFetch<bundlesResp>(
+  const { data: bundlesData } = useFetch<BundlesResp>(
     'Mobility.Account/api/Data/GetBundle',
   );
 

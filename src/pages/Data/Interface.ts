@@ -11,7 +11,7 @@ export interface BorrowEligibilityResp {
   };
 }
 
-export interface bundlesResp {
+export interface BundlesResp {
   result: {
     id: string;
     bundle: string;

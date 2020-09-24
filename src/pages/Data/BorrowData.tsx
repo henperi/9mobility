@@ -22,19 +22,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
-
-interface BorrowEligibilityResp {
-  result: {
-    borrowingOptions: {
-      mobileNumber: string;
-      borrowingAmounts: {
-        id: number;
-        amount: number;
-        interest: number;
-      }[];
-    }[];
-  };
-}
+import { BorrowEligibilityResp } from './Interface';
 
 interface BorrowSuccessResp {
   responseCode: number;
