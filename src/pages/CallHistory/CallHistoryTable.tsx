@@ -10,7 +10,7 @@ import { Spinner } from '../../components/Spinner';
 import { Text } from '../../components/Text';
 import { Row } from '../../components/Row';
 import { SizedBox } from '../../components/SizedBox';
-import { TableExample } from '../../components/Table';
+import { SimpleTable } from '../../components/Table';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 import { getFieldError } from '../../utils/formikHelper';
@@ -99,7 +99,7 @@ export const CallHistoryTable: React.FC = () => {
 
   const renderTable = () =>
     data?.result.results.length ? (
-      <TableExample
+      <SimpleTable
         columns={['S/N', 'Phone Number', 'Type', 'Charge', 'Date', 'Time']}
         data={tableData}
       />

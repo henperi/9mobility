@@ -20,6 +20,7 @@ import { BuyDataWithCard } from '../pages/Data/BuyDataWithCard';
 import { BuyDataWithAirtime } from '../pages/Data/BuyDataWithAirtime';
 import { TransferData } from '../pages/Data/TransferData';
 import { BorrowData } from '../pages/Data/BorrowData';
+import { PrepaidPlansPage } from '../pages/PrepaidPlans';
 
 export const Routes = () => {
   return (
@@ -84,6 +85,12 @@ export const Routes = () => {
       <ProtectedRoute exact path="/data/transfer" component={TransferData} />
       <ProtectedRoute exact path="/data/borrow" component={BorrowData} />
       <ProtectedRoute path="/call" component={CallHistory} />
+
+      <ProtectedRoute
+        exact
+        path="/prepaid-plans"
+        component={PrepaidPlansPage}
+      />
     </Switch>
   );
 };

@@ -29,7 +29,7 @@ interface SuccessResp {
 
 export const TransferData: React.FC = () => {
   const [transferAirtime, { loading, data, error }] = usePost<SuccessResp>(
-    'Mobility.Account/api/Airtime/Transfer',
+    'Mobility.Account/api/Data/Transfer',
   );
 
   const {
@@ -63,7 +63,10 @@ export const TransferData: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleTransferAirtime = async () => {
-    const response = await transferAirtime(formik.values);
+    const response = await transferAirtime({
+      ...formik.values,
+      mobileNumber: formik.values.recipientMobileNumber,
+    });
 
     if (response.data) {
       setShowConfirmationModal(false);
@@ -86,7 +89,7 @@ export const TransferData: React.FC = () => {
           <SizedBox height={15} />
           <Text>
             You are about to transfer
-            <Text variant="darker">{formik.values.amount}</Text> data to
+            <Text variant="darker">{formik.values.amount}</Text> data to &nbsp;
             <Text variant="darker">{formik.values.recipientMobileNumber}</Text>
           </Text>
           <SizedBox height={10} />
@@ -172,11 +175,13 @@ export const TransferData: React.FC = () => {
                 {...formik.getFieldProps('securityCode')}
                 minLength={4}
                 maxLength={4}
+                helperText="Default code is 0000"
                 error={getFieldError(
                   formik.errors.securityCode,
                   formik.touched.securityCode,
                 )}
               />
+
               <SizedBox height={16} />
               <TextField
                 label="Amount"

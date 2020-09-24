@@ -27,7 +27,7 @@ export interface IColumn extends React.HTMLAttributes<HTMLDivElement> {
 export enum ScreenSizes {
   xs = 0,
   sm = 420,
-  md = 750,
+  md = 640,
   lg = 1124,
   xl = 1400,
 }

@@ -181,6 +181,7 @@ export const TransferAirtime: React.FC = () => {
                   formik.errors.securityCode,
                   formik.touched.securityCode,
                 )}
+                helperText="Default code is 0000"
               />
               <SizedBox height={16} />
               <TextField

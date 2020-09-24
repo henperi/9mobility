@@ -47,7 +47,7 @@ export const BorrowData: React.FC = () => {
 
   const { loading: loadingEligibility, data: dataEligibility } = useFetch<
     BorrowEligibilityResp
-  >('Mobility.Account/api/Airtime/GetBorrowingEligibility');
+  >('Mobility.Account/api/Data/GetBorrowingEligibility');
 
   const [selectedNumber, setSelectedNumber] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<number>();
@@ -114,7 +114,7 @@ export const BorrowData: React.FC = () => {
       mobileNumber: Yup.string()
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
-      amount: Yup.number().required('Please select an amount'),
+      amount: Yup.string().required('Please select an amount'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -147,17 +147,13 @@ export const BorrowData: React.FC = () => {
           <Text>Hi {user?.firstName}</Text>
           <SizedBox height={15} />
           <Text>
-            You are about to borrow data worth
+            You are about to borrow data worth &nbsp;
             <Text variant="darker">N{formik.values.amount}</Text>
           </Text>
           <SizedBox height={10} />
           <Row useAppMargin>
             <Column xs={6} useAppMargin>
-              <Button
-                onClick={handleborrowData}
-                isLoading={loading}
-                fullWidth
-              >
+              <Button onClick={handleborrowData} isLoading={loading} fullWidth>
                 Confirm
               </Button>
             </Column>
@@ -245,7 +241,10 @@ export const BorrowData: React.FC = () => {
                   )}
                 />
                 <SizedBox height={16} />
-                <Text color={Colors.blackGrey}>You are eligible to borrow amount below. Select any amount to continue</Text>
+                <Text color={Colors.blackGrey}>
+                  You are eligible to borrow amount below. Select any amount to
+                  continue
+                </Text>
                 <SizedBox height={16} />
 
                 <Row useAppMargin>
