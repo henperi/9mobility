@@ -21,7 +21,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
+import { BorrowEligibilityResp, BundlesResp } from './Interface';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { logger } from '../../utils/logger';
 
@@ -57,7 +57,7 @@ export const BuyDataWithAirtime: React.FC = () => {
     'Mobility.Account/api/data/GetBorrowingEligibility',
   );
 
-  const { data: bundlesData } = useFetch<bundlesResp>(
+  const { data: bundlesData } = useFetch<BundlesResp>(
     'Mobility.Account/api/Data/GetBundle',
   );
 

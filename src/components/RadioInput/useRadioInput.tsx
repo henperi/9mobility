@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Styles } from './styles';
 
 /**
- * Custom hook for radio buttons.
- * @param {boolean} defaultChecked If checkbox should be checked by default.
- * @returns {any} a component, the state and function to update state.
+ * This is a custom hook that is used to make api get requests
+ * @param defaultChecked *
+ * @returns an object containg a RadioInput component, checked and setChecked
  */
-function useRadioInput(defaultChecked?: boolean): any {
+function useRadioInput(defaultChecked?: boolean) {
   const [checked, setChecked] = useState(defaultChecked);
 
   const RadioInput: React.FC<{
