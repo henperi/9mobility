@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="50px" height="39px" viewBox="0 0 50 39" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>3A8EA8A7-5FE6-4F5F-BB31-1765EFD0025C</title>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#808080" stop-opacity="0.25" offset="0%"></stop>
+            <stop stop-color="#808080" stop-opacity="0.12" offset="54%"></stop>
+            <stop stop-color="#808080" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-2" points="38.6466667 35.5414839 29.1427822 35.5414839 14.6458793 36.9898548 0.0369553806 35.5414839 0.0369553806 0.0572903226 14.5858268 1.14341935 29.4482415 0.0572903226 43.987874 2.109 43.987874 29.9890968"></polygon>
+        <linearGradient x1="50.0041594%" y1="100%" x2="50.0041594%" y2="0%" id="linearGradient-4">
+            <stop stop-color="#000000" stop-opacity="0.12" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.09" offset="55%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.02" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="99.993309%" x2="50%" y2="-0.00334548861%" id="linearGradient-5">
+            <stop stop-color="#000000" stop-opacity="0.12" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.09" offset="55%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.02" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-6">
+            <stop stop-color="#000000" stop-opacity="0.12" offset="0%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.09" offset="55%"></stop>
+            <stop stop-color="#000000" stop-opacity="0.02" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Web" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Prepaid-Plans" transform="translate(-305.000000, -714.000000)">
+            <g id="Group-4-Copy-4" transform="translate(280.000000, 663.000000)">
+                <g id="undraw_map_dros-copy" transform="translate(25.000000, 51.000000)">
+                    <polygon id="a073cd38-4eb0-453d-a1d0-70f9c24b1634" fill="url(#linearGradient-1)" points="41.0827636 37.4708377 31.7876364 37.4708377 15.9552 39 0 37.4708377 0 0 15.8888727 1.14687171 32.1210182 0 48 2.16650601 47.5927273 30.9418237"></polygon>
+                    <polygon id="59230751-4dc4-41f9-b924-118a87d1b7cc" fill="#FFFFFF" points="41.0832889 36.5097926 31.7878431 36.5097926 15.9551893 38 0 36.5097926 0 0 15.8891629 1.11780037 32.1209493 0 48 2.11107893 47.5925398 30.1487555"></polygon>
+                    <polygon id="5b2d8654-11e0-49b5-a1f9-dad8b3034394" fill="#006848" points="40.652828 34.6274177 31.1383302 34.6274177 16.6258162 36 2 34.6274177 2 1 16.5651186 2.02986088 31.4441306 1 46 2.94491573 46 29.3661351"></polygon>
+                    <g id="Clipped" transform="translate(6.000000, 2.000000)">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <g id="c9ed84a9-8cab-4a44-9ea6-8594f096f2dc"></g>
+                        <polygon id="Path" fill="#FFFFFF" mask="url(#mask-3)" points="53.2417323 45.7212581 19.8687139 26.6209032 28.3453543 -2.48675806 25.4605249 -3.66896774 21.3527034 10.4369839 -11.3770604 -8.29516129 -12.7034121 -5.03379032 20.3491339 13.8827581 12.8033071 39.7946935 15.6881365 40.9769032 18.8651444 30.0666774 51.9153806 48.982629"></polygon>
+                    </g>
+                    <polyline id="Path" fill="#000000" opacity="0.1" points="17 36 32 34.6274177 32 1 17 2.02986088"></polyline>
+                    <polygon id="Path" fill="url(#linearGradient-4)" points="40 36 40.112969 29 47 29.2720606"></polygon>
+                    <polygon id="Path" fill="#FFFFFF" points="40 37 40.0965 31 46 31.2336218"></polygon>
+                    <path d="M32,14.4547188 C32,17.469004 26,26 26,26 C26,26 20,17.469004 20,14.4547188 C20,11.4404336 22.6865402,9 26,9 C29.3134598,9 32,11.4421398 32,14.4547188 Z" id="Path" fill="url(#linearGradient-5)"></path>
+                    <circle id="Oval" fill="url(#linearGradient-6)" cx="25" cy="13" r="2"></circle>
+                    <path d="M29,13.2345543 C29,16.0429314 24.0010097,24 24.0010097,24 C24.0010097,24 19.0020194,16.0429314 19.0020194,13.2345543 C18.9504056,11.382318 19.8913748,9.64783968 21.4586807,8.706217 C23.0259866,7.76459433 24.9720106,7.76459433 26.5393165,8.706217 C28.1066224,9.64783968 29.0475916,11.382318 28.9959778,13.2345543 L29,13.2345543 Z" id="Path" fill="#FF5252"></path>
+                    <circle id="Oval" fill="#FFFFFF" cx="24" cy="13" r="1"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
