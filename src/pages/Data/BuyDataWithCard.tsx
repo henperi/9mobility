@@ -79,9 +79,9 @@ export const BuyDataWithCard: React.FC = () => {
     'Mobility.Account/api/data/BuyDataFromDebitCard',
   );
 
-  const { data: dataEligibility } = useFetch<
-    BorrowEligibilityResp
-  >('Mobility.Account/api/data/GetBorrowingEligibility');
+  const { data: dataEligibility } = useFetch<BorrowEligibilityResp>(
+    'Mobility.Account/api/data/GetBorrowingEligibility',
+  );
 
   const { data: bundlesData } = useFetch<bundlesResp>(
     'Mobility.Account/api/Data/GetBundle',

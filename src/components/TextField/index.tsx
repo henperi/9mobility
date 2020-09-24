@@ -96,7 +96,7 @@ export const TextField: React.FC<ITextField> = (props) => {
       if (dropDown) {
         return {
           readOnly: true,
-          value: value.value,
+          value: value.label || value.value,
           onClick: toggleDropDown,
         };
       }
@@ -136,6 +136,7 @@ export const TextField: React.FC<ITextField> = (props) => {
                         const e = {
                           target: {
                             value: option.value,
+                            label: option.label,
                           },
                         };
 
