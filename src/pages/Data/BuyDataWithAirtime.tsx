@@ -71,7 +71,7 @@ export const BuyDataWithAirtime: React.FC = () => {
     if (bundlesData) {
       const plansResults = bundlesData?.result?.map((option) => ({
         label: option.description,
-        value: option.id,
+        value: String(option.dataPlanId),
       }));
 
       setDataPlans(plansResults);
@@ -270,7 +270,6 @@ export const BuyDataWithAirtime: React.FC = () => {
             <SizedBox height={24} />
             {error && <ErrorBox>{error.message}</ErrorBox>}
             {data && <SuccessBox>{data.message}</SuccessBox>}
-            <pre>{JSON.stringify(formik.values, null, 2)}</pre>
 
             <form onSubmit={formik.handleSubmit}>
               <TextField
