@@ -108,7 +108,7 @@ export const CallHistoryTable: React.FC = () => {
     );
 
   return (
-    <div>
+    <Column>
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
@@ -182,7 +182,7 @@ export const CallHistoryTable: React.FC = () => {
           )}
         </Card>
       </Column>
-    </div>
+    </Column>
 
   );
 };

@@ -34,11 +34,11 @@ export const CallHistory: React.FC = () => {
         </Column>
       </CardStyles.CardHeader>
       <SizedBox height={40} />
-      <div>
+      <Column>
         <Route exact path={path} component={CallHistoryNumberCheck} />
         <Route path={`${path}/confirm-opt`} component={CallHistoryConfirmOTP} />
         <Route path={`${path}/history`} component={CallHistoryTable} />
-      </div>
+      </Column>
     </PageBody>
   );
 };
