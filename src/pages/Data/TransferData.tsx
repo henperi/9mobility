@@ -175,14 +175,13 @@ export const TransferData: React.FC = () => {
                 {...formik.getFieldProps('securityCode')}
                 minLength={4}
                 maxLength={4}
+                helperText="Default code is 0000"
                 error={getFieldError(
                   formik.errors.securityCode,
                   formik.touched.securityCode,
                 )}
               />
-              <Text color={Colors.blackGrey} size={12}>
-                Default code is 0000
-              </Text>
+
               <SizedBox height={16} />
               <TextField
                 label="Amount"
