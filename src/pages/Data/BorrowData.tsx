@@ -248,7 +248,10 @@ export const BorrowData: React.FC = () => {
                           fullWidth
                           onClick={() => {
                             setSelectedAmount(options.amount);
-                            formik.setFieldValue('amount', options.amount);
+                            formik.setFieldValue(
+                              'amount',
+                              String(options.amount),
+                            );
                           }}
                           variant="secondary"
                           outline={selectedAmount !== options.amount}
