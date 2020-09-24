@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -16,14 +16,13 @@ import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
 import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
-import { usePost } from '../../customHooks/useRequests';
+import { useFetch, usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-// import { handleAxiosError } from '../../utils/handleAxiosError';
-// import { logger } from '../../utils/logger';
-// import { logger } from '../../utils/logger';
+import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
+import useRadioInput from '../../components/RadioInput/useRadioInput';
 
 interface SuccessResp {
   responseCode: number;
@@ -31,10 +30,20 @@ interface SuccessResp {
 }
 
 export const BuyDataWithAirtime: React.FC = () => {
+  const {
+    RadioInput: SelectBundleRadio,
+    checked: selectBundle,
+    setChecked: setSelectBundle,
+  } = useRadioInput(true);
+  const {
+    RadioInput: CustomizeBundleRadio,
+    checked: customizeBundle,
+    setChecked: setCustomizeBundle,
+  } = useRadioInput(false);
   const [activeTab, setactiveTab] = useState(1);
 
-  const [rechargeWithPin, { loading, data, error }] = usePost<SuccessResp>(
-    'Mobility.Account/api/Airtime/RechargeWithPin',
+  const [buyDataWithAirtime, { loading, data, error }] = usePost<SuccessResp>(
+    'Mobility.Account/api/Data/BuyWithAirtime',
   );
 
   const {
@@ -43,21 +52,66 @@ export const BuyDataWithAirtime: React.FC = () => {
     },
   } = useGlobalStore();
 
+  const { data: dataEligibility } = useFetch<BorrowEligibilityResp>(
+    'Mobility.Account/api/data/GetBorrowingEligibility',
+  );
+
+  const { data: bundlesData } = useFetch<bundlesResp>(
+    'Mobility.Account/api/Data/GetBundle',
+  );
+
+  const [dataPlans, setDataPlans] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (bundlesData) {
+      const plansResults = bundlesData?.result?.map((option) => ({
+        label: option.description,
+        value: option.id,
+      }));
+
+      setDataPlans(plansResults);
+    }
+  }, [bundlesData]);
+
+  const [mobileNumbers, setMobileNumbers] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (dataEligibility) {
+      const mobileResults = dataEligibility.result.borrowingOptions.map(
+        (option) => ({
+          label: option.mobileNumber,
+          value: option.mobileNumber,
+        }),
+      );
+
+      setMobileNumbers(mobileResults);
+    }
+  }, [dataEligibility]);
+
   const formik = useFormik({
     initialValues: {
-      recipientMobileNumber: '',
-      amount: '',
-      dataValue: '',
-      dataBundle: '',
+      mobileNumber: '',
+      beneficiaryMobileNumber: '',
+      bundleId: '',
     },
     validationSchema: Yup.object({
-      recipientMobileNumber: Yup.string()
+      mobileNumber: Yup.string()
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
-      voucherPin: Yup.string()
-        .min(16, 'Must be a 16 digit number')
-        .max(16, 'Must be a 16 digit number')
+      beneficiaryMobileNumber: Yup.string()
+        .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
+      bundleId: Yup.string().required('This field is required'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -65,22 +119,33 @@ export const BuyDataWithAirtime: React.FC = () => {
   });
 
   const handleTabChange = () => {
-    formik.resetForm();
     if (activeTab === 1) {
+      formik.setFieldValue('beneficiaryMobileNumber', '');
       return setactiveTab(2);
     }
+    formik.setFieldValue('beneficiaryMobileNumber', formik.values.mobileNumber);
     return setactiveTab(1);
   };
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleRechargeWithPin = async () => {
-    const response = await rechargeWithPin(formik.values);
+  const handleBuyDataWithAirtime = async () => {
+    const response = await buyDataWithAirtime(formik.values);
 
     if (response.data) {
       setShowConfirmationModal(false);
       setShowSuccessModal(true);
+    }
+  };
+
+  const bundleHandler = () => {
+    if (selectBundle) {
+      setCustomizeBundle(true);
+      setSelectBundle(false);
+    } else {
+      setCustomizeBundle(false);
+      setSelectBundle(true);
     }
   };
 
@@ -98,14 +163,14 @@ export const BuyDataWithAirtime: React.FC = () => {
           <Text>Hi {user?.firstName}</Text>
           <SizedBox height={15} />
           <Text>
-            You are about to purchase data for
-            <Text variant="darker">{formik.values.recipientMobileNumber}</Text>
+            You are about to purchase data for &nbsp;
+            <Text variant="darker">{formik.values.mobileNumber}</Text>
           </Text>
           <SizedBox height={10} />
           <Row useAppMargin>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={handleRechargeWithPin}
+                onClick={handleBuyDataWithAirtime}
                 isLoading={loading}
                 fullWidth
               >
@@ -205,47 +270,74 @@ export const BuyDataWithAirtime: React.FC = () => {
             <SizedBox height={24} />
             {error && <ErrorBox>{error.message}</ErrorBox>}
             {data && <SuccessBox>{data.message}</SuccessBox>}
+            <pre>{JSON.stringify(formik.values, null, 2)}</pre>
+
             <form onSubmit={formik.handleSubmit}>
-              {activeTab === 1 && (
-                <TextField
-                  label="Select Phone Number"
-                  placeholder="Select Phone"
-                  dropDown
-                  dropDownOptions={[
-                    { label: '09095017151', value: '09095017151' },
-                    { label: '09091881282', value: '09091881282' },
-                  ]}
-                  value={formik.values.recipientMobileNumber}
-                  onChange={(e) =>
+              <TextField
+                label="Select Phone Number"
+                placeholder="Select Phone"
+                dropDown
+                dropDownOptions={mobileNumbers}
+                value={formik.values.mobileNumber}
+                onChange={(e) => {
+                  formik.setFieldValue('mobileNumber', e.target.value);
+                  if (activeTab === 1) {
                     formik.setFieldValue(
-                      'recipientMobileNumber',
+                      'beneficiaryMobileNumber',
                       e.target.value,
-                    )
+                    );
                   }
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.recipientMobileNumber,
-                    formik.touched.recipientMobileNumber,
-                  )}
-                />
-              )}
+                }}
+                type="tel"
+                minLength={11}
+                maxLength={11}
+                error={getFieldError(
+                  formik.errors.mobileNumber,
+                  formik.touched.mobileNumber,
+                )}
+              />
               {activeTab === 2 && (
                 <TextField
                   label="Recipient phone number"
                   placeholder="Enter Phone number"
-                  {...formik.getFieldProps('recipientMobileNumber')}
+                  {...formik.getFieldProps('beneficiaryMobileNumber')}
                   type="tel"
                   minLength={11}
                   maxLength={11}
                   error={getFieldError(
-                    formik.errors.recipientMobileNumber,
-                    formik.touched.recipientMobileNumber,
+                    formik.errors.beneficiaryMobileNumber,
+                    formik.touched.beneficiaryMobileNumber,
                   )}
                 />
               )}
-              {activeTab === 1 && (
+
+              <SizedBox height={16} />
+
+              <Row justifyContent="flex-start">
+                <Column xs={12} md={5}>
+                  <Text variant="lighter">
+                    <SelectBundleRadio
+                      onClick={() => bundleHandler()}
+                      onKeyDown={() => bundleHandler()}
+                    >
+                      Select bundle
+                    </SelectBundleRadio>
+                  </Text>
+                </Column>
+
+                <Column xs={12} md={6}>
+                  <Text variant="lighter">
+                    <CustomizeBundleRadio
+                      onClick={() => bundleHandler()}
+                      onKeyDown={() => bundleHandler()}
+                    >
+                      Customize bundle
+                    </CustomizeBundleRadio>
+                  </Text>
+                </Column>
+              </Row>
+
+              {selectBundle && (
                 <Fragment>
                   <SizedBox height={16} />
 
@@ -253,26 +345,15 @@ export const BuyDataWithAirtime: React.FC = () => {
                     label="Data Bundle"
                     placeholder="Select Data Bundle"
                     dropDown
-                    dropDownOptions={[
-                      {
-                        label: '1GB Daily(300 NGN)',
-                        value: '1GB Daily(300 NGN)',
-                      },
-                      {
-                        label: '1GB Daily(300 NGN)',
-                        value: '1GB Daily(300 NGN)',
-                      },
-                    ]}
-                    value={formik.values.dataBundle}
-                    onChange={(e) =>
-                      formik.setFieldValue('dataBundle', e.target.value)
-                    }
-                    type="tel"
-                    minLength={11}
-                    maxLength={11}
+                    dropDownOptions={dataPlans}
+                    value={formik.values.bundleId}
+                    onChange={(e) => {
+                      formik.setFieldValue('bundleId', String(e.target.value));
+                    }}
+                    type="text"
                     error={getFieldError(
-                      formik.errors.dataBundle,
-                      formik.touched.dataBundle,
+                      formik.errors.bundleId,
+                      formik.touched.bundleId,
                     )}
                   />
                 </Fragment>
@@ -280,9 +361,9 @@ export const BuyDataWithAirtime: React.FC = () => {
 
               <SizedBox height={24} />
 
-              {activeTab === 2 && (
+              {customizeBundle && (
                 <Row justifyContent="space-between">
-                  <Column xs={12} md={6}>
+                  {/* <Column xs={12} md={6}>
                     <TextField
                       label="Amount in Naira"
                       placeholder="Enter Amount"
@@ -309,7 +390,7 @@ export const BuyDataWithAirtime: React.FC = () => {
                         formik.touched.dataValue,
                       )}
                     />
-                  </Column>
+                  </Column> */}
                 </Row>
               )}
 
