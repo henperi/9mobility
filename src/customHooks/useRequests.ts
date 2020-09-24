@@ -51,7 +51,7 @@ export function useFetch<T>(url: string, params?: IParam) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState();
 
-  const refetch = useCallback(
+  const refetch: () => any = useCallback(
     () =>
       httpService
         .get(url + concatParams(params))
