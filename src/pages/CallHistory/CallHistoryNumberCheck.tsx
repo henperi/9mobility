@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Card } from '../../components/Card';
-import { Styles as CardStyles } from '../../components/Card/styles';
 import { PageBody } from '../../components/PageBody';
 import { useFormik } from 'formik';
 import appLogoBig from '../../assets/images/9mobile-logo-big.png';
@@ -12,10 +11,10 @@ import { Colors } from '../../themes/colors';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { SizedBox } from '../../components/SizedBox';
-import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+// import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { ErrorBox } from '../../components/ErrorBox';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-
 
 
 interface VerifyNumberResponse {
@@ -29,27 +28,21 @@ interface VerifyNumberResponse {
 
 export const CallHistoryNumberCheck: React.FC = () => {
   const history = useHistory();
-  // const { mobileNumbers } = useGetMobileNumbers();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>('');
 
-  const [verifyNumber] = usePost<VerifyNumberResponse>(
-    'Mobility.Onboarding/api/Verification/initiateverification',
-  );
+  const [verifyNumber] = usePost<VerifyNumberResponse>('Mobility.Onboarding/api/Verification/initiateverification',);
 
   const handleVerifyNumber = async (data: typeof formik.values) => {
     try {
-      // setLoading(true);
-      // setErrorMessage('');
+      setLoading(true);
+      setErrorMessage('');
       const result = await verifyNumber(data);
-      // setLoading(false);
-      console.log(result.data, 'this is result')
-      history.push(
-        `/call/confirm-opt?mobileNumber=${data.mobileNumber}&trackingId=${result.data.result.trackingId}`,
-      );
-
-      // logger.log(result.data);
+      setLoading(false);
+      history.push(`/call/confirm-opt?mobileNumber=${data.mobileNumber}&trackingId=${result.data.result.trackingId}`);
     } catch (error) {
-      // setLoading(false);
-      // setErrorMessage((error as Error).message);
+      setLoading(false);
+      setErrorMessage((error as Error).message);
     }
   };
 
@@ -64,12 +57,12 @@ export const CallHistoryNumberCheck: React.FC = () => {
     }),
     onSubmit: async (data) => {
       handleVerifyNumber(data)
-      // setShowConfirmationModal(true);
     },
   });
 
   return (
       <Column>
+        {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
         <form onSubmit={formik.handleSubmit}>
           <Card
             fullWidth
@@ -103,7 +96,11 @@ export const CallHistoryNumberCheck: React.FC = () => {
                   )}
                 />
               <SizedBox height={36} />
-              <Button type="submit" fullWidth>
+              <Button 
+                type="submit" 
+                fullWidth
+                isLoading={loading}
+              >
                 Generate OPT
               </Button>
             </Column>

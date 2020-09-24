@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }from 'react';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,10 +10,8 @@ import { Text } from '../../components/Text';
 import { SizedBox } from '../../components/SizedBox';
 import { usePost } from '../../customHooks/useRequests';
 import { TextField } from '../../components/TextField';
+import { ErrorBox } from '../../components/ErrorBox';
 import { Button } from '../../components/Button';
-
-
-
 
 export interface OtpVerificationResponse {
   result: {
@@ -35,6 +33,8 @@ export const CallHistoryConfirmOTP: React.FC = () => {
   const query = useUrlQuery();
   const mobileNumber = query.get('mobileNumber');
   const trackingId = query.get('trackingId');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>('');
 
   const [verifyOTP] = usePost<OtpVerificationResponse>(
     'Mobility.Onboarding/api/Verification/verifyotp',
@@ -42,21 +42,20 @@ export const CallHistoryConfirmOTP: React.FC = () => {
 
   const handleVerifyOTP = async (data: typeof formik.values) => {
     try {
-      // setLoading(true);
-      // setErrorMessage('');
+      setLoading(true);
+      setErrorMessage('');
 
       const result = await verifyOTP({ ...data, trackingId, mobileNumber });
-      console.log(result.data.result, 'this is the bitch right here')
        
-      // setLoading(false);
+      setLoading(false);
       // dispatch(setAuthUser(result.data.result));
 
       const { email, firstName } = result.data.result;
 
       if (email || firstName)  history.push(`/call/history?trackingId=${trackingId}`)
     } catch (error) {
-      // setLoading(false);
-      // setErrorMessage((error as Error).message);
+      setLoading(false);
+      setErrorMessage((error as Error).message);
     }
   };
 
@@ -78,6 +77,7 @@ export const CallHistoryConfirmOTP: React.FC = () => {
 
   return (
       <Column>
+        {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
         <form onSubmit={formik.handleSubmit}>
           <Card
             fullWidth
@@ -109,7 +109,11 @@ export const CallHistoryConfirmOTP: React.FC = () => {
                 error={getFieldError(formik.errors.otp, formik.touched.otp)}
               />
               <SizedBox height={36} />
-              <Button type="submit" fullWidth>
+              <Button 
+                type="submit"
+                isLoading={loading}
+                fullWidth
+              >
                 Continue
               </Button>
             </Column>

@@ -4,14 +4,11 @@ import { useFormik } from 'formik';
 import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import * as Yup from 'yup';
 import { Card } from '../../components/Card';
-import { Styles as CardStyles } from '../../components/Card/styles';
-import { PageBody } from '../../components/PageBody';
 import { useLazyFetch } from '../../customHooks/useRequests';
-import appLogoBig from '../../assets/images/9mobile-logo-big.png';
 import { Column } from '../../components/Column';
+import { Spinner } from '../../components/Spinner';
 import { Text } from '../../components/Text';
 import { Row } from '../../components/Row';
-import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
 import { TableExample } from '../../components/Table';
 import { TextField } from '../../components/TextField';
@@ -35,28 +32,13 @@ interface CallHistoryResp {
   };
 }
 
-// {
-//   "result": {
-//     "id": "string",
-//     "recipientNumber": "string",
-//     "type": "string",
-//     "charge": "string",
-//     "callDate": "2020-09-23T21:00:51.689Z",
-//     "endDate": "2020-09-23T21:00:51.689Z",
-//     "timeSpent": "string",
-//     "status": 1
-//   },
-//   "responseCode": 0,
-//   "message": "string"
-// }
-
 export const CallHistoryTable: React.FC = () => {
   // const history = useHistory();
   const query = useUrlQuery();
   const trackingId = query.get('trackingId');
   const [tableData, setTableData] = useState<(string | number)[][]>();
-  const [pageNumber] = useState(1);
-  const [pageSize] = useState(15);
+  // const [pageNumber] = useState(1);
+  // const [pageSize] = useState(15);
 
 
   const formik = useFormik({
@@ -69,7 +51,7 @@ export const CallHistoryTable: React.FC = () => {
       endDate: Yup.date().required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      // await getCallHistory()
+      await getCallHistory()
     },
   });
 
@@ -81,6 +63,8 @@ export const CallHistoryTable: React.FC = () => {
       locale: 'fr',
     }).toLocaleString(),
   }
+
+  console.log(date, 'thisis t')
 
   const [getCallHistory, { data, loading }] = useLazyFetch<
   CallHistoryResp
@@ -101,12 +85,17 @@ export const CallHistoryTable: React.FC = () => {
         });
       });
 
-      // setTableData(tableResults);
+      setTableData(tableResults);
     }
   }, [data]);
 
   // const [pageNumber] = useState(1);
   // const [pageSize] = useState(15);
+
+  useEffect(() => {
+    //  get call history
+    (async () => await getCallHistory())();
+  }, [])
 
   const renderTable = () =>
     data?.result.results.length ? (
@@ -115,7 +104,7 @@ export const CallHistoryTable: React.FC = () => {
         data={tableData}
       />
     ) : (
-      <Text variant="lighter">No transaction histories at the moment</Text>
+      <Text variant="lighter">No call histories at the moment</Text>
     );
 
   return (
@@ -184,13 +173,13 @@ export const CallHistoryTable: React.FC = () => {
           padding="28px"
           style={{ minHeight: '200px' }}
         >
-          {/* {loading ? (
+          {loading ? (
             <Spinner isFixed />
           ) : (
             <Column fullHeight alignItems="center">
               {renderTable()}
             </Column>
-          )} */}
+          )}
         </Card>
       </Column>
     </div>
