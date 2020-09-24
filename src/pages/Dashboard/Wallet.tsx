@@ -141,8 +141,12 @@ export const Wallet: React.FC = () => {
   };
 
   return (
-    <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
-      <Card fullWidth fullHeight style={{ minHeight: '300px' }}>
+    <Column xs={12} md={12} lg={4} xl={4} useAppMargin fullHeight>
+      <Card
+        fullWidth
+        fullHeight
+        style={{ minHeight: '300px', padding: '28px' }}
+      >
         {loading ? <Spinner isFixed /> : getContent()}
       </Card>
     </Column>

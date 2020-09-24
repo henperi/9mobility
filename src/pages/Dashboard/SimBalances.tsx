@@ -53,7 +53,11 @@ export const SimBalances: React.FC = (props) => {
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
-      <Card fullWidth fullHeight style={{ minHeight: '300px' }}>
+      <Card
+        fullWidth
+        fullHeight
+        style={{ minHeight: '300px', padding: '28px' }}
+      >
         {loading ? (
           <Spinner isFixed />
         ) : (

@@ -19,7 +19,7 @@ import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 import { getFieldError } from '../../utils/formikHelper';
 import { Spinner } from '../../components/Spinner';
-import { TableExample } from '../../components/Table';
+import { SimpleTable } from '../../components/Table';
 
 interface TransactionHistorryResp {
   result: {
@@ -76,6 +76,9 @@ export const TransactionHistoryPage: React.FC = () => {
 
   const [tableData, setTableData] = useState<(string | number)[][]>();
 
+  const getAmount = (amount: string) =>
+    amount.endsWith('MB') ? amount : `N${amount}`;
+
   useEffect(() => {
     if (data?.result) {
       const tableResults = data.result.results.map((result, i) => {
@@ -83,7 +86,7 @@ export const TransactionHistoryPage: React.FC = () => {
           'S/N': i + 1,
           Type: result.transactionType,
           Source: result.transactionSource,
-          Amount: result.transactionAmount,
+          Amount: getAmount(result.transactionAmount),
           Date: DateTime.fromISO(result.createdDate, {
             locale: 'fr',
           }).toLocaleString(),
@@ -97,10 +100,12 @@ export const TransactionHistoryPage: React.FC = () => {
 
   const renderTable = () =>
     data?.result.results.length ? (
-      <TableExample
-        columns={['S/N', 'Type', 'Source', 'Amount', 'Date', 'Time']}
-        data={tableData}
-      />
+      <div style={{ margin: '-28px' }}>
+        <SimpleTable
+          columns={['S/N', 'Type', 'Source', 'Amount', 'Date', 'Time']}
+          data={tableData}
+        />
+      </div>
     ) : (
       <Text variant="lighter">No transaction histories at the moment</Text>
     );

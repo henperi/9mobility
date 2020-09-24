@@ -2,22 +2,29 @@ import React from 'react';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
-import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import { Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import { generateShortId } from '../../utils/generateShortId';
+import { Text } from '../Text';
+import { Style } from './styles';
 
-export const TableExample: React.FC<{
+interface ISimpleTableProps
+  extends React.TableHTMLAttributes<HTMLTableElement> {
   columns?: string[];
   data?: (string | number | Date)[][];
-}> = (props) => {
-  const { columns, data } = props;
+}
+
+export const SimpleTable: React.FC<ISimpleTableProps> = (props) => {
+  const { columns, data, ...rest } = props;
+
   return (
-    <Table>
+    <Style.Table {...rest}>
       <Thead>
         <Tr>
           {columns?.map((name) => (
-            <Th style={{ textAlign: 'left' }} key={generateShortId()}>
-              {name}
+            <Th key={generateShortId()}>
+              <Text size={12} variant="lighter" weight={100}>
+                {name}
+              </Text>
             </Th>
           ))}
         </Tr>
@@ -26,11 +33,13 @@ export const TableExample: React.FC<{
         {data?.map((row) => (
           <Tr key={generateShortId()}>
             {row.map((item) => (
-              <Td key={generateShortId()}>{item}</Td>
+              <Td key={generateShortId()}>
+                <Text variant="lighter">{item}</Text>
+              </Td>
             ))}
           </Tr>
         ))}
       </Tbody>
-    </Table>
+    </Style.Table>
   );
 };

@@ -27,7 +27,11 @@ export const SubscribedServices = () => {
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
-      <Card fullWidth fullHeight style={{ minHeight: '300px' }}>
+      <Card
+        fullWidth
+        fullHeight
+        style={{ minHeight: '300px', padding: '28px' }}
+      >
         {loading ? (
           <Spinner isFixed />
         ) : (
@@ -78,9 +82,6 @@ export const SubscribedServices = () => {
                       {service.name}
                     </Text>
                     <SizedBox height={7} />
-                    <Text size={12} color={Colors.darkGreen} weight={500}>
-                      N300
-                    </Text>
                   </Column>
                 </Card>
               ))}
