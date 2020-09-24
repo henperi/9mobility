@@ -26,6 +26,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
+import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
 
 interface SuccessResp {
   result: {
@@ -33,33 +34,6 @@ interface SuccessResp {
   };
   responseCode: number;
   message: string;
-}
-
-interface bundlesResp {
-  result: {
-    id: string;
-    bundle: string;
-    cost: string;
-    dataValue: string;
-    validityDays: number;
-    isActive: boolean;
-    description: string;
-    dataPlanId: number;
-    categoryName: string;
-  }[];
-}
-
-interface BorrowEligibilityResp {
-  result: {
-    borrowingOptions: {
-      mobileNumber: string;
-      borrowingAmounts: {
-        id: number;
-        amount: number;
-        interest: number;
-      }[];
-    }[];
-  };
 }
 
 export const BuyDataWithCard: React.FC = () => {
