@@ -23,6 +23,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   responseCode: number;
@@ -131,11 +132,15 @@ export const BuyDataWithAirtime: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleBuyDataWithAirtime = async () => {
-    const response = await buyDataWithAirtime(formik.values);
+    try {
+      const response = await buyDataWithAirtime(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 

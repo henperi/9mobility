@@ -21,6 +21,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
+import { logger } from '../../utils/logger';
 
 interface BorrowEligibilityResp {
   result: {
@@ -41,8 +42,8 @@ interface BorrowSuccessResp {
 }
 
 export const BorrowData: React.FC = () => {
-  const [borrowAirtime, { loading, data, error }] = usePost<BorrowSuccessResp>(
-    'Mobility.Account/api/Airtime/Borrow',
+  const [borrowData, { loading, data, error }] = usePost<BorrowSuccessResp>(
+    'Mobility.Account/api/data/Borrow',
   );
 
   const { loading: loadingEligibility, data: dataEligibility } = useFetch<
@@ -125,11 +126,15 @@ export const BorrowData: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleborrowData = async () => {
-    const response = await borrowAirtime(formik.values);
+    try {
+      const response = await borrowData(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 

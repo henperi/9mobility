@@ -27,6 +27,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { BorrowEligibilityResp, bundlesResp } from '../../utils/Interfaces';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   result: {
@@ -137,12 +138,16 @@ export const BuyDataWithCard: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleBuyWithDebitCard = async () => {
-    const response = await buyWithDebitCard(formik.values);
+    try {
+      const response = await buyWithDebitCard(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
+      if (response.data) {
+        setShowConfirmationModal(false);
 
-      window.open(response.data.result.paymentLink, '_blank');
+        window.open(response.data.result.paymentLink, '_blank');
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 
