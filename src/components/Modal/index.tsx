@@ -10,7 +10,7 @@ import { SizedBox } from '../SizedBox';
 import { Text } from '../Text';
 import { Styles, IModalProps } from './styles';
 
-const modalRoot = document.getElementById('modal');
+const modalRoot = document.getElementById('modal-portal');
 
 export const Modal: React.FC<
   HtmlHTMLAttributes<HTMLDivElement> & IModalProps

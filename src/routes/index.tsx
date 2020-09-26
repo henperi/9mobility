@@ -21,6 +21,8 @@ import { BuyDataWithAirtime } from '../pages/Data/BuyDataWithAirtime';
 import { TransferData } from '../pages/Data/TransferData';
 import { BorrowData } from '../pages/Data/BorrowData';
 import { PrepaidPlansPage } from '../pages/PrepaidPlans';
+import { Roaming } from '../pages/Roaming';
+import { RoamingRates } from '../pages/Roaming/RoamingRates';
 
 export const Routes = () => {
   return (
@@ -92,6 +94,8 @@ export const Routes = () => {
         path="/prepaid-plans"
         component={PrepaidPlansPage}
       />
+      <ProtectedRoute exact path="/roaming" component={Roaming} />
+      <ProtectedRoute exact path="/roaming/rates" component={RoamingRates} />
     </Switch>
   );
 };

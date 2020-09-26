@@ -93,7 +93,7 @@ export const SideBar: React.FC<ISidebar> = (props) => {
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
           Postpaid/Corporate
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/roaming">
           Roaming
         </Styles.SideBarLink>
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
