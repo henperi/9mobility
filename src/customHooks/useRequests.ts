@@ -51,10 +51,10 @@ export function useFetch<T>(url: string, params?: IParam) {
   const [data, setData] = useState<T>();
   const [error, setError] = useState();
 
-  const refetch: () => any = useCallback(
-    () =>
+  const refetch = useCallback(
+    (fetchParams = params) =>
       httpService
-        .get(url + concatParams(params))
+        .get(url + concatParams(fetchParams))
         .then((result: AxiosResponse<T>) => {
           setLoading(false);
           setData(result.data);
@@ -85,26 +85,29 @@ export function useLazyFetch<T>(url: string, params?: IParam) {
     message: string;
   } | null>(null);
 
-  const callService = useCallback(async () => {
-    setLoading(true);
-    setErrorResponse(null);
+  const callService = useCallback(
+    async (fetchParams = params) => {
+      setLoading(true);
+      setErrorResponse(null);
 
-    return httpService
-      .get(url + concatParams(params))
-      .then((result: AxiosResponse<T>) => {
-        setLoading(false);
-        setData(result.data);
+      return httpService
+        .get(url + concatParams(fetchParams))
+        .then((result: AxiosResponse<T>) => {
+          setLoading(false);
+          setData(result.data);
 
-        return { loading: false, data: result.data, error: null };
-      })
-      .catch((error: AxiosError<Error1 | Error2>) => {
-        const errorRes = handleAxiosError(error);
-        setErrorResponse(errorRes);
-        setLoading(false);
+          return { loading: false, data: result.data, error: null };
+        })
+        .catch((error: AxiosError<Error1 | Error2>) => {
+          const errorRes = handleAxiosError(error);
+          setErrorResponse(errorRes);
+          setLoading(false);
 
-        throw errorRes;
-      });
-  }, [params, url]);
+          throw errorRes;
+        });
+    },
+    [params, url],
+  );
 
   const response = { loading, data, error: errorResponse };
   return [callService, response] as const;

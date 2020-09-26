@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { MouseEvent } from 'react';
 import { Colors } from '../../themes/colors';
 import { rem } from '../../utils/rem';
 
@@ -13,6 +14,7 @@ export interface ICardProps {
   fullWidth?: boolean;
   fullHeight?: boolean;
   color?: string;
+  onClick?: (event: MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 const Card = styled.div.attrs({})<ICardProps>`
@@ -27,6 +29,12 @@ const Card = styled.div.attrs({})<ICardProps>`
   z-index: 1;
   display: flex;
   height: ${({ fullHeight }) => (fullHeight ? '100%' : 'fit-content')};
+
+  ${({ onClick }) =>
+    onClick &&
+    css`
+      cursor: pointer;
+    `}
 
   ${({ fullWidth }) =>
     fullWidth &&
