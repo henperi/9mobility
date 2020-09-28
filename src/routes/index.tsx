@@ -23,6 +23,11 @@ import { BorrowData } from '../pages/Data/BorrowData';
 import { PrepaidPlansPage } from '../pages/PrepaidPlans';
 import { Roaming } from '../pages/Roaming';
 import { RoamingRates } from '../pages/Roaming/RoamingRates';
+import { PostpaidPage } from '../pages/Postpaid';
+import { PayBill } from '../pages/Postpaid/PayBill';
+import { Download } from '../pages/Postpaid/Download';
+import { BuyBundle } from '../pages/Postpaid/BuyBundle';
+import { ManageAccount } from '../pages/Postpaid/ManageAccount';
 
 export const Routes = () => {
   return (
@@ -96,6 +101,20 @@ export const Routes = () => {
       />
       <ProtectedRoute exact path="/roaming" component={Roaming} />
       <ProtectedRoute exact path="/roaming/rates" component={RoamingRates} />
+
+      <ProtectedRoute exact path="/postpaid" component={PostpaidPage} />
+      <ProtectedRoute exact path="/postpaid/pay-bill" component={PayBill} />
+      <ProtectedRoute
+        exact
+        path="/postpaid/download-statement"
+        component={Download}
+      />
+      <ProtectedRoute exact path="/postpaid/buy-bundle" component={BuyBundle} />
+      <ProtectedRoute
+        exact
+        path="/postpaid/manage-acct"
+        component={ManageAccount}
+      />
     </Switch>
   );
 };
