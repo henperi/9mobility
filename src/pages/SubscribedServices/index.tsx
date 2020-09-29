@@ -18,7 +18,7 @@ import { object } from 'yup';
 // import { AsyncImage } from '../../components/AsyncImage';
 // import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 
-export interface SubcribedServicesResp {
+export interface SubscribedServicesResp {
   result: [
     {
       id: string,
@@ -34,9 +34,9 @@ export interface SubcribedServicesResp {
   message: string
 }
 
-export const SubcribedServices: React.FC = () => {
+export const SubscribedServices: React.FC = () => {
 
-  const { data, loading } = useFetch<SubcribedServicesResp>(
+  const { data, loading } = useFetch<SubscribedServicesResp>(
     'Mobility.Account/api/Services/GetSubscribedServices'
     );
 
@@ -55,7 +55,7 @@ export const SubcribedServices: React.FC = () => {
               Subscribed Services
             </Text>
             <SizedBox height={2} />
-            <Text weight={100}>List of currently subcribed services</Text>
+            <Text weight={100}>List of currently subscribed services</Text>
             <SizedBox height={10} />
           </Column>
           {loading ? (
