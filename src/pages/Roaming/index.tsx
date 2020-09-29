@@ -71,7 +71,11 @@ export const Roaming: React.FC = () => {
       <SizedBox height={40} />
       <Row useAppMargin>
         <Column useAppMargin md={6} lg={4} fullHeight>
-          <Card fullWidth fullHeight onClick={() => null}>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/roaming/idd-rates')}
+          >
             <RoamingIcon />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
@@ -101,7 +105,11 @@ export const Roaming: React.FC = () => {
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={4} fullHeight>
-          <Card fullWidth fullHeight onClick={() => null}>
+          <Card
+            fullWidth
+            fullHeight
+            onClick={() => history.push('/roaming/buy-bundle')}
+          >
             <ShoppingIcon />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
