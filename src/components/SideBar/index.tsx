@@ -99,7 +99,7 @@ export const SideBar: React.FC<ISidebar> = (props) => {
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/roaming">
           Roaming
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/subcribed-services">
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/subscribed-services">
           My Subscribed Services
         </Styles.SideBarLink>
       </Column>
