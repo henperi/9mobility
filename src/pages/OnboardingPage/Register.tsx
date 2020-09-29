@@ -84,7 +84,7 @@ export const Register: React.FC<SetScreen> = () => {
   const { state } = useGlobalStore();
 
   useEffect(() => {
-    if (state.auth.isAuthenticated && state.auth.user?.email) {
+    if (state.auth.isAuthenticated && state.auth.user?.firstName) {
       history.push('/dashboard');
     }
   }, [history, state.auth]);
