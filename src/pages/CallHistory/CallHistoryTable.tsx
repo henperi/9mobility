@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 import { useFormik } from 'formik';
-import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import * as Yup from 'yup';
+// import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import { Card } from '../../components/Card';
 import { useLazyFetch } from '../../customHooks/useRequests';
 import { Column } from '../../components/Column';
@@ -16,30 +16,23 @@ import { Button } from '../../components/Button';
 import { getFieldError } from '../../utils/formikHelper';
 
 interface CallHistoryResp {
+  responseCode: number;
+  message: string;
   result: {
-    responseCode: number,
-    message: string;
-    results: {
-      recipientNumber: string;
-      callDate: Date | string;
-      timeSpent: string;
-      status: number
-      endDate: string;
-      charge: string;
-      type: string;
-      id: string;
-    }[];
-  };
+    id: string;
+    recipientNumber: string;
+    type: string;
+    charge: string;
+    callDate: string;
+    endDate: string;
+    timeSpent: string;
+    status: 1;
+  }[];
 }
 
-export const CallHistoryTable: React.FC = () => {
-  // const history = useHistory();
-  const query = useUrlQuery();
-  const trackingId = query.get('trackingId');
+export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
   const [tableData, setTableData] = useState<(string | number)[][]>();
-  // const [pageNumber] = useState(1);
-  // const [pageSize] = useState(15);
-
+  const { trackingId } = props;
 
   const formik = useFormik({
     initialValues: {
@@ -51,31 +44,31 @@ export const CallHistoryTable: React.FC = () => {
       endDate: Yup.date().required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      await getCallHistory()
+      await getCallHistory();
     },
   });
 
   const date = {
     start: DateTime.fromISO(formik.values.startDate, {
       locale: 'fr',
-    }).toLocaleString(),
+    }).toISODate(),
     end: DateTime.fromISO(formik.values.endDate, {
       locale: 'fr',
-    }).toLocaleString(),
-  }
+    }).toISODate(),
+  };
 
-  console.log(date, 'thisis t')
+  // console.log(date);
 
-  const [getCallHistory, { data, loading }] = useLazyFetch<
-  CallHistoryResp
-  >(`Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`);
+  const [getCallHistory, { data, loading }] = useLazyFetch<CallHistoryResp>(
+    `Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`,
+  );
 
   useEffect(() => {
     if (data?.result) {
-      const tableResults = data.result.results.map((result, i) => {
+      const tableResults = data.result.map((result, i) => {
         return Object.values({
           'S/N': i + 1,
-         'Phone Number': result.recipientNumber,
+          'Phone Number': result.recipientNumber,
           Type: result.type,
           Charge: result.charge,
           Date: DateTime.fromISO(result.endDate, {
@@ -89,20 +82,14 @@ export const CallHistoryTable: React.FC = () => {
     }
   }, [data]);
 
-  // const [pageNumber] = useState(1);
-  // const [pageSize] = useState(15);
-
-  useEffect(() => {
-    //  get call history
-    (async () => await getCallHistory())();
-  }, [])
-
   const renderTable = () =>
-    data?.result.results.length ? (
-      <SimpleTable
-        columns={['S/N', 'Phone Number', 'Type', 'Charge', 'Date', 'Time']}
-        data={tableData}
-      />
+    tableData?.length ? (
+      <div style={{ margin: '-28px' }}>
+        <SimpleTable
+          columns={['S/N', 'Phone Number', 'Type', 'Charge', 'Date', 'Time']}
+          data={tableData}
+        />
+      </div>
     ) : (
       <Text variant="lighter">No call histories at the moment</Text>
     );
@@ -112,17 +99,6 @@ export const CallHistoryTable: React.FC = () => {
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
-            <Column md={6} style={{ marginLeft: '0', paddingRight: '1%' }}>
-              <TextField
-                label="Select Phone Number"
-                placeholder="Select Phone"
-                dropDown
-                type="tel"
-                minLength={11}
-                maxLength={11}
-              />
-            </Column>
-            <SizedBox height={20} />
             <Row useAppMargin alignItems="flex-end">
               <Column useAppMargin md={4} lg={3}>
                 <TextField
@@ -183,6 +159,5 @@ export const CallHistoryTable: React.FC = () => {
         </Card>
       </Column>
     </Column>
-
   );
 };

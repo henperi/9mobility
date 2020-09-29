@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route, useRouteMatch } from 'react-router-dom';
 import { Styles as CardStyles } from '../../components/Card/styles';
 import { PageBody } from '../../components/PageBody';
 import appLogoBig from '../../assets/images/9mobile-logo-big.png';
@@ -8,13 +7,8 @@ import { Text } from '../../components/Text';
 import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
 import { CallHistoryNumberCheck } from './CallHistoryNumberCheck';
-import { CallHistoryConfirmOTP } from './CallHistoryConfirmOTP';
-import { CallHistoryTable } from './CallHistoryTable';
-
 
 export const CallHistory: React.FC = () => {
-  let { path, url } = useRouteMatch();
-
   return (
     <PageBody>
       <CardStyles.CardHeader
@@ -34,11 +28,7 @@ export const CallHistory: React.FC = () => {
         </Column>
       </CardStyles.CardHeader>
       <SizedBox height={40} />
-      <Column>
-        <Route exact path={path} component={CallHistoryNumberCheck} />
-        <Route path={`${path}/confirm-opt`} component={CallHistoryConfirmOTP} />
-        <Route path={`${path}/history`} component={CallHistoryTable} />
-      </Column>
+      <CallHistoryNumberCheck />
     </PageBody>
   );
 };

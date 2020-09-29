@@ -1,9 +1,8 @@
-import React, { useState }from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+
 import { Card } from '../../components/Card';
-import { useUrlQuery } from '../../customHooks/useUrlQuery';
 import { getFieldError } from '../../utils/formikHelper';
 import { Column } from '../../components/Column';
 import { Text } from '../../components/Text';
@@ -28,11 +27,14 @@ export interface OtpVerificationResponse {
   message: string;
 }
 
-export const CallHistoryConfirmOTP: React.FC = () => {
-  const history = useHistory();
-  const query = useUrlQuery();
-  const mobileNumber = query.get('mobileNumber');
-  const trackingId = query.get('trackingId');
+export const CallHistoryConfirmOTP: React.FC<{
+  message: string;
+  trackingId: string;
+  mobileNumber: string;
+  setshowCallHistoryScreen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = (props) => {
+  const { message, mobileNumber, trackingId, setshowCallHistoryScreen } = props;
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>('');
 
@@ -45,20 +47,13 @@ export const CallHistoryConfirmOTP: React.FC = () => {
       setLoading(true);
       setErrorMessage('');
 
-      const result = await verifyOTP({ ...data, trackingId, mobileNumber });
-       
-      setLoading(false);
-      // dispatch(setAuthUser(result.data.result));
-
-      const { email, firstName } = result.data.result;
-
-      if (email || firstName)  history.push(`/call/history?trackingId=${trackingId}`)
+      await verifyOTP({ ...data, trackingId, mobileNumber });
+      setshowCallHistoryScreen(true);
     } catch (error) {
       setLoading(false);
       setErrorMessage((error as Error).message);
     }
   };
-
 
   const formik = useFormik({
     initialValues: {
@@ -76,49 +71,45 @@ export const CallHistoryConfirmOTP: React.FC = () => {
   });
 
   return (
-      <Column>
-        {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
-        <form onSubmit={formik.handleSubmit}>
-          <Card
-            fullWidth
-            fullHeight
-            padding="40px"
-            style={{ minHeight: '300px' }}
+    <Column>
+      {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
+      <form onSubmit={formik.handleSubmit}>
+        <Card
+          fullWidth
+          fullHeight
+          padding="40px"
+          style={{ minHeight: '300px' }}
+        >
+          <Column
+            xs={12}
+            sm={10}
+            md={8}
+            lg={6}
+            xl={5}
+            style={{ margin: '0 auto' }}
           >
-            <Column
-              xs={12}
-              sm={10}
-              md={8}
-              lg={6}
-              xl={5}
-              style={{ margin: '0 auto' }}
-            >
-              <SizedBox height={20} />
-              <Text size={18} weight={700} alignment="center">
-                We sent you an SMS with a code
-              </Text>
-              <SizedBox height={6} />
-              <Text weight={300} alignment="center">
-                To access your call history, kindly enter the OPT sent to your
-                registered number
-              </Text>
-              <SizedBox height={36} />
-              <TextField 
-                placeholder="Enter OTP"
-                onChange={(e) => formik.setFieldValue('otp', e.target.value)}
-                error={getFieldError(formik.errors.otp, formik.touched.otp)}
-              />
-              <SizedBox height={36} />
-              <Button 
-                type="submit"
-                isLoading={loading}
-                fullWidth
-              >
-                Continue
-              </Button>
-            </Column>
-          </Card>
-        </form>
-      </Column>
+            <SizedBox height={20} />
+            <Text size={18} weight={700} alignment="center">
+              {message}
+            </Text>
+            <SizedBox height={6} />
+            <Text weight={300} alignment="center">
+              To access your call history, kindly enter the OPT sent to your
+              registered number
+            </Text>
+            <SizedBox height={36} />
+            <TextField
+              placeholder="Enter OTP"
+              onChange={(e) => formik.setFieldValue('otp', e.target.value)}
+              error={getFieldError(formik.errors.otp, formik.touched.otp)}
+            />
+            <SizedBox height={36} />
+            <Button type="submit" isLoading={loading} fullWidth>
+              Continue
+            </Button>
+          </Column>
+        </Card>
+      </form>
+    </Column>
   );
 };
