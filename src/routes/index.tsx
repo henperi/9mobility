@@ -28,6 +28,7 @@ import { PayBill } from '../pages/Postpaid/PayBill';
 import { Download } from '../pages/Postpaid/Download';
 import { BuyBundle } from '../pages/Postpaid/BuyBundle';
 import { ManageAccount } from '../pages/Postpaid/ManageAccount';
+import { SubcribedServices } from '../pages/SubcribedServices';
 
 export const Routes = () => {
   return (
@@ -114,6 +115,11 @@ export const Routes = () => {
         exact
         path="/postpaid/manage-acct"
         component={ManageAccount}
+      />
+      <ProtectedRoute
+        exact
+        path="/subcribed-services"
+        component={SubcribedServices}
       />
     </Switch>
   );
