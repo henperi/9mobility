@@ -59,10 +59,9 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
       setLoading(false);
       dispatch(setAuthUser(result.data.result));
 
-      // logger.log(result.data);
       const { email, firstName } = result.data.result;
 
-      if (email || firstName) {
+      if (email && firstName) {
         history.push(`/dashboard`);
       } else history.push(`/onboarding/register`);
     } catch (error) {
