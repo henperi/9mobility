@@ -16,7 +16,7 @@ import { Button } from '../../components/Button';
 import { Spinner } from '../../components/Spinner';
 import { AsyncImage } from '../../components/AsyncImage';
 import { SinglePlan } from './SinglePlan';
-// import { logger } from '../../utils/logger';
+import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 
 export interface ActivePlan {
   result: {
@@ -31,13 +31,7 @@ export interface ActivePlan {
 }
 
 export const PrepaidPlansPage: React.FC = () => {
-  // const history = useHistory();
-
-  const { data, loading } = useFetch<ActivePlan>(
-    'Mobility.Account/api/Plans/GetActivePlan',
-  );
-
-  // logger.log('A');
+  const { data, loading } = useGetActivePlan();
 
   const { data: allPlans, loading: allPlansLoading } = useFetch<{
     result: ActivePlan['result'][];

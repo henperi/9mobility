@@ -21,19 +21,8 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
-
-interface BorrowEligibilityResp {
-  result: {
-    borrowingOptions: {
-      mobileNumber: string;
-      borrowingAmounts: {
-        id: number;
-        amount: number;
-        interest: number;
-      }[];
-    }[];
-  };
-}
+import { logger } from '../../utils/logger';
+import { BorrowEligibilityResp } from './Interface';
 
 interface BorrowSuccessResp {
   responseCode: number;
@@ -41,8 +30,8 @@ interface BorrowSuccessResp {
 }
 
 export const BorrowData: React.FC = () => {
-  const [borrowAirtime, { loading, data, error }] = usePost<BorrowSuccessResp>(
-    'Mobility.Account/api/Airtime/Borrow',
+  const [borrowData, { loading, data, error }] = usePost<BorrowSuccessResp>(
+    'Mobility.Account/api/data/Borrow',
   );
 
   const { loading: loadingEligibility, data: dataEligibility } = useFetch<
@@ -125,11 +114,15 @@ export const BorrowData: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleborrowData = async () => {
-    const response = await borrowAirtime(formik.values);
+    try {
+      const response = await borrowData(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
-      setShowSuccessModal(true);
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 
@@ -255,7 +248,10 @@ export const BorrowData: React.FC = () => {
                           fullWidth
                           onClick={() => {
                             setSelectedAmount(options.amount);
-                            formik.setFieldValue('amount', options.amount);
+                            formik.setFieldValue(
+                              'amount',
+                              String(options.amount),
+                            );
                           }}
                           variant="secondary"
                           outline={selectedAmount !== options.amount}

@@ -90,10 +90,13 @@ export const SideBar: React.FC<ISidebar> = (props) => {
         >
           Prepaid Plans
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+        <Styles.SideBarLink
+          activeClassName="active-sidebar-link"
+          to="/postpaid"
+        >
           Postpaid/Corporate
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">
+        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/roaming">
           Roaming
         </Styles.SideBarLink>
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/any">

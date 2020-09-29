@@ -26,6 +26,8 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
+import { BorrowEligibilityResp, BundlesResp } from './Interface';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   result: {
@@ -33,33 +35,6 @@ interface SuccessResp {
   };
   responseCode: number;
   message: string;
-}
-
-interface bundlesResp {
-  result: {
-    id: string;
-    bundle: string;
-    cost: string;
-    dataValue: string;
-    validityDays: number;
-    isActive: boolean;
-    description: string;
-    dataPlanId: number;
-    categoryName: string;
-  }[];
-}
-
-interface BorrowEligibilityResp {
-  result: {
-    borrowingOptions: {
-      mobileNumber: string;
-      borrowingAmounts: {
-        id: number;
-        amount: number;
-        interest: number;
-      }[];
-    }[];
-  };
 }
 
 export const BuyDataWithCard: React.FC = () => {
@@ -83,7 +58,7 @@ export const BuyDataWithCard: React.FC = () => {
     'Mobility.Account/api/data/GetBorrowingEligibility',
   );
 
-  const { data: bundlesData } = useFetch<bundlesResp>(
+  const { data: bundlesData } = useFetch<BundlesResp>(
     'Mobility.Account/api/Data/GetBundle',
   );
 
@@ -163,12 +138,16 @@ export const BuyDataWithCard: React.FC = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleBuyWithDebitCard = async () => {
-    const response = await buyWithDebitCard(formik.values);
+    try {
+      const response = await buyWithDebitCard(formik.values);
 
-    if (response.data) {
-      setShowConfirmationModal(false);
+      if (response.data) {
+        setShowConfirmationModal(false);
 
-      window.open(response.data.result.paymentLink, '_blank');
+        window.open(response.data.result.paymentLink, '_blank');
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
     }
   };
 

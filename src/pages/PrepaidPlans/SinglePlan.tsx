@@ -20,26 +20,14 @@ import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-// import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
 import { ActivePlan } from '.';
 import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
+import { Spinner } from '../../components/Spinner';
 
-// interface BorrowEligibilityResp {
-//   result: {
-//     borrowingOptions: {
-//       mobileNumber: string;
-//       borrowingAmounts: {
-//         id: number;
-//         amount: number;
-//         interest: number;
-//       }[];
-//     }[];
-//   };
-// }
-
-interface BorrowSuccessResp {
+interface MigrateSuccessResp {
   responseCode: number;
   message: string;
 }
@@ -48,10 +36,13 @@ export const SinglePlan: React.FC<{
   plan: ActivePlan['result'];
   allPlans: ActivePlan['result'][];
 }> = ({ plan, allPlans }) => {
-  // const {} = plan;
-  // console.log('a');
+  const {
+    data: activePlan,
+    loading: activePlanLoading,
+    refetch,
+  } = useGetActivePlan();
 
-  const [migrateToPlan, { loading, data, error }] = usePost<BorrowSuccessResp>(
+  const [migrateToPlan, { loading, data, error }] = usePost<MigrateSuccessResp>(
     'Mobility.Account/api/Plans/MigrateToPlan',
   );
 
@@ -107,6 +98,7 @@ export const SinglePlan: React.FC<{
       const response = await migrateToPlan(formik.values);
 
       if (response.data) {
+        await refetch();
         setShowConfirmationModal(false);
         setShowSuccessModal(true);
       }
@@ -185,8 +177,6 @@ export const SinglePlan: React.FC<{
     return allPlans.filter((thisPlan) => thisPlan.id === planId);
   };
 
-  // console.log(formik.values);
-
   return (
     <>
       <PageBody centeralize>
@@ -222,11 +212,17 @@ export const SinglePlan: React.FC<{
                   backgroundColor: convertHexToRGBA(Colors.yellowGreen, 0.3),
                 }}
               >
-                <Text>{plan.name}</Text>
-                <SizedBox height={10} />
-                <Text size={12} variant="lighter">
-                  {plan.description}
-                </Text>
+                {activePlanLoading ? (
+                  <Spinner isFixed />
+                ) : (
+                  <>
+                    <Text>{activePlan?.result.name}</Text>
+                    <SizedBox height={10} />
+                    <Text size={12} variant="lighter">
+                      {activePlan?.result.description}
+                    </Text>
+                  </>
+                )}
               </Card>
 
               <SizedBox height={30} />

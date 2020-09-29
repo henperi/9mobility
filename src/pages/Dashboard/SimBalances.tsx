@@ -11,6 +11,7 @@ import { Text } from '../../components/Text';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { useFetch } from '../../customHooks/useRequests';
 import { Colors } from '../../themes/colors';
+import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 
 interface AirtimeDataResp {
   result: {
@@ -51,6 +52,8 @@ export const SimBalances: React.FC = (props) => {
 
   const history = useHistory();
 
+  const { data: activePlan, loading: activePlanLoading } = useGetActivePlan();
+
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
       <Card
@@ -73,6 +76,7 @@ export const SimBalances: React.FC = (props) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 minHeight: 'unset',
+                paddingLeft: 0,
               }}
             >
               <Text size={18} color={Colors.darkGreen} weight={500}>
@@ -95,10 +99,16 @@ export const SimBalances: React.FC = (props) => {
               </Column>
             </Row>
             <SizedBox height={35} />
-            <Text>
-              You’re currently on MoreTalk. Call rate is 25k/sec to all networks
-              after ₦25 spend.
-            </Text>
+            {activePlanLoading ? (
+              <Spinner />
+            ) : (
+              <Text weight={100} size={14} variant="lighter">
+                <Text casing="capitalize" weight={500}>
+                  {activePlan?.result.name}:{' '}
+                </Text>
+                {activePlan?.result.description}
+              </Text>
+            )}
             <SizedBox height={25} />
             <Row useAppMargin>
               <Column useAppMargin xs={6}>
@@ -108,7 +118,7 @@ export const SimBalances: React.FC = (props) => {
               </Column>
               <Column useAppMargin xs={6}>
                 <Button
-                  onClick={() => history.push('/airtime')}
+                  onClick={() => history.push('/data')}
                   fullWidth
                   outline
                   variant="secondary"

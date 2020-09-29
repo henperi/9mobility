@@ -77,7 +77,7 @@ export const DropDownContainer = styled(StackStyles.StackChild)`
   box-sizing: border-box;
   box-shadow: 0px 5px 20px rgba(219, 219, 219, 0.25);
   border-radius: 4px;
-  max-height: 300px;
+  max-height: 200px;
   overflow: auto;
   min-width: 100%;
 `;

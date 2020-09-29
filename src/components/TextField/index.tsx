@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Styles } from './styles';
 import { Text } from '../Text';
@@ -15,6 +15,7 @@ import {
   DropDownStack,
 } from '../Button/styles';
 import { generateShortId } from '../../utils/generateShortId';
+import { Portal } from '../Portal';
 
 export interface ITextField
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -33,7 +34,7 @@ export interface ITextField
   dropDown?: boolean;
   dropDownOptions?: {
     label: string;
-    value: string;
+    value: string | number;
   }[];
 }
 
@@ -58,12 +59,31 @@ export const TextField: React.FC<ITextField> = (props) => {
   } = props;
 
   const [showDropDown, setshowDropDown] = useState(false);
-  const [value, setValue] = useState({
-    label: '',
-    value: '',
-  });
+  const [value, setValue] = useState<{ label: string; value: string | number }>(
+    {
+      label: '',
+      value: '',
+    },
+  );
+
+  const [coords, setCoords] = useState<{
+    left?: number;
+    top?: number;
+    width?: string;
+  }>({});
+
+  const ref = useRef<HTMLElement | null | undefined>();
 
   const toggleDropDown = () => {
+    const rect = ref.current?.getBoundingClientRect();
+
+    if (rect) {
+      setCoords({
+        left: rect.x,
+        top: rect.y + rect.height + window.scrollY,
+        width: `${rect.width}px`,
+      });
+    }
     setshowDropDown(!showDropDown);
   };
 
@@ -96,7 +116,9 @@ export const TextField: React.FC<ITextField> = (props) => {
       if (dropDown) {
         return {
           readOnly: true,
-          value: value.label || value.value,
+          value: dropDownOptions?.length
+            ? value.label || value.value
+            : 'loading...',
           onClick: toggleDropDown,
         };
       }
@@ -111,6 +133,7 @@ export const TextField: React.FC<ITextField> = (props) => {
           disabled={!!inputProps.disabled}
           style={style}
           dropDown={dropDown}
+          ref={ref as React.RefObject<HTMLDivElement>}
         >
           {leftIcon && <div className="inputIcon">{leftIcon}</div>}
           <Styles.Input {...inputProps} {...getDropDownProps()} />
@@ -123,34 +146,42 @@ export const TextField: React.FC<ITextField> = (props) => {
         </Styles.TextField>
 
         {dropDownOptions && showDropDown && (
-          <DropDownStack style={{ width: '100%' }}>
-            <DropDownContainer>
-              {dropDownOptions?.map((option) => {
-                return (
-                  <DropDownItem
-                    key={generateShortId()}
-                    onClick={() => {
-                      setValue(option);
+          <Portal width={coords.width}>
+            <DropDownStack
+              style={{
+                width: '100%',
+                left: coords?.left,
+                top: coords?.top,
+              }}
+            >
+              <DropDownContainer>
+                {dropDownOptions?.map((option) => {
+                  return (
+                    <DropDownItem
+                      key={generateShortId()}
+                      onClick={() => {
+                        setValue(option);
 
-                      if (inputProps.onChange) {
-                        const e = {
-                          target: {
-                            value: option.value,
-                            label: option.label,
-                          },
-                        };
+                        if (inputProps.onChange) {
+                          const e = {
+                            target: {
+                              value: option.value,
+                              label: option.label,
+                            },
+                          };
 
-                        inputProps.onChange(e as any);
-                      }
-                    }}
-                    role="presentation"
-                  >
-                    {option.label}
-                  </DropDownItem>
-                );
-              })}
-            </DropDownContainer>
-          </DropDownStack>
+                          inputProps.onChange(e as any);
+                        }
+                      }}
+                      role="presentation"
+                    >
+                      {option.label}
+                    </DropDownItem>
+                  );
+                })}
+              </DropDownContainer>
+            </DropDownStack>
+          </Portal>
         )}
       </>
     );
