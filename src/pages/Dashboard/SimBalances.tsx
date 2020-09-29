@@ -54,6 +54,20 @@ export const SimBalances: React.FC = (props) => {
 
   const { data: activePlan, loading: activePlanLoading } = useGetActivePlan();
 
+  const renderActivePlan = () =>
+    activePlan?.result.name ? (
+      <Text weight={100} size={14} variant="lighter">
+        <Text casing="capitalize" weight={500}>
+          {activePlan?.result.name}:{' '}
+        </Text>
+        {activePlan?.result.description}
+      </Text>
+    ) : (
+      <Text weight={100} size={14} variant="lighter">
+        You dont have an active plan at the moment
+      </Text>
+    );
+
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
       <Card
@@ -99,16 +113,7 @@ export const SimBalances: React.FC = (props) => {
               </Column>
             </Row>
             <SizedBox height={35} />
-            {activePlanLoading ? (
-              <Spinner />
-            ) : (
-              <Text weight={100} size={14} variant="lighter">
-                <Text casing="capitalize" weight={500}>
-                  {activePlan?.result.name}:{' '}
-                </Text>
-                {activePlan?.result.description}
-              </Text>
-            )}
+            {activePlanLoading ? <Spinner /> : renderActivePlan()}
             <SizedBox height={25} />
             <Row useAppMargin>
               <Column useAppMargin xs={6}>

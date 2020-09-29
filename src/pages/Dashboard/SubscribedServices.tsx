@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Column } from '../../components/Column';
@@ -24,6 +25,8 @@ export const SubscribedServices = () => {
   const { data, loading } = useFetch<SubscribedServiceResp>(
     'Mobility.Account/api/Services/GetSubscribedServices',
   );
+
+  const history = useHistory();
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
@@ -88,7 +91,12 @@ export const SubscribedServices = () => {
             </Scrollable>
             <SizedBox height={15} />
             <Row>
-              <Button fullWidth>View all subscribed services</Button>
+              <Button
+                onClick={() => history.push('/subscribed-services')}
+                fullWidth
+              >
+                View all subscribed services
+              </Button>
             </Row>
           </Column>
         )}
