@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
+import { Chart } from 'react-google-charts';
+
 // import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -24,25 +26,14 @@ import { Spinner } from '../../components/Spinner';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 
 interface TransactionHistorryResp {
-  result: {
-    pageNumber: number;
-    pageSize: number;
-    totalNumberOfPages: number;
-    totalNumberOfRecords: number;
-    nextPageUrl: string;
-    prevPageUrl: string;
-    results:
-      | {
-          transactionAmount: string;
-          createdDate: Date | string;
-          dateCreated: string;
-          timeCreated: string;
-          transactionType: number;
-          transactionSource: number;
-          id: number;
-        }[]
-      | null;
-  };
+  result:
+    | {
+        amountUsed: string;
+        dataUsage: string;
+        time: string;
+        usePurpose: string;
+      }[]
+    | null;
 }
 
 export const DataUsagePage: React.FC = () => {
@@ -63,7 +54,7 @@ export const DataUsagePage: React.FC = () => {
         .required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      await getTransactionHistory();
+      await getDataUsageHistory();
     },
   });
 
@@ -74,17 +65,46 @@ export const DataUsagePage: React.FC = () => {
     locale: 'fr',
   }).toISODate();
 
-  const [getTransactionHistory, { data, loading }] = useLazyFetch<
+  const [getDataUsageHistory, { data, loading }] = useLazyFetch<
     TransactionHistorryResp
   >(`Mobility.Account/api/Data/getdatausage/${start}/${end}`);
 
-  const renderTable = () =>
-    data?.result?.results?.length ? (
-      <>
-        <Text color={Colors.darkGreen} weight={700} variant="lighter">
-          Data Usage Chart
-        </Text>
-      </>
+  const [barData, setbarData] = useState<(string | number)[][] | null>();
+
+  useEffect(() => {
+    if (data) {
+      const result = data.result?.map((d) => [
+        DateTime.fromISO(d.time, {
+          locale: 'fr',
+        }).toISODate(),
+        parseInt(d.dataUsage, 10) / 1000,
+      ]);
+
+      setbarData(result);
+    }
+  }, [data]);
+
+  const options = {
+    title: 'Data Usage',
+    hAxis: { title: 'Date/Time' },
+    vAxis: { title: 'Data Used' },
+    colors: ['#B4C404'],
+    chartArea: { width: '50%' },
+    isStacked: true,
+  };
+
+  const renderChart = () =>
+    barData ? (
+      <Card fullWidth>
+        <Chart
+          width="100%"
+          height="300px"
+          chartType="Bar"
+          loader={<Spinner />}
+          data={[['Date/Time', 'MB'], ...barData]}
+          options={options}
+        />
+      </Card>
     ) : (
       <Text variant="lighter">No data histories at the moment</Text>
     );
@@ -185,9 +205,7 @@ export const DataUsagePage: React.FC = () => {
           {loading ? (
             <Spinner isFixed />
           ) : (
-            <Column fullHeight alignItems="center">
-              {renderTable()}
-            </Column>
+            <Column fullHeight>{renderChart()}</Column>
           )}
         </Card>
       </Column>
