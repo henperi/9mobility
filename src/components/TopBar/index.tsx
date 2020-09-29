@@ -1,4 +1,5 @@
 import React, { HtmlHTMLAttributes, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Styles } from './style';
 
 import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
@@ -24,6 +25,7 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 export const TopBar: React.FC<ITopBar> = (props) => {
   const { auth, setShowSidebar = () => null, ...rest } = props;
   const { dispatch, state } = useGlobalStore();
+  const history = useHistory();
 
   const [refresh] = useTokenRefresher(state);
 
@@ -75,7 +77,7 @@ export const TopBar: React.FC<ITopBar> = (props) => {
             >
               <SettingsIcon
                 style={{ marginRight: '8px' }}
-                onClick={handleLogout}
+                onClick={() => history.push('/settings')}
               />
               Settings
             </Text>

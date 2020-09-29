@@ -29,6 +29,8 @@ import { Download } from '../pages/Postpaid/Download';
 import { BuyBundle } from '../pages/Postpaid/BuyBundle';
 import { ManageAccount } from '../pages/Postpaid/ManageAccount';
 import { SubscribedServices } from '../pages/SubscribedServices';
+import { Settings } from '../pages/Settings';
+import { ManageNumbers } from '../pages/Settings/ManageNumbers';
 
 export const Routes = () => {
   return (
@@ -120,6 +122,12 @@ export const Routes = () => {
         exact
         path="/subscribed-services"
         component={SubscribedServices}
+      />
+      <ProtectedRoute exact path="/settings" component={Settings} />
+      <ProtectedRoute
+        exact
+        path="/settings/manage-numbers"
+        component={ManageNumbers}
       />
     </Switch>
   );

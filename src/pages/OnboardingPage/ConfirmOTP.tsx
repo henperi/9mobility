@@ -30,6 +30,7 @@ export interface OnboardingAuthResponse {
     hasWallet: boolean;
     walletAccount: string;
     refreshToken: string;
+    dob: string;
   };
   responseCode: number;
   message: string;

@@ -7,5 +7,6 @@ export interface AuthUser {
   hasWallet: boolean;
   walletAccount: string;
   refreshToken: string;
+  dob?: string;
   // mobile?: string;
 }
