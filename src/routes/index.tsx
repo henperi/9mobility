@@ -8,7 +8,6 @@ import { ProtectedRoute } from '../components/ProtectedRoute';
 import { Dashboard } from '../pages/Dashboard';
 import { AirtimePage } from '../pages/Airtime';
 import { CallHistory } from '../pages/CallHistory';
-import { CallHistoryTable } from '../pages/CallHistory/CallHistoryTable';
 import { BuyWithPin } from '../pages/Airtime/BuyWithPin';
 import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
 import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
@@ -92,8 +91,7 @@ export const Routes = () => {
 
       <ProtectedRoute exact path="/data/transfer" component={TransferData} />
       <ProtectedRoute exact path="/data/borrow" component={BorrowData} />
-      <ProtectedRoute exact path="/call" component={CallHistory} />
-      <ProtectedRoute exact path="/call/history" component={CallHistoryTable} />
+      <ProtectedRoute path="/call" component={CallHistory} />
 
       <ProtectedRoute
         exact
