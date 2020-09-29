@@ -66,12 +66,14 @@ export const DataPage: React.FC = () => {
               <SizedBox height={10} />
 
               <Text size={12} weight={500} color={Colors.grey}>
-                Valid till 28/05/2019
+                Valid till {data?.result.dataModel.expiryDate}
               </Text>
               <SizedBox height={5} />
 
               <Text size={12} weight={500} color={Colors.grey}>
-                Roll-Over Applicable
+                {data?.result.dataModel.isRollOver
+                  ? 'Roll-Over Applicable'
+                  : 'Roll-Over not Applicable'}
               </Text>
             </Column>
             <Column useAppMargin xs={6} md={3} lg={2}>
@@ -84,12 +86,14 @@ export const DataPage: React.FC = () => {
               <SizedBox height={10} />
 
               <Text size={12} weight={500} color={Colors.grey}>
-                Valid till 24/04/2019
+                Valid till {data?.result.dataModel.bonusExpiryDate}
               </Text>
               <SizedBox height={5} />
 
               <Text size={12} weight={500} color={Colors.grey}>
-                Roll-Over Applicable
+                {data?.result.dataModel.isRollOver
+                  ? 'Roll-Over Applicable'
+                  : 'Roll-Over not Applicable'}
               </Text>
             </Column>
           </Row>
@@ -105,7 +109,7 @@ export const DataPage: React.FC = () => {
           >
             <CreditCard />
             <SizedBox height={60} />
-            <Text size={18} weight={500} color={Colors.lightGreen}>
+            <Text size={18} weight={500} color={Colors.darkGreen}>
               Buy with debit card
             </Text>
             <SizedBox height={8} />
@@ -122,7 +126,7 @@ export const DataPage: React.FC = () => {
           >
             <NotePin />
             <SizedBox height={50} />
-            <Text size={18} weight={500} color={Colors.lightGreen}>
+            <Text size={18} weight={500} color={Colors.darkGreen}>
               Buy with airtime
             </Text>
             <SizedBox height={8} />
@@ -140,7 +144,7 @@ export const DataPage: React.FC = () => {
           >
             <TransferForward />
             <SizedBox height={50} />
-            <Text size={18} weight={500} color={Colors.lightGreen}>
+            <Text size={18} weight={500} color={Colors.darkGreen}>
               Transfer data
             </Text>
             <SizedBox height={8} />
@@ -158,13 +162,13 @@ export const DataPage: React.FC = () => {
           >
             <MobileBorrow />
             <SizedBox height={45} />
-            <Text size={18} weight={500} color={Colors.lightGreen}>
+            <Text size={18} weight={500} color={Colors.darkGreen}>
               Borrow data
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Did you run out of data during an important online process? No
-              worries, we've got you covered.
+              Ran out of data during an important online process? No worries, we
+              got you covered.
             </Text>
           </Card>
         </Column>

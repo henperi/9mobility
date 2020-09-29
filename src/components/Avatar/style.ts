@@ -13,8 +13,8 @@ const Avatar = styled.div`
 
   img {
     object-fit: cover;
-    height: ${rem(32)};
-    width: ${rem(32)};
+    height: 100%;
+    width: 100%;
   }
 `;
 

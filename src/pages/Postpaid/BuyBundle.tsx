@@ -57,166 +57,168 @@ export const BuyBundle = () => {
   }, [corporateData, getCorporateNumbers]);
 
   return (
-    <PageBody centeralize>
-      <Column xs={12} md={7} lg={6}>
-        <CardStyles.CardHeader
-          style={{ height: '100%', position: 'relative', padding: '20px' }}
-        >
-          <img src={appLogoBig} alt="appLogoBig" />
+    <PageBody>
+      <Column justifyContent="center">
+        <Column xs={12} md={7} lg={6}>
+          <CardStyles.CardHeader
+            style={{ height: '100%', position: 'relative', padding: '20px' }}
+          >
+            <img src={appLogoBig} alt="appLogoBig" />
 
-          <BackButton />
+            <BackButton />
 
-          <SizedBox height={25} />
+            <SizedBox height={25} />
 
-          <Column justifyContent="center">
-            <Text size={18} weight={500}>
-              Manage Numbers
-            </Text>
-            <Text size={14} color={Colors.grey} weight={200}>
-              Services and features
-            </Text>
-          </Column>
-        </CardStyles.CardHeader>
+            <Column justifyContent="center">
+              <Text size={18} weight={500}>
+                Manage Numbers
+              </Text>
+              <Text size={14} color={Colors.grey} weight={200}>
+                Services and features
+              </Text>
+            </Column>
+          </CardStyles.CardHeader>
 
-        <Card showOverlayedDesign fullWidth style={{ minHeight: '400px' }}>
-          {corporateNumbersError && (
-            <ErrorBox>{corporateNumbersError?.message}</ErrorBox>
-          )}
-          {corporateDetailsLoading ? (
-            <Spinner isFixed />
-          ) : (
-            <>
-              {corporateDataError ? (
-                <ErrorBox>{corporateDataError?.message}</ErrorBox>
-              ) : (
-                <>
-                  <Card
-                    fullWidth
-                    style={{
-                      backgroundColor: convertHexToRGBA(
-                        Colors.yellowGreen,
-                        0.2,
-                      ),
-                      padding: '3%',
-                    }}
-                  >
-                    <Row wrap justifyContent="space-between">
-                      <Column xs={6}>
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractName}
-                        </Text>
-                        <Text size={14}>
-                          Admin: {corporateData?.result.adminNumber}
-                        </Text>
-                      </Column>
-                      <Column xs={6} justifyContent="flex-end">
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractNumber}
-                        </Text>
-                        <Text size={14}>Contact Number</Text>
-                      </Column>
-                    </Row>
-                  </Card>
-                  <SizedBox height={30} />
-                  <Text weight="600" size={18}>
-                    Numbers attached
-                  </Text>
-                  <SizedBox height={15} />
-                  <Row childGap={10}>
-                    <Column
-                      lg={6}
-                      xs={12}
+          <Card showOverlayedDesign fullWidth style={{ minHeight: '400px' }}>
+            {corporateNumbersError && (
+              <ErrorBox>{corporateNumbersError?.message}</ErrorBox>
+            )}
+            {corporateDetailsLoading ? (
+              <Spinner isFixed />
+            ) : (
+              <>
+                {corporateDataError ? (
+                  <ErrorBox>{corporateDataError?.message}</ErrorBox>
+                ) : (
+                  <>
+                    <Card
+                      fullWidth
                       style={{
-                        flex: '1',
-                        backgroundColor: Colors.white,
+                        backgroundColor: convertHexToRGBA(
+                          Colors.yellowGreen,
+                          0.2,
+                        ),
+                        padding: '3%',
                       }}
                     >
-                      <Card
-                        fullWidth
-                        fullHeight
-                        style={{
-                          padding: '5%',
-                          minHeight: '250px',
-                          maxHeight: '250px',
-                          backgroundColor: convertHexToRGBA(
-                            Colors.blackGrey,
-                            0.1,
-                          ),
-                          border: `solid 1px ${convertHexToRGBA(
-                            Colors.blackGrey,
-                            0.1,
-                          )}`,
-                        }}
-                      >
-                        <TextField
-                          placeholder="Search numbers"
-                          onChange={() => null}
-                          type="tel"
-                          minLength={11}
-                          maxLength={11}
-                        />
-                        <SizedBox height={20} />
-
-                        {corporateNumbersLoading ? (
-                          <Spinner isFixed />
-                        ) : (
-                          <>
-                            {corporateNumbers?.result?.attachedNumbers
-                              ?.length ? (
-                              <>
-                                {corporateNumbers?.result.attachedNumbers.map(
-                                  (num, index) => (
-                                    <>
-                                      <RadioInput
-                                        key={generateShortId()}
-                                        checked={selectedNumber === index}
-                                        onChange={() =>
-                                          setSelectedNumber(index)
-                                        }
-                                      >
-                                        {num}
-                                      </RadioInput>
-                                      <SizedBox height={10} />
-                                    </>
-                                  ),
-                                )}
-                              </>
-                            ) : (
-                              <Text>No numbers found</Text>
-                            )}
-                          </>
-                        )}
-                      </Card>
-                    </Column>
-                    <Column lg={6} xs={12} style={{ flex: '1' }}>
-                      <Card
-                        fullWidth
-                        fullHeight
-                        style={{
-                          backgroundColor: Colors.darkGreen,
-                          padding: '3%',
-                          minHeight: '250px',
-                          maxHeight: '250px',
-                        }}
-                      >
-                        <Column
-                          fullHeight
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          <Text color={Colors.white} alignment="center">
-                            Display Services available on the MSISDN. Display
-                            per MSISDN
+                      <Row wrap justifyContent="space-between">
+                        <Column xs={6}>
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractName}
+                          </Text>
+                          <Text size={14}>
+                            Admin: {corporateData?.result.adminNumber}
                           </Text>
                         </Column>
-                      </Card>
-                    </Column>
-                  </Row>
-                </>
-              )}
-            </>
-          )}
-        </Card>
+                        <Column xs={6} justifyContent="flex-end">
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractNumber}
+                          </Text>
+                          <Text size={14}>Contact Number</Text>
+                        </Column>
+                      </Row>
+                    </Card>
+                    <SizedBox height={30} />
+                    <Text weight="600" size={18}>
+                      Numbers attached
+                    </Text>
+                    <SizedBox height={15} />
+                    <Row childGap={10}>
+                      <Column
+                        lg={6}
+                        xs={12}
+                        style={{
+                          flex: '1',
+                          backgroundColor: Colors.white,
+                        }}
+                      >
+                        <Card
+                          fullWidth
+                          fullHeight
+                          style={{
+                            padding: '5%',
+                            minHeight: '250px',
+                            maxHeight: '250px',
+                            backgroundColor: convertHexToRGBA(
+                              Colors.blackGrey,
+                              0.1,
+                            ),
+                            border: `solid 1px ${convertHexToRGBA(
+                              Colors.blackGrey,
+                              0.1,
+                            )}`,
+                          }}
+                        >
+                          <TextField
+                            placeholder="Search numbers"
+                            onChange={() => null}
+                            type="tel"
+                            minLength={11}
+                            maxLength={11}
+                          />
+                          <SizedBox height={20} />
+
+                          {corporateNumbersLoading ? (
+                            <Spinner isFixed />
+                          ) : (
+                            <>
+                              {corporateNumbers?.result?.attachedNumbers
+                                ?.length ? (
+                                <>
+                                  {corporateNumbers?.result.attachedNumbers.map(
+                                    (num, index) => (
+                                      <>
+                                        <RadioInput
+                                          key={generateShortId()}
+                                          checked={selectedNumber === index}
+                                          onChange={() =>
+                                            setSelectedNumber(index)
+                                          }
+                                        >
+                                          {num}
+                                        </RadioInput>
+                                        <SizedBox height={10} />
+                                      </>
+                                    ),
+                                  )}
+                                </>
+                              ) : (
+                                <Text>No numbers found</Text>
+                              )}
+                            </>
+                          )}
+                        </Card>
+                      </Column>
+                      <Column lg={6} xs={12} style={{ flex: '1' }}>
+                        <Card
+                          fullWidth
+                          fullHeight
+                          style={{
+                            backgroundColor: Colors.darkGreen,
+                            padding: '3%',
+                            minHeight: '250px',
+                            maxHeight: '250px',
+                          }}
+                        >
+                          <Column
+                            fullHeight
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <Text color={Colors.white} alignment="center">
+                              Display Services available on the MSISDN. Display
+                              per MSISDN
+                            </Text>
+                          </Column>
+                        </Card>
+                      </Column>
+                    </Row>
+                  </>
+                )}
+              </>
+            )}
+          </Card>
+        </Column>
       </Column>
     </PageBody>
   );

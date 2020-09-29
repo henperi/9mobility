@@ -189,93 +189,95 @@ export const BorrowData: React.FC = () => {
 
   return (
     <>
-      <PageBody centeralize>
-        <Column xs={12} md={6} lg={5}>
-          <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '20px' }}
-          >
-            <img src={appLogoBig} alt="appLogoBig" />
+      <PageBody>
+        <Column justifyContent="center">
+          <Column xs={12} md={6} lg={6}>
+            <CardStyles.CardHeader
+              style={{ height: '100%', position: 'relative', padding: '20px' }}
+            >
+              <img src={appLogoBig} alt="appLogoBig" />
 
-            <BackButton />
+              <BackButton />
 
-            <SizedBox height={25} />
+              <SizedBox height={25} />
 
-            <Column justifyContent="center">
-              <Text size={18} weight={500}>
-                Borrow Data
-              </Text>
-              <Text size={14} color={Colors.grey} weight={200}>
-                Borrow and pay back later
-              </Text>
-            </Column>
-          </CardStyles.CardHeader>
-          <Card showOverlayedDesign fullWidth padding="12% 15%">
-            {error && <ErrorBox>{error.message}</ErrorBox>}
-            {loadingEligibility ? (
-              <Spinner />
-            ) : (
-              <form onSubmit={formik.handleSubmit}>
-                <TextField
-                  label="Select Phone Number"
-                  placeholder="Select Phone"
-                  dropDown
-                  dropDownOptions={mobileNumbers}
-                  value={formik.values.mobileNumber}
-                  onChange={(e) => {
-                    formik.setFieldValue('mobileNumber', e.target.value);
-                    setSelectedNumber(e.target.value);
-                  }}
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.mobileNumber,
-                    formik.touched.mobileNumber,
-                  )}
-                />
-                <SizedBox height={16} />
-                <Text color={Colors.blackGrey}>
-                  You are eligible to borrow amount below. Select any amount to
-                  continue
+              <Column justifyContent="center">
+                <Text size={18} weight={500}>
+                  Borrow Data
                 </Text>
-                <SizedBox height={16} />
+                <Text size={14} color={Colors.grey} weight={200}>
+                  Borrow and pay back later
+                </Text>
+              </Column>
+            </CardStyles.CardHeader>
+            <Card showOverlayedDesign fullWidth padding="7% 20%">
+              {error && <ErrorBox>{error.message}</ErrorBox>}
+              {loadingEligibility ? (
+                <Spinner />
+              ) : (
+                <form onSubmit={formik.handleSubmit}>
+                  <TextField
+                    label="Select Phone Number"
+                    placeholder="Select Phone"
+                    dropDown
+                    dropDownOptions={mobileNumbers}
+                    value={formik.values.mobileNumber}
+                    onChange={(e) => {
+                      formik.setFieldValue('mobileNumber', e.target.value);
+                      setSelectedNumber(e.target.value);
+                    }}
+                    type="tel"
+                    minLength={11}
+                    maxLength={11}
+                    error={getFieldError(
+                      formik.errors.mobileNumber,
+                      formik.touched.mobileNumber,
+                    )}
+                  />
+                  <SizedBox height={16} />
+                  <Text color={Colors.blackGrey}>
+                    You are eligible to borrow amount below. Select any amount
+                    to continue
+                  </Text>
+                  <SizedBox height={16} />
 
-                <Row useAppMargin>
-                  {borrowingAmounts &&
-                    borrowingAmounts[selectedNumber].map((options) => (
-                      <Column xs={4} useAppMargin key={options.id}>
-                        <Button
-                          fullWidth
-                          onClick={() => {
-                            setSelectedAmount(options.amount);
-                            formik.setFieldValue(
-                              'amount',
-                              String(options.amount),
-                            );
-                          }}
-                          variant="secondary"
-                          outline={selectedAmount !== options.amount}
-                          type="button"
-                        >
-                          {options.amount}
-                        </Button>
-                      </Column>
-                    ))}
-                </Row>
-                {formik.errors.amount && (
-                  <>
-                    <SizedBox height={10} />
-                    <ErrorBox>{formik.errors.amount}</ErrorBox>
-                  </>
-                )}
-                <SizedBox height={24} />
-                <Button type="submit" isLoading={loading} fullWidth>
-                  Borrow now
-                </Button>
-                {renderModals()}
-              </form>
-            )}
-          </Card>
+                  <Row useAppMargin>
+                    {borrowingAmounts &&
+                      borrowingAmounts[selectedNumber].map((options) => (
+                        <Column xs={4} useAppMargin key={options.id}>
+                          <Button
+                            fullWidth
+                            onClick={() => {
+                              setSelectedAmount(options.amount);
+                              formik.setFieldValue(
+                                'amount',
+                                String(options.amount),
+                              );
+                            }}
+                            variant="secondary"
+                            outline={selectedAmount !== options.amount}
+                            type="button"
+                          >
+                            {options.amount}
+                          </Button>
+                        </Column>
+                      ))}
+                  </Row>
+                  {formik.errors.amount && (
+                    <>
+                      <SizedBox height={10} />
+                      <ErrorBox>{formik.errors.amount}</ErrorBox>
+                    </>
+                  )}
+                  <SizedBox height={24} />
+                  <Button type="submit" isLoading={loading} fullWidth>
+                    Borrow now
+                  </Button>
+                  {renderModals()}
+                </form>
+              )}
+            </Card>
+          </Column>
         </Column>
       </PageBody>
     </>

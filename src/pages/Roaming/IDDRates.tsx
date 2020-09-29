@@ -118,74 +118,76 @@ export const IDDRates: React.FC = () => {
 
   return (
     <>
-      <PageBody centeralize>
-        <Column xs={12} md={6} lg={6}>
-          <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '20px' }}
-          >
-            <img src={appLogoBig} alt="appLogoBig" />
+      <PageBody>
+        <Column justifyContent="center">
+          <Column xs={12} md={6} lg={6}>
+            <CardStyles.CardHeader
+              style={{ height: '100%', position: 'relative', padding: '20px' }}
+            >
+              <img src={appLogoBig} alt="appLogoBig" />
 
-            <BackButton />
+              <BackButton />
 
-            <SizedBox height={25} />
+              <SizedBox height={25} />
 
-            <Column justifyContent="center">
-              <Text size={18} weight={500}>
-                Roaming Data Bundles
-              </Text>
-              <Text size={14} color={Colors.grey} weight={200}>
-                Recharge with your airtime
-              </Text>
-            </Column>
-          </CardStyles.CardHeader>
-          <Card showOverlayedDesign fullWidth padding="5% 5%">
-            {error && <ErrorBox>{error.message}</ErrorBox>}
-            <form onSubmit={formik.handleSubmit}>
-              <Row useAppMargin>
-                <Column useAppMargin md={6}>
-                  <TextField
-                    label="Billing"
-                    placeholder="Billing Options"
-                    dropDown
-                    dropDownOptions={billingOptions?.result.map((option) => ({
-                      label: option.name,
-                      value: option.id,
-                    }))}
-                    value={formik.values.billingOptionId}
-                    onChange={(e) =>
-                      formik.setFieldValue('billingOptionId', e.target.value)
-                    }
-                    error={getFieldError(
-                      formik.errors.billingOptionId,
-                      formik.touched.billingOptionId,
-                    )}
-                  />
-                </Column>
-                <Column useAppMargin md={6}>
-                  <TextField
-                    label="Country"
-                    placeholder="Select Country"
-                    dropDown
-                    dropDownOptions={countries?.result
-                      .sort((a, b) => (a.name > b.name ? 1 : -1))
-                      .map((option) => ({
+              <Column justifyContent="center">
+                <Text size={18} weight={500}>
+                  Roaming Data Bundles
+                </Text>
+                <Text size={14} color={Colors.grey} weight={200}>
+                  Recharge with your airtime
+                </Text>
+              </Column>
+            </CardStyles.CardHeader>
+            <Card showOverlayedDesign fullWidth padding="5% 5%">
+              {error && <ErrorBox>{error.message}</ErrorBox>}
+              <form onSubmit={formik.handleSubmit}>
+                <Row useAppMargin>
+                  <Column useAppMargin md={6}>
+                    <TextField
+                      label="Billing"
+                      placeholder="Billing Options"
+                      dropDown
+                      dropDownOptions={billingOptions?.result.map((option) => ({
                         label: option.name,
                         value: option.id,
                       }))}
-                    value={formik.values.countryId}
-                    onChange={(e) =>
-                      formik.setFieldValue('countryId', e.target.value)
-                    }
-                    error={getFieldError(
-                      formik.errors.countryId,
-                      formik.touched.countryId,
-                    )}
-                  />
-                </Column>
-              </Row>
-              {renderResults()}
-            </form>
-          </Card>
+                      value={formik.values.billingOptionId}
+                      onChange={(e) =>
+                        formik.setFieldValue('billingOptionId', e.target.value)
+                      }
+                      error={getFieldError(
+                        formik.errors.billingOptionId,
+                        formik.touched.billingOptionId,
+                      )}
+                    />
+                  </Column>
+                  <Column useAppMargin md={6}>
+                    <TextField
+                      label="Country"
+                      placeholder="Select Country"
+                      dropDown
+                      dropDownOptions={countries?.result
+                        .sort((a, b) => (a.name > b.name ? 1 : -1))
+                        .map((option) => ({
+                          label: option.name,
+                          value: option.id,
+                        }))}
+                      value={formik.values.countryId}
+                      onChange={(e) =>
+                        formik.setFieldValue('countryId', e.target.value)
+                      }
+                      error={getFieldError(
+                        formik.errors.countryId,
+                        formik.touched.countryId,
+                      )}
+                    />
+                  </Column>
+                </Row>
+                {renderResults()}
+              </form>
+            </Card>
+          </Column>
         </Column>
       </PageBody>
     </>
