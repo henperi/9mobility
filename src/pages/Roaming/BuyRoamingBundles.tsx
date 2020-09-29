@@ -21,16 +21,17 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-import { BorrowEligibilityResp, BundlesResp } from './Interface';
+import { BundlesResp } from './Interface';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { logger } from '../../utils/logger';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 
 interface SuccessResp {
   responseCode: number;
   message: string;
 }
 
-export const BuyDataWithAirtime: React.FC = () => {
+export const BuyRoamingBundles: React.FC = () => {
   const {
     RadioInput: SelectBundleRadio,
     checked: selectBundle,
@@ -44,7 +45,7 @@ export const BuyDataWithAirtime: React.FC = () => {
   const [activeTab, setactiveTab] = useState(1);
 
   const [buyDataWithAirtime, { loading, data, error }] = usePost<SuccessResp>(
-    'Mobility.Account/api/Data/BuyWithAirtime',
+    'Mobility.Account/api/Roaming/BuyBundleWithAirtime',
   );
 
   const {
@@ -53,12 +54,10 @@ export const BuyDataWithAirtime: React.FC = () => {
     },
   } = useGlobalStore();
 
-  const { data: dataEligibility } = useFetch<BorrowEligibilityResp>(
-    'Mobility.Account/api/data/GetBorrowingEligibility',
-  );
+  const { mobileNumbers } = useGetMobileNumbers();
 
   const { data: bundlesData } = useFetch<BundlesResp>(
-    'Mobility.Account/api/Data/GetBundle',
+    'Mobility.Account/api/Roaming/GetRoamingDataBundles',
   );
 
   const [dataPlans, setDataPlans] = useState<
@@ -79,7 +78,7 @@ export const BuyDataWithAirtime: React.FC = () => {
     }
   }, [bundlesData]);
 
-  const [mobileNumbers, setMobileNumbers] = useState<
+  const [userSims, setUserSims] = useState<
     {
       label: string;
       value: string;
@@ -87,17 +86,15 @@ export const BuyDataWithAirtime: React.FC = () => {
   >([]);
 
   useEffect(() => {
-    if (dataEligibility) {
-      const mobileResults = dataEligibility.result.borrowingOptions.map(
-        (option) => ({
-          label: option.mobileNumber,
-          value: option.mobileNumber,
-        }),
-      );
+    if (mobileNumbers) {
+      const mobileResults = mobileNumbers?.map((option) => ({
+        label: option.label,
+        value: option.value,
+      }));
 
-      setMobileNumbers(mobileResults);
+      setUserSims(mobileResults);
     }
-  }, [dataEligibility]);
+  }, [mobileNumbers]);
 
   const formik = useFormik({
     initialValues: {
@@ -159,7 +156,7 @@ export const BuyDataWithAirtime: React.FC = () => {
       <Modal
         isVisible={showConfirmationModal}
         onClose={() => setShowConfirmationModal(false)}
-        header={{ title: 'Transaction Confirmation' }}
+        header={{ title: 'Roaming Transaction Confirmation' }}
         size="sm"
       >
         {error && <ErrorBox>{error.message}</ErrorBox>}
@@ -226,7 +223,7 @@ export const BuyDataWithAirtime: React.FC = () => {
   return (
     <>
       <PageBody centeralize>
-        <Column xs={12} md={6} lg={5}>
+        <Column xs={12} md={6} lg={6}>
           <CardStyles.CardHeader
             style={{ height: '100%', position: 'relative', padding: '20px' }}
           >
@@ -238,10 +235,10 @@ export const BuyDataWithAirtime: React.FC = () => {
 
             <Column justifyContent="center">
               <Text size={18} weight={500}>
-                Buy Data
+                Roaming Data Bundles
               </Text>
               <Text size={14} color={Colors.grey} weight={200}>
-                Pay using your airtime balance
+                Recharge with your airtime
               </Text>
             </Column>
           </CardStyles.CardHeader>
@@ -283,7 +280,7 @@ export const BuyDataWithAirtime: React.FC = () => {
                 label="Select Phone Number"
                 placeholder="Select Phone"
                 dropDown
-                dropDownOptions={mobileNumbers}
+                dropDownOptions={userSims}
                 value={formik.values.mobileNumber}
                 onChange={(e) => {
                   formik.setFieldValue('mobileNumber', e.target.value);
@@ -403,7 +400,7 @@ export const BuyDataWithAirtime: React.FC = () => {
               <SizedBox height={24} />
 
               <Button type="submit" isLoading={loading} fullWidth>
-                Recharge Now
+                Buy Now with airtime
               </Button>
               {renderModals()}
             </form>

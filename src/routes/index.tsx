@@ -30,6 +30,8 @@ import { ManageAccount } from '../pages/Postpaid/ManageAccount';
 import { SubscribedServices } from '../pages/SubscribedServices';
 import { Settings } from '../pages/Settings';
 import { ManageNumbers } from '../pages/Settings/ManageNumbers';
+import { BuyRoamingBundles } from '../pages/Roaming/BuyRoamingBundles';
+import { IDDRates } from '../pages/Roaming/IDDRates';
 
 export const Routes = () => {
   return (
@@ -102,6 +104,12 @@ export const Routes = () => {
       />
       <ProtectedRoute exact path="/roaming" component={Roaming} />
       <ProtectedRoute exact path="/roaming/rates" component={RoamingRates} />
+      <ProtectedRoute exact path="/roaming/idd-rates" component={IDDRates} />
+      <ProtectedRoute
+        exact
+        path="/roaming/buy-bundle"
+        component={BuyRoamingBundles}
+      />
 
       <ProtectedRoute exact path="/postpaid" component={PostpaidPage} />
       <ProtectedRoute exact path="/postpaid/pay-bill" component={PayBill} />
