@@ -67,28 +67,36 @@ export const TopBar: React.FC<ITopBar> = (props) => {
           >
             <Text
               color={Colors.white}
-              style={{ display: 'flex', alignItems: 'center' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
             >
-              <BellIcon style={{ marginRight: '8px' }} onClick={handleLogout} />
+              <BellIcon style={{ marginRight: '8px' }} onClick={() => null} />
             </Text>
             <Text
               color={Colors.white}
-              style={{ display: 'flex', alignItems: 'center' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+              onClick={() => history.push('/settings')}
             >
-              <SettingsIcon
-                style={{ marginRight: '8px' }}
-                onClick={() => history.push('/settings')}
-              />
+              <SettingsIcon style={{ marginRight: '8px' }} />
               Settings
             </Text>
             <Text
               color={Colors.white}
-              style={{ display: 'flex', alignItems: 'center' }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+              onClick={handleLogout}
             >
-              <PowerIcon
-                style={{ marginRight: '8px' }}
-                onClick={handleLogout}
-              />
+              <PowerIcon style={{ marginRight: '8px' }} />
               Logout
             </Text>
           </Row>
