@@ -151,124 +151,130 @@ export const Download = () => {
   );
 
   return (
-    <PageBody centeralize>
-      <Column xs={12} md={7} lg={6}>
-        <CardStyles.CardHeader
-          style={{ height: '100%', position: 'relative', padding: '20px' }}
-        >
-          <img src={appLogoBig} alt="appLogoBig" />
+    <PageBody>
+      <Column justifyContent="center">
+        <Column xs={12} md={7} lg={6}>
+          <CardStyles.CardHeader
+            style={{ height: '100%', position: 'relative', padding: '20px' }}
+          >
+            <img src={appLogoBig} alt="appLogoBig" />
 
-          <BackButton />
+            <BackButton />
 
-          <SizedBox height={25} />
+            <SizedBox height={25} />
 
-          <Column justifyContent="center">
-            <Text size={18} weight={500}>
-              International call (IDD) rates
-            </Text>
-            <Text size={14} color={Colors.grey} weight={200}>
-              Rates in country visited & back to Nigeria
-            </Text>
-          </Column>
-        </CardStyles.CardHeader>
+            <Column justifyContent="center">
+              <Text size={18} weight={500}>
+                International call (IDD) rates
+              </Text>
+              <Text size={14} color={Colors.grey} weight={200}>
+                Rates in country visited & back to Nigeria
+              </Text>
+            </Column>
+          </CardStyles.CardHeader>
 
-        <Card showOverlayedDesign fullWidth>
-          {corporateDetailsLoading ? (
-            <Spinner isFixed />
-          ) : (
-            <>
-              {corporateDataError ? (
-                <ErrorBox>{corporateDataError?.message}</ErrorBox>
-              ) : (
-                <>
-                  <Card
-                    fullWidth
-                    style={{
-                      backgroundColor: convertHexToRGBA(
-                        Colors.yellowGreen,
-                        0.2,
-                      ),
-                      padding: '3%',
-                    }}
-                  >
-                    <Row wrap justifyContent="space-between">
-                      <Column xs={6}>
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractName}
-                        </Text>
-                        <Text size={14}>
-                          Admin: {corporateData?.result.adminNumber}
-                        </Text>
-                      </Column>
-                      <Column xs={6} justifyContent="flex-end">
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractNumber}
-                        </Text>
-                        <Text size={14}>Contact Number</Text>
+          <Card showOverlayedDesign fullWidth>
+            {corporateDetailsLoading ? (
+              <Spinner isFixed />
+            ) : (
+              <>
+                {corporateDataError ? (
+                  <ErrorBox>{corporateDataError?.message}</ErrorBox>
+                ) : (
+                  <>
+                    <Card
+                      fullWidth
+                      style={{
+                        backgroundColor: convertHexToRGBA(
+                          Colors.yellowGreen,
+                          0.2,
+                        ),
+                        padding: '3%',
+                      }}
+                    >
+                      <Row wrap justifyContent="space-between">
+                        <Column xs={6}>
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractName}
+                          </Text>
+                          <Text size={14}>
+                            Admin: {corporateData?.result.adminNumber}
+                          </Text>
+                        </Column>
+                        <Column xs={6} justifyContent="flex-end">
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractNumber}
+                          </Text>
+                          <Text size={14}>Contact Number</Text>
+                        </Column>
+                      </Row>
+                    </Card>
+
+                    <SizedBox height={30} />
+
+                    <Row justifyContent="center">
+                      <Column xs={12}>
+                        <form onSubmit={formik.handleSubmit}>
+                          <Row
+                            childGap={10}
+                            wrap
+                            justifyContent="space-between"
+                          >
+                            <Column lg={6} xs={12} style={{ flex: '1' }}>
+                              <TextField
+                                label="Month"
+                                placeholder="Select Year"
+                                dropDown
+                                dropDownOptions={months}
+                                value={formik.values.month}
+                                onChange={(e) =>
+                                  formik.setFieldValue('month', e.target.value)
+                                }
+                                type="tel"
+                                minLength={11}
+                                maxLength={11}
+                                error={getFieldError(
+                                  formik.errors.month,
+                                  formik.touched.month,
+                                )}
+                              />
+                            </Column>
+                            <Column lg={6} xs={12} style={{ flex: '1' }}>
+                              <TextField
+                                label="Year"
+                                placeholder="Select Month"
+                                dropDown
+                                dropDownOptions={years}
+                                value={formik.values.year}
+                                onChange={(e) =>
+                                  formik.setFieldValue('year', e.target.value)
+                                }
+                                type="tel"
+                                minLength={11}
+                                maxLength={11}
+                                error={getFieldError(
+                                  formik.errors.year,
+                                  formik.touched.year,
+                                )}
+                              />
+                            </Column>
+                          </Row>
+                          <SizedBox height={24} />
+                          <Button type="submit" isLoading={loading} fullWidth>
+                            View/Download
+                          </Button>
+                          <SizedBox height={60} />
+
+                          {renderModals()}
+                        </form>
                       </Column>
                     </Row>
-                  </Card>
-
-                  <SizedBox height={30} />
-
-                  <Row justifyContent="center">
-                    <Column xs={12}>
-                      <form onSubmit={formik.handleSubmit}>
-                        <Row childGap={10} wrap justifyContent="space-between">
-                          <Column lg={6} xs={12} style={{ flex: '1' }}>
-                            <TextField
-                              label="Month"
-                              placeholder="Select Year"
-                              dropDown
-                              dropDownOptions={months}
-                              value={formik.values.month}
-                              onChange={(e) =>
-                                formik.setFieldValue('month', e.target.value)
-                              }
-                              type="tel"
-                              minLength={11}
-                              maxLength={11}
-                              error={getFieldError(
-                                formik.errors.month,
-                                formik.touched.month,
-                              )}
-                            />
-                          </Column>
-                          <Column lg={6} xs={12} style={{ flex: '1' }}>
-                            <TextField
-                              label="Year"
-                              placeholder="Select Month"
-                              dropDown
-                              dropDownOptions={years}
-                              value={formik.values.year}
-                              onChange={(e) =>
-                                formik.setFieldValue('year', e.target.value)
-                              }
-                              type="tel"
-                              minLength={11}
-                              maxLength={11}
-                              error={getFieldError(
-                                formik.errors.year,
-                                formik.touched.year,
-                              )}
-                            />
-                          </Column>
-                        </Row>
-                        <SizedBox height={24} />
-                        <Button type="submit" isLoading={loading} fullWidth>
-                          View/Download
-                        </Button>
-                        <SizedBox height={60} />
-
-                        {renderModals()}
-                      </form>
-                    </Column>
-                  </Row>
-                </>
-              )}
-            </>
-          )}
-        </Card>
+                  </>
+                )}
+              </>
+            )}
+          </Card>
+        </Column>
       </Column>
     </PageBody>
   );

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
+import { DateTime } from 'luxon';
 import { Column } from '../../components/Column';
 import { PageBody } from '../../components/PageBody';
 import { Text } from '../../components/Text';
@@ -14,85 +15,160 @@ import { Card } from '../../components/Card';
 import { Avatar } from '../../components/Avatar';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-import { getFieldError } from '../../utils/formikHelper';
+import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import { ToggleSwitch } from '../../components/ToggleSwitch';
-import { logger } from '../../utils/logger';
-import { usePost } from '../../customHooks/useRequests';
+import { useLazyFetch, usePost } from '../../customHooks/useRequests';
 import { Modal } from '../../components/Modal';
-import { ErrorBox } from '../../components/ErrorBox';
 import { useGlobalStore } from '../../store';
+import { ErrorBox } from '../../components/ErrorBox';
+import { ConfirmOTP } from './ConfirmOTP';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { logger } from '../../utils/logger';
+import { Spinner } from '../../components/Spinner';
+import { setAuthUser } from '../../store/modules/auth/actions';
 
 interface SuccessResp {
   responseCode: number;
   message: string;
 }
 
+interface VerifyNumberResponse {
+  result: {
+    trackingId: string;
+    expiresIn: Date;
+  };
+  responseCode: number;
+  message: string;
+}
+
 export const Settings = () => {
+  const { mobileNumbers } = useGetMobileNumbers();
+
   const history = useHistory();
   const [activeDND, setActiveDND] = useState(false);
   const [activeVoicemail, setActiveVoicemail] = useState(false);
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const [updateProfile, { loading, data, error }] = usePost<SuccessResp>(
-    'Mobility.Onboarding/api/Onboarding/editprofile',
-  );
+  const [showOTPScreen, setshowOTPScreen] = useState(false);
+
+  const [requestOTP, { loading: OTPLoading, data: OTPData }] = useLazyFetch<
+    VerifyNumberResponse
+  >('Mobility.Onboarding/api/Verification/initiateinappotp');
+
+  const [
+    updateProfile,
+    {
+      loading: profildUpdateLoading,
+      error: profileUpdateErr,
+      data: profileUpdateData,
+    },
+  ] = usePost<SuccessResp>('Mobility.Onboarding/api/Onboarding/editprofile');
 
   const {
     state: {
       auth: { user },
     },
+    dispatch,
   } = useGlobalStore();
+
+  const updateUserProfile = async () => {
+    try {
+      const result = await updateProfile({ ...formik.values });
+      if (
+        result.data &&
+        formik.values.firstName &&
+        formik.values.lastName &&
+        user
+      ) {
+        dispatch(
+          setAuthUser({
+            ...user,
+            firstName: formik.values.firstName,
+            lastName: formik.values.lastName,
+            dob: formik.values.dob,
+          }),
+        );
+        setShowSuccessModal(true);
+      }
+    } catch (err) {
+      logger.log(err);
+    }
+  };
+
+  const getOTP = async () => {
+    try {
+      await requestOTP();
+    } catch (err) {
+      logger.log(err);
+    }
+  };
+
+  useEffect(() => {
+    if (OTPData?.result?.trackingId) {
+      setshowOTPScreen(true);
+    }
+  }, [OTPData]);
+
+  const dob =
+    user?.dob &&
+    DateTime.fromISO(user?.dob, {
+      locale: 'fr',
+    }).toISODate();
 
   const formik = useFormik({
     initialValues: {
       firstName: user?.firstName,
       lastName: user?.lastName,
-      dob: user?.dob,
+      dob,
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required('This field is required'),
       lastName: Yup.string().required('This field is required'),
-      dob: Yup.string().required('This field is required'),
+      dob: Yup.string().test('DOB', 'Future dates are not allowed', (value) => {
+        return !isFutureDate(value);
+      }),
     }),
     onSubmit: async (formData) => {
-      handleProfileUpdate();
+      getOTP();
     },
   });
 
-  const handleProfileUpdate = async () => {
-    try {
-      const response = await updateProfile(formik.values);
-      if (response.data) {
-        setShowSuccessModal(true);
-      }
-    } catch (errorResp) {
-      logger.log(errorResp);
-    }
-  };
-
   const renderModals = () => (
-    <Modal
-      isVisible={showSuccessModal}
-      onClose={() => setShowSuccessModal(false)}
-      size="sm"
-    >
-      {error && <ErrorBox>{error.message}</ErrorBox>}
-      <SizedBox height={15} />
-      <Column>
-        <Text>Hi {user?.firstName}</Text>
+    <>
+      <Modal
+        isVisible={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        size="sm"
+      >
+        {profileUpdateErr && <ErrorBox>{profileUpdateErr.message}</ErrorBox>}
         <SizedBox height={15} />
-        {data?.message && <Text>{data?.message}</Text>}
-        <SizedBox height={10} />
-        <Button
-          onClick={() => setShowSuccessModal(false)}
-          isLoading={loading}
-          fullWidth
-        >
-          Done
-        </Button>
-      </Column>
-    </Modal>
+        <Column>
+          <Text>Hi {user?.firstName}</Text>
+          <SizedBox height={15} />
+          {profileUpdateData?.message && (
+            <Text>{profileUpdateData?.message}</Text>
+          )}
+          <SizedBox height={10} />
+          <Button onClick={() => setShowSuccessModal(false)} fullWidth>
+            Done
+          </Button>
+        </Column>
+      </Modal>
+    </>
   );
+
+  if (showOTPScreen && OTPData && mobileNumbers) {
+    return (
+      <ConfirmOTP
+        message={OTPData?.message}
+        setshowOTPScreen={setshowOTPScreen}
+        callbackFunction={updateUserProfile}
+        trackingId={OTPData.result.trackingId}
+        mobileNumber={mobileNumbers[0].value}
+      />
+    );
+  }
 
   return (
     <PageBody>
@@ -119,6 +195,7 @@ export const Settings = () => {
           <SizedBox height={20} />
 
           <Row childGap={15}>
+            {profildUpdateLoading && <Spinner isFixed />}
             <Column xs={12} lg={5}>
               <Card fullHeight fullWidth>
                 <Text size={18} weight={600}>
@@ -139,7 +216,9 @@ export const Settings = () => {
                 <SizedBox height={20} />
 
                 <form onSubmit={formik.handleSubmit}>
-                  {error && <ErrorBox>{error.message}</ErrorBox>}
+                  {profileUpdateErr && (
+                    <ErrorBox>{profileUpdateErr.message}</ErrorBox>
+                  )}
 
                   <TextField
                     label="First Name"
@@ -173,8 +252,13 @@ export const Settings = () => {
                   />
                   <SizedBox height={20} />
 
-                  <Button type="submit" fullWidth>
-                    Recharge Now
+                  <Button
+                    type="submit"
+                    fullWidth
+                    isLoading={OTPLoading}
+                    disabled={profildUpdateLoading}
+                  >
+                    Update
                   </Button>
                   <SizedBox height={20} />
                 </form>

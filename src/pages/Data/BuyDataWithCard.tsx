@@ -223,7 +223,7 @@ export const BuyDataWithCard: React.FC = () => {
 
   const bundleHandler = () => {
     if (selectBundle) {
-      setCustomizeBundle(true);
+      setCustomizeBundle(false);
       setSelectBundle(false);
     } else {
       setCustomizeBundle(false);
@@ -233,193 +233,195 @@ export const BuyDataWithCard: React.FC = () => {
 
   return (
     <>
-      <PageBody centeralize>
-        <Column xs={12} md={6} lg={5}>
-          <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '20px' }}
-          >
-            <img src={appLogoBig} alt="appLogoBig" />
-
-            <BackButton />
-
-            <SizedBox height={25} />
-
-            <Column justifyContent="center">
-              <Text size={18} weight={500}>
-                Buy Data
-              </Text>
-              <Text size={14} color={Colors.grey} weight={200}>
-                Pay with debit/credit card
-              </Text>
-            </Column>
-          </CardStyles.CardHeader>
-          <Card showOverlayedDesign fullWidth padding="12% 15%">
-            <Row
-              wrap
-              justifyContent="center"
-              alignItems="center"
-              style={{
-                border: `1px solid ${Colors.lightGreen}`,
-                padding: '2px',
-              }}
+      <PageBody>
+        <Column justifyContent="center">
+          <Column xs={12} md={6} lg={6}>
+            <CardStyles.CardHeader
+              style={{ height: '100%', position: 'relative', padding: '20px' }}
             >
-              <Column xs={6} style={{ marginBottom: 0 }}>
-                <Button
-                  fullWidth
-                  variant={activeTab === 1 ? 'tertiary' : 'default'}
-                  onClick={handleTabChange}
-                >
-                  <Text size={14}>Recharge Self</Text>
-                </Button>
+              <img src={appLogoBig} alt="appLogoBig" />
+
+              <BackButton />
+
+              <SizedBox height={25} />
+
+              <Column justifyContent="center">
+                <Text size={18} weight={500}>
+                  Buy Data
+                </Text>
+                <Text size={14} color={Colors.grey} weight={200}>
+                  Pay with debit/credit card
+                </Text>
               </Column>
-              <Column xs={6} style={{ marginBottom: 0 }}>
-                <Button
-                  variant={activeTab === 2 ? 'tertiary' : 'default'}
-                  onClick={handleTabChange}
-                  fullWidth
-                >
-                  <Text size={14}>Recharge others</Text>
-                </Button>
-              </Column>
-            </Row>
-
-            <SizedBox height={24} />
-            {error && <ErrorBox>{error.message}</ErrorBox>}
-
-            <form onSubmit={formik.handleSubmit}>
-              {activeTab === 1 && (
-                <TextField
-                  label="Select Phone Number"
-                  placeholder="Select Phone"
-                  dropDown
-                  dropDownOptions={mobileNumbers}
-                  value={formik.values.mobileNumber}
-                  onChange={(e) =>
-                    formik.setFieldValue('mobileNumber', e.target.value)
-                  }
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.mobileNumber,
-                    formik.touched.mobileNumber,
-                  )}
-                />
-              )}
-
-              {activeTab === 2 && (
-                <TextField
-                  label="Recipient phone number"
-                  placeholder="Enter Phone number"
-                  {...formik.getFieldProps('mobileNumber')}
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.mobileNumber,
-                    formik.touched.mobileNumber,
-                  )}
-                />
-              )}
-
-              <SizedBox height={16} />
-
-              <Row justifyContent="flex-start">
-                <Column xs={12} md={5}>
-                  <Text variant="lighter">
-                    <SelectBundleRadio
-                      onClick={() => bundleHandler()}
-                      onKeyDown={() => bundleHandler()}
-                    >
-                      Select bundle
-                    </SelectBundleRadio>
-                  </Text>
+            </CardStyles.CardHeader>
+            <Card showOverlayedDesign fullWidth padding="7% 20%">
+              <Row
+                wrap
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                  border: `1px solid ${Colors.lightGreen}`,
+                  padding: '2px',
+                }}
+              >
+                <Column xs={6} style={{ marginBottom: 0 }}>
+                  <Button
+                    fullWidth
+                    variant={activeTab === 1 ? 'tertiary' : 'default'}
+                    onClick={handleTabChange}
+                  >
+                    <Text size={14}>Recharge Self</Text>
+                  </Button>
                 </Column>
-
-                <Column xs={12} md={6}>
-                  <Text variant="lighter">
-                    <CustomizeBundleRadio
-                      onClick={() => bundleHandler()}
-                      onKeyDown={() => bundleHandler()}
-                    >
-                      Customize bundle
-                    </CustomizeBundleRadio>
-                  </Text>
+                <Column xs={6} style={{ marginBottom: 0 }}>
+                  <Button
+                    variant={activeTab === 2 ? 'tertiary' : 'default'}
+                    onClick={handleTabChange}
+                    fullWidth
+                  >
+                    <Text size={14}>Recharge others</Text>
+                  </Button>
                 </Column>
               </Row>
 
-              <SizedBox height={16} />
-              {selectBundle && (
-                <TextField
-                  label="Data Bundle"
-                  placeholder="Select Data Bundle"
-                  dropDown
-                  dropDownOptions={dataPlans}
-                  value={formik.values.dataBundle}
-                  onChange={(e) => {
-                    formik.setFieldValue('dataBundle', e.target.value);
-                    formik.setFieldValue('amount', e.target.value);
-                  }}
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.dataBundle,
-                    formik.touched.dataBundle,
-                  )}
-                />
-              )}
+              <SizedBox height={24} />
+              {error && <ErrorBox>{error.message}</ErrorBox>}
 
-              {customizeBundle && (
-                <Row justifyContent="space-between">
-                  <Column xs={12} md={6}>
-                    <TextField
-                      label="Amount in Naira"
-                      placeholder="Enter Amount"
-                      {...formik.getFieldProps('amount')}
-                      type="text"
-                      minLength={11}
-                      maxLength={11}
-                      error={getFieldError(
-                        formik.errors.amount,
-                        formik.touched.amount,
-                      )}
-                    />
-                  </Column>
+              <form onSubmit={formik.handleSubmit}>
+                {activeTab === 1 && (
+                  <TextField
+                    label="Select Phone Number"
+                    placeholder="Select Phone"
+                    dropDown
+                    dropDownOptions={mobileNumbers}
+                    value={formik.values.mobileNumber}
+                    onChange={(e) =>
+                      formik.setFieldValue('mobileNumber', e.target.value)
+                    }
+                    type="tel"
+                    minLength={11}
+                    maxLength={11}
+                    error={getFieldError(
+                      formik.errors.mobileNumber,
+                      formik.touched.mobileNumber,
+                    )}
+                  />
+                )}
+
+                {activeTab === 2 && (
+                  <TextField
+                    label="Recipient phone number"
+                    placeholder="Enter Phone number"
+                    {...formik.getFieldProps('mobileNumber')}
+                    type="tel"
+                    minLength={11}
+                    maxLength={11}
+                    error={getFieldError(
+                      formik.errors.mobileNumber,
+                      formik.touched.mobileNumber,
+                    )}
+                  />
+                )}
+
+                <SizedBox height={16} />
+
+                <Row justifyContent="flex-start">
                   <Column xs={12} md={5}>
-                    <TextField
-                      label="Value in MB/GB"
-                      placeholder=""
-                      {...formik.getFieldProps('datavalue')}
-                      type="text"
-                      minLength={11}
-                      maxLength={11}
-                      error={getFieldError(
-                        formik.errors.dataValue,
-                        formik.touched.dataValue,
-                      )}
-                    />
+                    <Text variant="lighter">
+                      <SelectBundleRadio
+                        onClick={() => bundleHandler()}
+                        onKeyDown={() => bundleHandler()}
+                      >
+                        Select bundle
+                      </SelectBundleRadio>
+                    </Text>
+                  </Column>
+
+                  <Column xs={12} md={6}>
+                    <Text variant="lighter">
+                      <CustomizeBundleRadio
+                      // onClick={() => bundleHandler()}
+                      // onKeyDown={() => bundleHandler()}
+                      >
+                        Customize bundle
+                      </CustomizeBundleRadio>
+                    </Text>
                   </Column>
                 </Row>
-              )}
+
+                <SizedBox height={16} />
+                {selectBundle && (
+                  <TextField
+                    label="Data Bundle"
+                    placeholder="Select Data Bundle"
+                    dropDown
+                    dropDownOptions={dataPlans}
+                    value={formik.values.dataBundle}
+                    onChange={(e) => {
+                      formik.setFieldValue('dataBundle', e.target.value);
+                      formik.setFieldValue('amount', e.target.value);
+                    }}
+                    type="tel"
+                    minLength={11}
+                    maxLength={11}
+                    error={getFieldError(
+                      formik.errors.dataBundle,
+                      formik.touched.dataBundle,
+                    )}
+                  />
+                )}
+
+                {customizeBundle && (
+                  <Row justifyContent="space-between">
+                    <Column xs={12} md={6}>
+                      <TextField
+                        label="Amount in Naira"
+                        placeholder="Enter Amount"
+                        {...formik.getFieldProps('amount')}
+                        type="text"
+                        minLength={11}
+                        maxLength={11}
+                        error={getFieldError(
+                          formik.errors.amount,
+                          formik.touched.amount,
+                        )}
+                      />
+                    </Column>
+                    <Column xs={12} md={5}>
+                      <TextField
+                        label="Value in MB/GB"
+                        placeholder=""
+                        {...formik.getFieldProps('datavalue')}
+                        type="text"
+                        minLength={11}
+                        maxLength={11}
+                        error={getFieldError(
+                          formik.errors.dataValue,
+                          formik.touched.dataValue,
+                        )}
+                      />
+                    </Column>
+                  </Row>
+                )}
+
+                <SizedBox height={20} />
+                <Button type="submit" isLoading={loading} fullWidth>
+                  Pay with debit/credit card
+                </Button>
+                {renderModals()}
+              </form>
 
               <SizedBox height={20} />
-              <Button type="submit" isLoading={loading} fullWidth>
-                Pay with debit/credit card
-              </Button>
-              {renderModals()}
-            </form>
 
-            <SizedBox height={20} />
-
-            <Row justifyContent="center">
-              <img src={masterCardLogo} alt="masterCardLogo" />
-              <SizedBox width={20} />
-              <img src={verveLogo} alt="verveLogo" />
-              <SizedBox width={10} />
-              <img src={visaLogo} alt="visaLogo" />
-            </Row>
-          </Card>
+              <Row justifyContent="center">
+                <img src={masterCardLogo} alt="masterCardLogo" />
+                <SizedBox width={20} />
+                <img src={verveLogo} alt="verveLogo" />
+                <SizedBox width={10} />
+                <img src={visaLogo} alt="visaLogo" />
+              </Row>
+            </Card>
+          </Column>
         </Column>
       </PageBody>
     </>

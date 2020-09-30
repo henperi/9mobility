@@ -149,78 +149,79 @@ export const TransferData: React.FC = () => {
 
   return (
     <>
-      <PageBody centeralize>
-        <Column xs={12} md={6} lg={5}>
-          <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '20px' }}
-          >
-            <img src={appLogoBig} alt="appLogoBig" />
+      <PageBody>
+        <Column justifyContent="center">
+          <Column xs={12} md={6} lg={6}>
+            <CardStyles.CardHeader
+              style={{ height: '100%', position: 'relative', padding: '20px' }}
+            >
+              <img src={appLogoBig} alt="appLogoBig" />
 
-            <BackButton />
+              <BackButton />
 
-            <SizedBox height={25} />
+              <SizedBox height={25} />
 
-            <Column justifyContent="center">
-              <Text size={18} weight={500}>
-                Transfer Data
-              </Text>
-              <Text size={14} color={Colors.grey} weight={200}>
-                Send data to another
-              </Text>
-            </Column>
-          </CardStyles.CardHeader>
-          <Card showOverlayedDesign fullWidth padding="12% 15%">
-            <SizedBox height={24} />
-            {error && <ErrorBox>{error.message}</ErrorBox>}
-            {data && <SuccessBox>{data.message}</SuccessBox>}
-            <form onSubmit={formik.handleSubmit}>
-              <TextField
-                label="Security code"
-                placeholder="Enter Security code"
-                {...formik.getFieldProps('securityCode')}
-                minLength={4}
-                maxLength={4}
-                helperText="Default code is 0000"
-                error={getFieldError(
-                  formik.errors.securityCode,
-                  formik.touched.securityCode,
-                )}
-              />
+              <Column justifyContent="center">
+                <Text size={18} weight={500}>
+                  Transfer Data
+                </Text>
+                <Text size={14} color={Colors.grey} weight={200}>
+                  Send data to another
+                </Text>
+              </Column>
+            </CardStyles.CardHeader>
+            <Card showOverlayedDesign fullWidth padding="7% 20%">
+              {error && <ErrorBox>{error.message}</ErrorBox>}
+              {data && <SuccessBox>{data.message}</SuccessBox>}
+              <form onSubmit={formik.handleSubmit}>
+                <TextField
+                  label="Security code"
+                  placeholder="Enter Security code"
+                  {...formik.getFieldProps('securityCode')}
+                  minLength={4}
+                  maxLength={4}
+                  helperText="Default code is 0000"
+                  error={getFieldError(
+                    formik.errors.securityCode,
+                    formik.touched.securityCode,
+                  )}
+                />
 
-              <SizedBox height={16} />
-              <TextField
-                label="Amount"
-                placeholder="Enter data amount you want to transfer"
-                {...formik.getFieldProps('amount')}
-                type="number"
-                minLength={1}
-                // maxLength={11}
-                error={getFieldError(
-                  formik.errors.amount,
-                  formik.touched.amount,
-                )}
-              />
-              <SizedBox height={16} />
+                <SizedBox height={16} />
+                <TextField
+                  label="Amount"
+                  placeholder="Enter data amount you want to transfer"
+                  {...formik.getFieldProps('amount')}
+                  type="number"
+                  minLength={1}
+                  // maxLength={11}
+                  error={getFieldError(
+                    formik.errors.amount,
+                    formik.touched.amount,
+                  )}
+                />
+                <SizedBox height={16} />
 
-              <TextField
-                label="Recipient phone number"
-                placeholder="Enter Phone number"
-                {...formik.getFieldProps('recipientMobileNumber')}
-                type="tel"
-                minLength={11}
-                maxLength={11}
-                error={getFieldError(
-                  formik.errors.recipientMobileNumber,
-                  formik.touched.recipientMobileNumber,
-                )}
-              />
-              <SizedBox height={24} />
-              <Button type="submit" isLoading={loading} fullWidth>
-                Transfer
-              </Button>
-              {renderModals()}
-            </form>
-          </Card>
+                <TextField
+                  label="Recipient phone number"
+                  placeholder="Enter Phone number"
+                  {...formik.getFieldProps('recipientMobileNumber')}
+                  type="tel"
+                  minLength={11}
+                  maxLength={11}
+                  error={getFieldError(
+                    formik.errors.recipientMobileNumber,
+                    formik.touched.recipientMobileNumber,
+                  )}
+                />
+                <SizedBox height={24} />
+                <Button type="submit" isLoading={loading} fullWidth>
+                  Transfer
+                </Button>
+                {renderModals()}
+              </form>
+            </Card>
+          </Column>
         </Column>
       </PageBody>
     </>

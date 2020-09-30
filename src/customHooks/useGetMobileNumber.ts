@@ -13,7 +13,7 @@ export interface MobileNumbersResp {
 }
 
 export const useGetMobileNumbers = () => {
-  const { data, loading, error } = useFetch<MobileNumbersResp>(
+  const { data, loading, error, refetch } = useFetch<MobileNumbersResp>(
     'Mobility.Onboarding/api/Onboarding/getsims',
   );
 
@@ -35,5 +35,5 @@ export const useGetMobileNumbers = () => {
     }
   }, [data]);
 
-  return { mobileNumbers, loading, error };
+  return { mobileNumbers, loading, error, data, refetch };
 };

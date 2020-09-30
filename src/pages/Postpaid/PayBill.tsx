@@ -152,95 +152,97 @@ export const PayBill = () => {
   );
 
   return (
-    <PageBody centeralize>
-      <Column xs={12} md={7} lg={6}>
-        <CardStyles.CardHeader
-          style={{ height: '100%', position: 'relative', padding: '20px' }}
-        >
-          <img src={appLogoBig} alt="appLogoBig" />
+    <PageBody>
+      <Column justifyContent="center">
+        <Column xs={12} md={7} lg={6}>
+          <CardStyles.CardHeader
+            style={{ height: '100%', position: 'relative', padding: '20px' }}
+          >
+            <img src={appLogoBig} alt="appLogoBig" />
 
-          <BackButton />
+            <BackButton />
 
-          <SizedBox height={25} />
+            <SizedBox height={25} />
 
-          <Column justifyContent="center">
-            <Text size={18} weight={500}>
-              International call (IDD) rates
-            </Text>
-            <Text size={14} color={Colors.grey} weight={200}>
-              Rates in country visited & back to Nigeria
-            </Text>
-          </Column>
-        </CardStyles.CardHeader>
+            <Column justifyContent="center">
+              <Text size={18} weight={500}>
+                International call (IDD) rates
+              </Text>
+              <Text size={14} color={Colors.grey} weight={200}>
+                Rates in country visited & back to Nigeria
+              </Text>
+            </Column>
+          </CardStyles.CardHeader>
 
-        <Card showOverlayedDesign fullWidth>
-          {error && <ErrorBox>{error.message}</ErrorBox>}
-          {corporateDetailsLoading ? (
-            <Spinner isFixed />
-          ) : (
-            <>
-              {corporateDataError ? (
-                <ErrorBox>{corporateDataError?.message}</ErrorBox>
-              ) : (
-                <>
-                  <Card
-                    fullWidth
-                    style={{
-                      backgroundColor: convertHexToRGBA(
-                        Colors.yellowGreen,
-                        0.2,
-                      ),
-                      padding: '3%',
-                    }}
-                  >
-                    <Row wrap justifyContent="space-between">
-                      <Column xs={6}>
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractName}
-                        </Text>
-                        <Text size={14}>
-                          Admin: {corporateData?.result.adminNumber}
-                        </Text>
-                      </Column>
-                      <Column xs={6} justifyContent="flex-end">
-                        <Text size={16} weight="500" color={Colors.darkGreen}>
-                          {corporateData?.result.contractNumber}
-                        </Text>
-                        <Text size={14}>Contact Number</Text>
+          <Card showOverlayedDesign fullWidth>
+            {error && <ErrorBox>{error.message}</ErrorBox>}
+            {corporateDetailsLoading ? (
+              <Spinner isFixed />
+            ) : (
+              <>
+                {corporateDataError ? (
+                  <ErrorBox>{corporateDataError?.message}</ErrorBox>
+                ) : (
+                  <>
+                    <Card
+                      fullWidth
+                      style={{
+                        backgroundColor: convertHexToRGBA(
+                          Colors.yellowGreen,
+                          0.2,
+                        ),
+                        padding: '3%',
+                      }}
+                    >
+                      <Row wrap justifyContent="space-between">
+                        <Column xs={6}>
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractName}
+                          </Text>
+                          <Text size={14}>
+                            Admin: {corporateData?.result.adminNumber}
+                          </Text>
+                        </Column>
+                        <Column xs={6} justifyContent="flex-end">
+                          <Text size={16} weight="500" color={Colors.darkGreen}>
+                            {corporateData?.result.contractNumber}
+                          </Text>
+                          <Text size={14}>Contact Number</Text>
+                        </Column>
+                      </Row>
+                    </Card>
+
+                    <SizedBox height={30} />
+
+                    <Row justifyContent="center">
+                      <Column xs={8}>
+                        <form onSubmit={formik.handleSubmit}>
+                          <TextField
+                            label="Amount"
+                            placeholder="Enter An Amount e.g 500"
+                            {...formik.getFieldProps('amount')}
+                            type="text"
+                            error={getFieldError(
+                              formik.errors.amount,
+                              formik.touched.amount,
+                            )}
+                          />
+                          <SizedBox height={24} />
+                          <Button type="submit" isLoading={loading} fullWidth>
+                            Pay Bill
+                          </Button>
+                          <SizedBox height={60} />
+
+                          {renderModals()}
+                        </form>
                       </Column>
                     </Row>
-                  </Card>
-
-                  <SizedBox height={30} />
-
-                  <Row justifyContent="center">
-                    <Column xs={8}>
-                      <form onSubmit={formik.handleSubmit}>
-                        <TextField
-                          label="Amount"
-                          placeholder="Enter An Amount e.g 500"
-                          {...formik.getFieldProps('amount')}
-                          type="text"
-                          error={getFieldError(
-                            formik.errors.amount,
-                            formik.touched.amount,
-                          )}
-                        />
-                        <SizedBox height={24} />
-                        <Button type="submit" isLoading={loading} fullWidth>
-                          Pay Bill
-                        </Button>
-                        <SizedBox height={60} />
-
-                        {renderModals()}
-                      </form>
-                    </Column>
-                  </Row>
-                </>
-              )}
-            </>
-          )}
-        </Card>
+                  </>
+                )}
+              </>
+            )}
+          </Card>
+        </Column>
       </Column>
     </PageBody>
   );

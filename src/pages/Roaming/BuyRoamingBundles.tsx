@@ -222,151 +222,155 @@ export const BuyRoamingBundles: React.FC = () => {
 
   return (
     <>
-      <PageBody centeralize>
-        <Column xs={12} md={6} lg={6}>
-          <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '20px' }}
-          >
-            <img src={appLogoBig} alt="appLogoBig" />
-
-            <BackButton />
-
-            <SizedBox height={25} />
-
-            <Column justifyContent="center">
-              <Text size={18} weight={500}>
-                Roaming Data Bundles
-              </Text>
-              <Text size={14} color={Colors.grey} weight={200}>
-                Recharge with your airtime
-              </Text>
-            </Column>
-          </CardStyles.CardHeader>
-          <Card showOverlayedDesign fullWidth padding="12% 15%">
-            <Row
-              wrap
-              justifyContent="center"
-              alignItems="center"
-              style={{
-                border: `1px solid ${Colors.lightGreen}`,
-                padding: '2px',
-              }}
+      <PageBody>
+        <Column justifyContent="center">
+          <Column xs={12} md={6} lg={6}>
+            <CardStyles.CardHeader
+              style={{ height: '100%', position: 'relative', padding: '20px' }}
             >
-              <Column xs={6} style={{ marginBottom: 0 }}>
-                <Button
-                  fullWidth
-                  variant={activeTab === 1 ? 'tertiary' : 'default'}
-                  onClick={handleTabChange}
-                >
-                  <Text size={14}>Recharge Self</Text>
-                </Button>
-              </Column>
-              <Column xs={6} style={{ marginBottom: 0 }}>
-                <Button
-                  variant={activeTab === 2 ? 'tertiary' : 'default'}
-                  onClick={handleTabChange}
-                  fullWidth
-                >
-                  <Text size={14}>Recharge others</Text>
-                </Button>
-              </Column>
-            </Row>
-            <SizedBox height={24} />
-            {error && <ErrorBox>{error.message}</ErrorBox>}
-            {data && <SuccessBox>{data.message}</SuccessBox>}
+              <img src={appLogoBig} alt="appLogoBig" />
 
-            <form onSubmit={formik.handleSubmit}>
-              <TextField
-                label="Select Phone Number"
-                placeholder="Select Phone"
-                dropDown
-                dropDownOptions={userSims}
-                value={formik.values.mobileNumber}
-                onChange={(e) => {
-                  formik.setFieldValue('mobileNumber', e.target.value);
-                  if (activeTab === 1) {
-                    formik.setFieldValue(
-                      'beneficiaryMobileNumber',
-                      e.target.value,
-                    );
-                  }
+              <BackButton />
+
+              <SizedBox height={25} />
+
+              <Column justifyContent="center">
+                <Text size={18} weight={500}>
+                  Roaming Data Bundles
+                </Text>
+                <Text size={14} color={Colors.grey} weight={200}>
+                  Recharge with your airtime
+                </Text>
+              </Column>
+            </CardStyles.CardHeader>
+            <Card showOverlayedDesign fullWidth padding="12% 15%">
+              <Row
+                wrap
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                  border: `1px solid ${Colors.lightGreen}`,
+                  padding: '2px',
                 }}
-                type="tel"
-                minLength={11}
-                maxLength={11}
-                error={getFieldError(
-                  formik.errors.mobileNumber,
-                  formik.touched.mobileNumber,
-                )}
-              />
-              {activeTab === 2 && (
+              >
+                <Column xs={6} style={{ marginBottom: 0 }}>
+                  <Button
+                    fullWidth
+                    variant={activeTab === 1 ? 'tertiary' : 'default'}
+                    onClick={handleTabChange}
+                  >
+                    <Text size={14}>Recharge Self</Text>
+                  </Button>
+                </Column>
+                <Column xs={6} style={{ marginBottom: 0 }}>
+                  <Button
+                    variant={activeTab === 2 ? 'tertiary' : 'default'}
+                    onClick={handleTabChange}
+                    fullWidth
+                  >
+                    <Text size={14}>Recharge others</Text>
+                  </Button>
+                </Column>
+              </Row>
+              <SizedBox height={24} />
+              {error && <ErrorBox>{error.message}</ErrorBox>}
+              {data && <SuccessBox>{data.message}</SuccessBox>}
+
+              <form onSubmit={formik.handleSubmit}>
                 <TextField
-                  label="Recipient phone number"
-                  placeholder="Enter Phone number"
-                  {...formik.getFieldProps('beneficiaryMobileNumber')}
+                  label="Select Phone Number"
+                  placeholder="Select Phone"
+                  dropDown
+                  dropDownOptions={userSims}
+                  value={formik.values.mobileNumber}
+                  onChange={(e) => {
+                    formik.setFieldValue('mobileNumber', e.target.value);
+                    if (activeTab === 1) {
+                      formik.setFieldValue(
+                        'beneficiaryMobileNumber',
+                        e.target.value,
+                      );
+                    }
+                  }}
                   type="tel"
                   minLength={11}
                   maxLength={11}
                   error={getFieldError(
-                    formik.errors.beneficiaryMobileNumber,
-                    formik.touched.beneficiaryMobileNumber,
+                    formik.errors.mobileNumber,
+                    formik.touched.mobileNumber,
                   )}
                 />
-              )}
-
-              <SizedBox height={16} />
-
-              <Row justifyContent="flex-start">
-                <Column xs={12} md={5}>
-                  <Text variant="lighter">
-                    <SelectBundleRadio
-                      onClick={() => bundleHandler()}
-                      onKeyDown={() => bundleHandler()}
-                    >
-                      Select bundle
-                    </SelectBundleRadio>
-                  </Text>
-                </Column>
-
-                <Column xs={12} md={6}>
-                  <Text variant="lighter">
-                    <CustomizeBundleRadio
-                      onClick={() => bundleHandler()}
-                      onKeyDown={() => bundleHandler()}
-                    >
-                      Customize bundle
-                    </CustomizeBundleRadio>
-                  </Text>
-                </Column>
-              </Row>
-
-              {selectBundle && (
-                <Fragment>
-                  <SizedBox height={16} />
-
+                {activeTab === 2 && (
                   <TextField
-                    label="Data Bundle"
-                    placeholder="Select Data Bundle"
-                    dropDown
-                    dropDownOptions={dataPlans}
-                    value={formik.values.bundleId}
-                    onChange={(e) => {
-                      formik.setFieldValue('bundleId', String(e.target.value));
-                    }}
-                    type="text"
+                    label="Recipient phone number"
+                    placeholder="Enter Phone number"
+                    {...formik.getFieldProps('beneficiaryMobileNumber')}
+                    type="tel"
+                    minLength={11}
+                    maxLength={11}
                     error={getFieldError(
-                      formik.errors.bundleId,
-                      formik.touched.bundleId,
+                      formik.errors.beneficiaryMobileNumber,
+                      formik.touched.beneficiaryMobileNumber,
                     )}
                   />
-                </Fragment>
-              )}
+                )}
 
-              <SizedBox height={24} />
+                <SizedBox height={16} />
 
-              {customizeBundle && (
-                <Row justifyContent="space-between">
-                  {/* <Column xs={12} md={6}>
+                <Row justifyContent="flex-start">
+                  <Column xs={12} md={5}>
+                    <Text variant="lighter">
+                      <SelectBundleRadio
+                        onClick={() => bundleHandler()}
+                        onKeyDown={() => bundleHandler()}
+                      >
+                        Select bundle
+                      </SelectBundleRadio>
+                    </Text>
+                  </Column>
+
+                  <Column xs={12} md={6}>
+                    <Text variant="lighter">
+                      <CustomizeBundleRadio
+                        onClick={() => bundleHandler()}
+                        onKeyDown={() => bundleHandler()}
+                      >
+                        Customize bundle
+                      </CustomizeBundleRadio>
+                    </Text>
+                  </Column>
+                </Row>
+
+                {selectBundle && (
+                  <Fragment>
+                    <SizedBox height={16} />
+
+                    <TextField
+                      label="Data Bundle"
+                      placeholder="Select Data Bundle"
+                      dropDown
+                      dropDownOptions={dataPlans}
+                      value={formik.values.bundleId}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          'bundleId',
+                          String(e.target.value),
+                        );
+                      }}
+                      type="text"
+                      error={getFieldError(
+                        formik.errors.bundleId,
+                        formik.touched.bundleId,
+                      )}
+                    />
+                  </Fragment>
+                )}
+
+                <SizedBox height={24} />
+
+                {customizeBundle && (
+                  <Row justifyContent="space-between">
+                    {/* <Column xs={12} md={6}>
                     <TextField
                       label="Amount in Naira"
                       placeholder="Enter Amount"
@@ -394,17 +398,18 @@ export const BuyRoamingBundles: React.FC = () => {
                       )}
                     />
                   </Column> */}
-                </Row>
-              )}
+                  </Row>
+                )}
 
-              <SizedBox height={24} />
+                <SizedBox height={24} />
 
-              <Button type="submit" isLoading={loading} fullWidth>
-                Buy Now with airtime
-              </Button>
-              {renderModals()}
-            </form>
-          </Card>
+                <Button type="submit" isLoading={loading} fullWidth>
+                  Buy Now with airtime
+                </Button>
+                {renderModals()}
+              </form>
+            </Card>
+          </Column>
         </Column>
       </PageBody>
     </>
