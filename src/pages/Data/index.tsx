@@ -55,47 +55,55 @@ export const DataPage: React.FC = () => {
           </Text>
           <SizedBox height={32} />
           <Row wrap useAppMargin>
-            <Column useAppMargin xs={6} md={3} lg={2}>
-              <Text size={12} weight={500} color={Colors.grey}>
-                Data Balance
-              </Text>
+            {loading ? (
+              <SizedBox height={50}>
+                <Spinner isFixed>Gathering your balances</Spinner>
+              </SizedBox>
+            ) : (
+              <>
+                <Column useAppMargin xs={6} md={3} lg={2}>
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Data Balance
+                  </Text>
 
-              <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.dataModel.balance}
-              </Text>
-              <SizedBox height={10} />
+                  <Text size={24} weight={500}>
+                    {data?.result.dataModel.balance}
+                  </Text>
+                  <SizedBox height={10} />
 
-              <Text size={12} weight={500} color={Colors.grey}>
-                Valid till {data?.result.dataModel.expiryDate}
-              </Text>
-              <SizedBox height={5} />
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Valid till {data?.result.dataModel.expiryDate}
+                  </Text>
+                  <SizedBox height={5} />
 
-              <Text size={12} weight={500} color={Colors.grey}>
-                {data?.result.dataModel.isRollOver
-                  ? 'Roll-Over Applicable'
-                  : 'Roll-Over not Applicable'}
-              </Text>
-            </Column>
-            <Column useAppMargin xs={6} md={3} lg={2}>
-              <Text size={12} weight={500} color={Colors.grey}>
-                Data Bonus
-              </Text>
-              <Text size={24} weight={500}>
-                {loading ? <Spinner /> : data?.result.dataModel.bonusBalance}
-              </Text>
-              <SizedBox height={10} />
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    {data?.result.dataModel.isRollOver
+                      ? 'Roll-Over Applicable'
+                      : 'Roll-Over not Applicable'}
+                  </Text>
+                </Column>
+                <Column useAppMargin xs={6} md={3} lg={2}>
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Data Bonus
+                  </Text>
+                  <Text size={24} weight={500}>
+                    {data?.result.dataModel.bonusBalance}
+                  </Text>
+                  <SizedBox height={10} />
 
-              <Text size={12} weight={500} color={Colors.grey}>
-                Valid till {data?.result.dataModel.bonusExpiryDate}
-              </Text>
-              <SizedBox height={5} />
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    Valid till {data?.result.dataModel.bonusExpiryDate}
+                  </Text>
+                  <SizedBox height={5} />
 
-              <Text size={12} weight={500} color={Colors.grey}>
-                {data?.result.dataModel.isRollOver
-                  ? 'Roll-Over Applicable'
-                  : 'Roll-Over not Applicable'}
-              </Text>
-            </Column>
+                  <Text size={12} weight={500} color={Colors.grey}>
+                    {data?.result.dataModel.isRollOver
+                      ? 'Roll-Over Applicable'
+                      : 'Roll-Over not Applicable'}
+                  </Text>
+                </Column>
+              </>
+            )}
           </Row>
         </Column>
       </CardStyles.CardHeader>
