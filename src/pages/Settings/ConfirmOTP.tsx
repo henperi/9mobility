@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { Card } from '../../components/Card';
 import { getFieldError } from '../../utils/formikHelper';
 import { Column } from '../../components/Column';
 import { Text } from '../../components/Text';
@@ -83,36 +82,29 @@ export const ConfirmOTP: React.FC<{
 
   return (
     <Modal isVisible onClose={() => setshowOTPScreen(false)} size="sm">
-      <Column>
+      <Column style={{ minHeight: '300px', padding: '40px' }}>
         {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
         <form onSubmit={formik.handleSubmit}>
-          <Card
-            fullWidth
-            fullHeight
-            padding="40px"
-            style={{ minHeight: '300px' }}
-          >
-            <Column xs={12} style={{ margin: '0 auto' }}>
-              <SizedBox height={20} />
-              <Text size={18} weight={700} alignment="center">
-                {message}
-              </Text>
-              <SizedBox height={6} />
-              <Text weight={300} alignment="center">
-                Kindly enter the OPT sent to your registered number
-              </Text>
-              <SizedBox height={36} />
-              <TextField
-                placeholder="Enter OTP"
-                onChange={(e) => formik.setFieldValue('otp', e.target.value)}
-                error={getFieldError(formik.errors.otp, formik.touched.otp)}
-              />
-              <SizedBox height={36} />
-              <Button type="submit" isLoading={loading} fullWidth>
-                Continue
-              </Button>
-            </Column>
-          </Card>
+          <Column xs={12} style={{ margin: '0 auto' }}>
+            <SizedBox height={20} />
+            <Text size={18} weight={700} alignment="center">
+              {message}
+            </Text>
+            <SizedBox height={6} />
+            <Text weight={300} alignment="center">
+              Kindly enter the OPT sent to your registered number
+            </Text>
+            <SizedBox height={36} />
+            <TextField
+              placeholder="Enter OTP"
+              onChange={(e) => formik.setFieldValue('otp', e.target.value)}
+              error={getFieldError(formik.errors.otp, formik.touched.otp)}
+            />
+            <SizedBox height={36} />
+            <Button type="submit" isLoading={loading} fullWidth>
+              Continue
+            </Button>
+          </Column>
         </form>
       </Column>
     </Modal>

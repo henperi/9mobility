@@ -22,10 +22,20 @@ import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { generateShortId } from '../../utils/generateShortId';
 import { Modal } from '../../components/Modal';
 import { logger } from '../../utils/logger';
-import { usePost } from '../../customHooks/useRequests';
+import { useLazyFetch, usePost } from '../../customHooks/useRequests';
 import { useGlobalStore } from '../../store';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Spinner } from '../../components/Spinner';
+import { ConfirmOTP } from './ConfirmOTP';
+
+interface VerifyNumberResponse {
+  result: {
+    trackingId: string;
+    expiresIn: Date;
+  };
+  responseCode: number;
+  message: string;
+}
 
 interface SuccessResp {
   responseCode: number;
@@ -36,9 +46,16 @@ export const ManageNumbers = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedPhone, setSelectedPhone] = useState('');
 
-  const [showRemovePrompt, setShowRemovePrompt] = useState(false);
-  const [showActivatePrompt, setShowActivatePrompt] = useState(false);
-  const [showDeactivatePrompt, setShowDeactivatePrompt] = useState(false);
+  const [addNumberOTP, setAddNumberOTP] = useState(false);
+  const [removeNumberOTP, setRemoveNumberOTP] = useState(false);
+  const [activateNumberOTP, setActivateNumberOTP] = useState(false);
+  const [deactivateNumberOTP, setDeactivateNumberOTP] = useState(false);
+
+  const {
+    loading: loadingNumbers,
+    data: numbersData,
+    refetch: refetchMobileNumbers,
+  } = useGetMobileNumbers();
 
   const {
     state: {
@@ -54,13 +71,26 @@ export const ManageNumbers = () => {
       simNumber: Yup.string().required('This field is required'),
     }),
     onSubmit: async () => {
-      addSimNumber();
+      setAddNumberOTP(true);
+      getOTP();
     },
   });
 
-  const [addNumber, { loading, error }] = usePost<SuccessResp>(
-    'Mobility.Onboarding/api/Onboarding/addsim',
+  const getOTP = async () => {
+    try {
+      await requestOTP();
+    } catch (err) {
+      logger.log(err);
+    }
+  };
+
+  const [requestOTP, { data: OTPData }] = useLazyFetch<VerifyNumberResponse>(
+    'Mobility.Onboarding/api/Verification/initiateinappotp',
   );
+
+  const [addNumber, { loading: adding, error: addError }] = usePost<
+    SuccessResp
+  >('Mobility.Onboarding/api/Onboarding/addsim');
 
   const [removeNumber, { loading: removing, error: removeError }] = usePost<
     SuccessResp
@@ -82,6 +112,7 @@ export const ManageNumbers = () => {
 
       if (response.data) {
         refetchMobileNumbers();
+        setAddNumberOTP(false);
         setShowSuccessModal(true);
       }
     } catch (errorResp) {
@@ -93,9 +124,9 @@ export const ManageNumbers = () => {
     try {
       const response = await activateNumber({ simNumber: selectedPhone });
       if (response?.data) {
-        setShowActivatePrompt(false);
-        setShowSuccessModal(true);
         refetchMobileNumbers();
+        setActivateNumberOTP(false);
+        setShowSuccessModal(true);
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -106,9 +137,9 @@ export const ManageNumbers = () => {
     try {
       const response = await deactivateNumber({ simNumber: selectedPhone });
       if (response?.data) {
-        setShowDeactivatePrompt(false);
-        setShowSuccessModal(true);
         refetchMobileNumbers();
+        setDeactivateNumberOTP(false);
+        setShowSuccessModal(true);
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -119,20 +150,14 @@ export const ManageNumbers = () => {
     try {
       const response = await removeNumber({ simNumber: selectedPhone });
       if (response?.data) {
-        setShowRemovePrompt(false);
-        setShowSuccessModal(true);
         refetchMobileNumbers();
+        setRemoveNumberOTP(false);
+        setShowSuccessModal(true);
       }
     } catch (errorResp) {
       logger.log(errorResp);
     }
   };
-
-  const {
-    loading: loadingNumbers,
-    data: numbersData,
-    refetch: refetchMobileNumbers,
-  } = useGetMobileNumbers();
 
   const renderModals = () => (
     <>
@@ -141,7 +166,6 @@ export const ManageNumbers = () => {
         onClose={() => setShowSuccessModal(false)}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName}</Text>
@@ -150,130 +174,61 @@ export const ManageNumbers = () => {
           <SizedBox height={15} />
           <Text>Thank you for using 9mobile</Text>
           <SizedBox height={10} />
-          <Button
-            onClick={() => setShowSuccessModal(false)}
-            isLoading={loading}
-            fullWidth
-          >
+          <Button onClick={() => setShowSuccessModal(false)} fullWidth>
             Done
           </Button>
         </Column>
       </Modal>
-
-      <Modal
-        isVisible={showRemovePrompt}
-        onClose={() => setShowRemovePrompt(false)}
-        header={{ title: 'Transaction Confirmation' }}
-        size="sm"
-      >
-        {removeError && <ErrorBox>{removeError.message}</ErrorBox>}
-        <SizedBox height={15} />
-        <Column>
-          <Text>Hi {user?.firstName}</Text>
-          <SizedBox height={15} />
-          <Text>
-            You are about to remove{' '}
-            <Text variant="darker">{selectedPhone}</Text> from your sims
-          </Text>
-          <SizedBox height={10} />
-          <Row useAppMargin>
-            <Column xs={6} useAppMargin>
-              <Button onClick={removeSimNumber} isLoading={removing} fullWidth>
-                Confirm
-              </Button>
-            </Column>
-            <Column xs={6} useAppMargin>
-              <Button
-                onClick={() => setShowRemovePrompt(false)}
-                outline
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Column>
-          </Row>
-        </Column>
-      </Modal>
-
-      <Modal
-        isVisible={showActivatePrompt}
-        onClose={() => setShowActivatePrompt(false)}
-        header={{ title: 'Activation Confirmation' }}
-        size="sm"
-      >
-        {activationError && <ErrorBox>{activationError.message}</ErrorBox>}
-        <SizedBox height={15} />
-        <Column>
-          <Text>Hi {user?.firstName}</Text>
-          <SizedBox height={15} />
-          <Text>
-            You are about to activate{' '}
-            <Text variant="darker">{selectedPhone}</Text>
-          </Text>
-          <SizedBox height={10} />
-          <Row useAppMargin>
-            <Column xs={6} useAppMargin>
-              <Button
-                onClick={activateSimNumber}
-                isLoading={activating}
-                fullWidth
-              >
-                Confirm
-              </Button>
-            </Column>
-            <Column xs={6} useAppMargin>
-              <Button
-                onClick={() => setShowActivatePrompt(false)}
-                outline
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Column>
-          </Row>
-        </Column>
-      </Modal>
-
-      <Modal
-        isVisible={showDeactivatePrompt}
-        onClose={() => setShowDeactivatePrompt(false)}
-        header={{ title: 'Deactivation Confirmation' }}
-        size="sm"
-      >
-        {deactivationError && <ErrorBox>{deactivationError.message}</ErrorBox>}
-        <SizedBox height={15} />
-        <Column>
-          <Text>Hi {user?.firstName}</Text>
-          <SizedBox height={15} />
-          <Text>
-            You are about to de-activate{' '}
-            <Text variant="darker">{selectedPhone}</Text>
-          </Text>
-          <SizedBox height={10} />
-          <Row useAppMargin>
-            <Column xs={6} useAppMargin>
-              <Button
-                onClick={deactivateSimNumber}
-                isLoading={deactivating}
-                fullWidth
-              >
-                Confirm
-              </Button>
-            </Column>
-            <Column xs={6} useAppMargin>
-              <Button
-                onClick={() => setShowActivatePrompt(false)}
-                outline
-                fullWidth
-              >
-                Cancel
-              </Button>
-            </Column>
-          </Row>
-        </Column>
-      </Modal>
     </>
   );
+
+  if (addNumberOTP && OTPData && numbersData) {
+    return (
+      <ConfirmOTP
+        message={OTPData?.message}
+        setshowOTPScreen={setAddNumberOTP}
+        callbackFunction={addSimNumber}
+        trackingId={OTPData.result.trackingId}
+        mobileNumber={numbersData.result[0].mobileNumber}
+      />
+    );
+  }
+
+  if (removeNumberOTP && OTPData && numbersData) {
+    return (
+      <ConfirmOTP
+        message={OTPData?.message}
+        setshowOTPScreen={setRemoveNumberOTP}
+        callbackFunction={removeSimNumber}
+        trackingId={OTPData.result.trackingId}
+        mobileNumber={numbersData.result[0].mobileNumber}
+      />
+    );
+  }
+
+  if (activateNumberOTP && OTPData && numbersData) {
+    return (
+      <ConfirmOTP
+        message={OTPData?.message}
+        setshowOTPScreen={setActivateNumberOTP}
+        callbackFunction={activateSimNumber}
+        trackingId={OTPData.result.trackingId}
+        mobileNumber={numbersData.result[0].mobileNumber}
+      />
+    );
+  }
+
+  if (deactivateNumberOTP && OTPData && numbersData) {
+    return (
+      <ConfirmOTP
+        message={OTPData?.message}
+        setshowOTPScreen={setDeactivateNumberOTP}
+        callbackFunction={deactivateSimNumber}
+        trackingId={OTPData.result.trackingId}
+        mobileNumber={numbersData.result[0].mobileNumber}
+      />
+    );
+  }
 
   return (
     <PageBody>
@@ -299,6 +254,7 @@ export const ManageNumbers = () => {
           </CardStyles.CardHeader>
           <Card showOverlayedDesign fullWidth padding="5% 5%">
             <Text weight={600}>Add Number</Text>
+            {addError && <ErrorBox>{addError.message}</ErrorBox>}
 
             <form onSubmit={formik.handleSubmit}>
               <Row childGap={5}>
@@ -326,6 +282,7 @@ export const ManageNumbers = () => {
                       borderColor: `${Colors.darkGreen}`,
                       marginTop: `${rem(3)}`,
                     }}
+                    isLoading={adding}
                   >
                     Add Number
                   </Button>
@@ -334,7 +291,15 @@ export const ManageNumbers = () => {
             </form>
             <SizedBox height={30} />
             <Column>
-              {loadingNumbers ? (
+              {removeError && <ErrorBox>{removeError.message}</ErrorBox>}
+              {activationError && (
+                <ErrorBox>{activationError.message}</ErrorBox>
+              )}
+              {deactivationError && (
+                <ErrorBox>{deactivationError.message}</ErrorBox>
+              )}
+
+              {loadingNumbers || activating || deactivating || removing ? (
                 <Spinner isFixed />
               ) : (
                 <>
@@ -365,7 +330,8 @@ export const ManageNumbers = () => {
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
                                 setSelectedPhone(num.mobileNumber);
-                                setShowRemovePrompt(true);
+                                setRemoveNumberOTP(true);
+                                getOTP();
                               }}
                             >
                               remove number
@@ -378,8 +344,9 @@ export const ManageNumbers = () => {
                                 color={Colors.darkGreen}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => {
-                                  setShowDeactivatePrompt(true);
+                                  setDeactivateNumberOTP(true);
                                   setSelectedPhone(num.mobileNumber);
+                                  getOTP();
                                 }}
                               >
                                 Deactivate number
@@ -390,8 +357,9 @@ export const ManageNumbers = () => {
                                 color={Colors.darkGreen}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => {
-                                  setShowActivatePrompt(true);
+                                  setActivateNumberOTP(true);
                                   setSelectedPhone(num.mobileNumber);
+                                  getOTP();
                                 }}
                               >
                                 Activate number
