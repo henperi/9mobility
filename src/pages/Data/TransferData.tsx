@@ -22,6 +22,7 @@ import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 
 interface SuccessResp {
   responseCode: number;
@@ -29,6 +30,8 @@ interface SuccessResp {
 }
 
 export const TransferData: React.FC = () => {
+  const { mobileNumbers } = useGetMobileNumbers();
+
   const [transferAirtime, { loading, data, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Data/Transfer',
   );
@@ -67,7 +70,7 @@ export const TransferData: React.FC = () => {
     try {
       const response = await transferAirtime({
         ...formik.values,
-        mobileNumber: formik.values.recipientMobileNumber,
+        mobileNumber: mobileNumbers && mobileNumbers[0].value,
       });
 
       if (response.data) {
@@ -93,8 +96,9 @@ export const TransferData: React.FC = () => {
           <Text>Hi {user?.firstName}</Text>
           <SizedBox height={15} />
           <Text>
-            You are about to transfer
-            <Text variant="darker">{formik.values.amount}</Text> data to &nbsp;
+            You are about to transfer&nbsp;
+            <Text variant="darker">{formik.values.amount}</Text>mb data to
+            &nbsp;
             <Text variant="darker">{formik.values.recipientMobileNumber}</Text>
           </Text>
           <SizedBox height={10} />
@@ -126,7 +130,6 @@ export const TransferData: React.FC = () => {
         onClose={() => setShowSuccessModal(false)}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName}</Text>
@@ -194,7 +197,6 @@ export const TransferData: React.FC = () => {
                   {...formik.getFieldProps('amount')}
                   type="number"
                   minLength={1}
-                  // maxLength={11}
                   error={getFieldError(
                     formik.errors.amount,
                     formik.touched.amount,

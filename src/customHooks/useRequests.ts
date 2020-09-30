@@ -49,7 +49,10 @@ const concatParams = (params?: IParam) => {
 export function useFetch<T>(url: string, params?: IParam) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<T>();
-  const [error, setError] = useState();
+  const [error, setError] = useState<{
+    responseCode: number;
+    message: string;
+  } | null>(null);
 
   const refetch = useCallback(
     (fetchParams = params) =>
