@@ -17,6 +17,7 @@ import { TextField } from '../../components/TextField';
 import { Spinner } from '../../components/Spinner';
 import { RadioInput } from '../../components/RadioInput';
 import { generateShortId } from '../../utils/generateShortId';
+import { logger } from '../../utils/logger';
 
 export const ManageAccount = () => {
   const [selectedNumber, setSelectedNumber] = useState<number>(-1);
@@ -43,16 +44,24 @@ export const ManageAccount = () => {
   );
 
   useEffect(() => {
-    getCorporateDetails();
-  }, [getCorporateDetails, getCorporateNumbers]);
+    try {
+      getCorporateDetails();
+    } catch (errorResp) {
+      logger.log(errorResp);
+    }
+  }, [getCorporateDetails]);
 
   useEffect(() => {
     if (corporateData) {
-      getCorporateNumbers({
-        contractNumber: String(corporateData.result.contractNumber),
-        pageNumber: 1,
-        pageSize: 5,
-      });
+      try {
+        getCorporateNumbers({
+          contractNumber: String(corporateData.result.contractNumber),
+          pageNumber: 1,
+          pageSize: 5,
+        });
+      } catch (errorResp) {
+        logger.log(errorResp);
+      }
     }
   }, [corporateData, getCorporateNumbers]);
 

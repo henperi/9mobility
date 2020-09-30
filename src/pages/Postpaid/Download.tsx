@@ -56,7 +56,11 @@ export const Download = () => {
   );
 
   useEffect(() => {
-    getCorporateDetails();
+    try {
+      getCorporateDetails();
+    } catch (errorResp) {
+      logger.log(errorResp);
+    }
   }, [getCorporateDetails]);
 
   const formik = useFormik({

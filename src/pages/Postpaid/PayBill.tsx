@@ -47,7 +47,11 @@ export const PayBill = () => {
   );
 
   useEffect(() => {
-    getCorporateDetails();
+    try {
+      getCorporateDetails();
+    } catch (errorResp) {
+      logger.log(errorResp);
+    }
   }, [getCorporateDetails]);
 
   const [payPostpaidBill, { loading, error }] = usePost<SuccessResp>(
