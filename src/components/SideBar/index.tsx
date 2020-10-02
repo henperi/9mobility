@@ -12,6 +12,17 @@ import { Row } from '../Row';
 import { Avatar } from '../Avatar';
 import { useGlobalStore } from '../../store';
 
+import { ReactComponent as HomeIcon } from '../../assets/images/homeIcon.svg';
+import { ReactComponent as AirtimeIcon } from '../../assets/images/airtimeIcon.svg';
+import { ReactComponent as CallHistoryIcon } from '../../assets/images/callHistoryIcon.svg';
+import { ReactComponent as DataIcon } from '../../assets/images/dataIcon.svg';
+import { ReactComponent as DataUsage } from '../../assets/images/dataUsageIcon.svg';
+import { ReactComponent as TimeIcon } from '../../assets/images/timeIcon.svg';
+import { ReactComponent as PrepaidPlanIcon } from '../../assets/images/prepaidPlanIcon.svg';
+import { ReactComponent as PostPaidIcon } from '../../assets/images/postPaidIcon.svg';
+import { ReactComponent as RoamingIcon } from '../../assets/images/roamingIcon.svg';
+import { ReactComponent as SubscribedIcon } from '../../assets/images/subscribedIcon.svg';
+
 interface ISidebar extends HtmlHTMLAttributes<HTMLDivElement> {
   showSidebar?: boolean;
 }
@@ -48,6 +59,7 @@ export const SideBar: React.FC<ISidebar> = (props) => {
           activeClassName="active-sidebar-link"
           to="/dashboard"
         >
+          <HomeIcon />
           Dashboard
         </Styles.SideBarLink>
         <SizedBox height={20} />
@@ -64,42 +76,54 @@ export const SideBar: React.FC<ISidebar> = (props) => {
         <SizedBox height={5} />
 
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/airtime">
+          <AirtimeIcon />
           Airtime
         </Styles.SideBarLink>
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/data">
+          <DataIcon />
           Data
         </Styles.SideBarLink>
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/call">
+          <CallHistoryIcon />
           Call History
         </Styles.SideBarLink>
         <Styles.SideBarLink
           activeClassName="active-sidebar-link"
           to="/data-usage/history"
         >
+          <DataUsage />
           Data Usage
         </Styles.SideBarLink>
         <Styles.SideBarLink
           activeClassName="active-sidebar-link"
           to="/transaction/history"
         >
+          <TimeIcon />
           Transaction History
         </Styles.SideBarLink>
         <Styles.SideBarLink
           activeClassName="active-sidebar-link"
           to="/prepaid-plans"
         >
+          <PrepaidPlanIcon />
           Prepaid Plans
         </Styles.SideBarLink>
         <Styles.SideBarLink
           activeClassName="active-sidebar-link"
           to="/postpaid"
         >
+          <PostPaidIcon />
           Postpaid/Corporate
         </Styles.SideBarLink>
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/roaming">
+          <RoamingIcon />
           Roaming
         </Styles.SideBarLink>
-        <Styles.SideBarLink activeClassName="active-sidebar-link" to="/subscribed-services">
+        <Styles.SideBarLink
+          activeClassName="active-sidebar-link"
+          to="/subscribed-services"
+        >
+          <SubscribedIcon />
           My Subscribed Services
         </Styles.SideBarLink>
       </Column>

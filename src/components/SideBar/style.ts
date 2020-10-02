@@ -16,7 +16,7 @@ const SideBar = styled.div<{ showSidebar?: boolean }>`
   z-index: 10;
   overflow-y: auto;
 
-  @media (max-width: ${ScreenSizes.lg}px) {
+  @media (max-width: ${ScreenSizes.lg - 0.1}px) {
     /* display: none; */
     position: fixed;
     transform: ${({ showSidebar }) =>
@@ -36,17 +36,30 @@ const SideBarLink = styled(NavLink)<{ active?: boolean }>`
   color: #627382;
   font-size: ${rem(15)};
   text-decoration: none;
+  display: flex;
+  align-items: center;
+
+  svg {
+    margin-right: ${rem(6)};
+  }
 
   &.active-sidebar-link {
     font-weight: 600;
     color: ${Colors.darkGreen};
+
+    svg {
+      path {
+        stroke: ${Colors.darkGreen} !important;
+      }
+      color: ${Colors.darkGreen} !important;
+    }
 
     &:before {
       position: absolute;
       content: '';
       top: 0;
       left: 0;
-      width: 6px;
+      width: ${rem(6)};
       height: 100%;
       background-color: ${Colors.darkGreen};
     }
@@ -63,7 +76,7 @@ const SideBarLink = styled(NavLink)<{ active?: boolean }>`
         content: '';
         top: 0;
         left: 0;
-        width: 6px;
+        width: ${rem(6)};
         height: 100%;
         background-color: ${Colors.darkGreen};
       }
