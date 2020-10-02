@@ -74,8 +74,6 @@ export const SubscribedServices: React.FC = () => {
       </CardStyles.CardHeader>
       <SizedBox height={40} />
       <Row useAppMargin>
-        {loading && <Spinner isFixed />}
-
         {data?.result.map((item: any) => (
           <Column useAppMargin md={6} lg={3} fullHeight key={generateShortId()}>
             <Card

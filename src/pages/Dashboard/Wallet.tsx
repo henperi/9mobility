@@ -122,12 +122,12 @@ export const Wallet: React.FC = () => {
           Wallet
         </Text>
 
-        <SizedBox height={35} />
+        {/* <SizedBox height={35} /> */}
         <Text>
           You preserntly don’t have a 9PSB wallet. Create a wallet to enjoy
           unlimited possibilities
         </Text>
-        <SizedBox height={25} />
+        {/* <SizedBox height={25} /> */}
         {errorMessage && <ErrorBox>{errorMessage}</ErrorBox>}
         <Button
           isLoading={loadingCreateWallet}
@@ -145,7 +145,7 @@ export const Wallet: React.FC = () => {
       <Card
         fullWidth
         fullHeight
-        style={{ minHeight: '300px', padding: '28px' }}
+        style={{ minHeight: '200px', padding: '28px' }}
       >
         {loading ? <Spinner isFixed /> : getContent()}
       </Card>
