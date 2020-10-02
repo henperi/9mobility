@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { DropDownButton } from '../../components/Button/DropdownButton';
@@ -13,6 +13,7 @@ import { useLazyFetch } from '../../customHooks/useRequests';
 import { Colors } from '../../themes/colors';
 import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 import { ReactComponent as RefreshIcon } from '../../assets/images/refreshIcon.svg';
+import { logger } from '../../utils/logger';
 
 interface AirtimeDataResp {
   result: {
@@ -47,7 +48,13 @@ export const SimBalances: React.FC = (props) => {
   const getAirtimeRef = useRef(getAirtime);
 
   useEffect(() => {
-    getAirtimeRef.current();
+    (async () => {
+      try {
+        await getAirtimeRef.current();
+      } catch (e) {
+        // console.log('object', error);
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -56,15 +63,27 @@ export const SimBalances: React.FC = (props) => {
     }
   }, [data]);
 
+  const handelGetAirtime = useCallback(() => {
+    try {
+      getAirtime();
+    } catch (e) {
+      logger.log(e);
+    }
+  }, [getAirtime]);
+
   useEffect(() => {
     if (mobile) {
-      getAirtime();
+      handelGetAirtime();
     }
-  }, [getAirtime, mobile]);
+  }, [handelGetAirtime, mobile]);
 
   const history = useHistory();
 
-  const { data: activePlan, loading: activePlanLoading } = useGetActivePlan();
+  const {
+    data: activePlan,
+    loading: activePlanLoading,
+    error: activePlanError,
+  } = useGetActivePlan();
 
   const renderActivePlan = () =>
     activePlan?.result.name ? (
@@ -76,7 +95,8 @@ export const SimBalances: React.FC = (props) => {
       </Text>
     ) : (
       <Text weight={100} size={14} variant="lighter">
-        You dont have an active plan at the moment
+        {activePlanError?.message ||
+          'You dont have an active plan at the moment'}
       </Text>
     );
 
@@ -111,7 +131,7 @@ export const SimBalances: React.FC = (props) => {
                     {mobile || (mobileNumbers && mobileNumbers[0].value)}
                   </Text>
                 </DropDownButton>
-                <RefreshIcon onClick={() => getAirtime()} />
+                <RefreshIcon onClick={() => handelGetAirtime()} />
               </Row>
               <SizedBox height={20} />
               <Row>

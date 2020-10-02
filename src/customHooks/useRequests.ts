@@ -62,7 +62,11 @@ export function useFetch<T>(url: string, params?: IParam) {
           setLoading(false);
           setData(result.data);
         })
-        .catch((err) => setError(err)),
+        .catch((err) => {
+          const errorRes = handleAxiosError(err);
+          setError(errorRes);
+          setLoading(false);
+        }),
     [params, url],
   );
 
