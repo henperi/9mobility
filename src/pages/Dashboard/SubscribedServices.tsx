@@ -30,66 +30,66 @@ export const SubscribedServices = () => {
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
-      <Card
-        fullWidth
-        fullHeight
-        style={{ minHeight: '300px', padding: '28px' }}
-      >
+      <Card fullWidth fullHeight style={{ padding: '28px' }}>
         {loading ? (
           <Spinner isFixed />
         ) : (
           <Column fullHeight alignItems="space-between">
-            <Text size={18} color={Colors.darkGreen} weight={500}>
-              Subscribed services
-            </Text>
-            <SizedBox height={20} />
-            <Row>
-              <Column>
-                <Text>As of 11:04AM, 26th March 2019</Text>
-                <Text size={18} color={Colors.darkGreen} weight="bold">
-                  {data?.result.length} Services
-                </Text>
-              </Column>
-            </Row>
-            <SizedBox height={35} />
-            <Scrollable
-              style={{ width: '95%', marginLeft: '2.5%' }}
-              arrowStyles={{
-                width: '25px',
-                height: '25px',
-                padding: '5px',
-              }}
-            >
-              {data?.result.map((service) => (
-                <Card
-                  key={service.id}
-                  style={{
-                    background: '#EDF6F8',
-                    minWidth: '92px',
-                    marginRight: '2.5%',
-                    height: '100%',
-                  }}
-                >
-                  <Column
-                    justifyContent="center"
-                    alignItems="center"
-                    fullHeight
+            <Column>
+              <Text size={18} color={Colors.darkGreen} weight={500}>
+                Subscribed services
+              </Text>
+              <SizedBox height={20} />
+              <Row>
+                <Column>
+                  <Text>As of 11:04AM, 26th March 2019</Text>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
+                    {data?.result.length} Services
+                  </Text>
+                </Column>
+              </Row>
+            </Column>
+            {/* <SizedBox height={35} /> */}
+            {data?.result.length ? (
+              <Scrollable
+                style={{ width: '95%', marginLeft: '2.5%' }}
+                arrowStyles={{
+                  width: '25px',
+                  height: '25px',
+                  padding: '5px',
+                }}
+              >
+                {data?.result.map((service) => (
+                  <Card
+                    key={service.id}
+                    style={{
+                      background: '#EDF6F8',
+                      minWidth: '92px',
+                      marginRight: '2.5%',
+                      height: '100%',
+                    }}
                   >
-                    <Text
-                      casing="titleCase"
-                      size={12}
-                      color={Colors.darkGreen}
-                      weight={700}
-                      alignment="center"
+                    <Column
+                      justifyContent="center"
+                      alignItems="center"
+                      fullHeight
                     >
-                      {service.name}
-                    </Text>
-                    <SizedBox height={7} />
-                  </Column>
-                </Card>
-              ))}
-            </Scrollable>
-            <SizedBox height={15} />
+                      <Text
+                        casing="titleCase"
+                        size={12}
+                        color={Colors.darkGreen}
+                        weight={700}
+                        alignment="center"
+                      >
+                        {service.name}
+                      </Text>
+                      <SizedBox height={7} />
+                    </Column>
+                  </Card>
+                ))}
+              </Scrollable>
+            ) : null}
+            {/* <SizedBox height={15} /> */}
             <Row>
               <Button
                 onClick={() => history.push('/subscribed-services')}

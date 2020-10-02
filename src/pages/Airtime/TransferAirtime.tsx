@@ -53,7 +53,9 @@ export const TransferAirtime: React.FC = () => {
         .min(4, 'Must be a 4 digit number')
         .max(4, 'Must be a 16 digit number')
         .required('This field is required'),
-      amount: Yup.number().min(1, 'Amount must be at least N1').required(),
+      amount: Yup.number()
+        .min(10, 'Amount must be at least ₦10')
+        .required('Amount field is required'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -186,11 +188,10 @@ export const TransferAirtime: React.FC = () => {
               <SizedBox height={16} />
               <TextField
                 label="Amount"
-                placeholder="Enter amount you want to transfer"
+                placeholder="Enter amount"
                 {...formik.getFieldProps('amount')}
                 type="number"
-                minLength={1}
-                // maxLength={11}
+                min={10}
                 error={getFieldError(
                   formik.errors.amount,
                   formik.touched.amount,

@@ -206,7 +206,7 @@ export const TextField: React.FC<ITextField> = (props) => {
           <>
             <SizedBox height={2.5} />
             <Text
-              casing="titleCase"
+              casing="sentenceCase"
               color={convertHexToRGBA(Colors.error, 0.8)}
               size={12}
             >

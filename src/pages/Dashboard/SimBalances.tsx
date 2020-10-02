@@ -85,51 +85,53 @@ export const SimBalances: React.FC = (props) => {
       <Card
         fullWidth
         fullHeight
-        style={{ minHeight: '300px', padding: '28px' }}
+        style={{ minHeight: '250px', padding: '28px' }}
       >
         {loading ? (
           <Spinner isFixed />
         ) : (
           <Column fullHeight alignItems="space-between">
-            <Row justifyContent="space-between" alignItems="center">
-              <DropDownButton
-                dropdownOptions={mobileNumbers}
-                useDefaultName={false}
-                variant="default"
-                dropDownChange={(e) => setmobile(e.value)}
-                style={{
-                  minWidth: '180px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  minHeight: 'unset',
-                  paddingLeft: 0,
-                }}
-              >
-                <Text size={18} color={Colors.darkGreen} weight={500}>
-                  {mobile || (mobileNumbers && mobileNumbers[0].value)}
-                </Text>
-              </DropDownButton>
-              <RefreshIcon onClick={() => getAirtime()} />
-            </Row>
-            <SizedBox height={20} />
-            <Row>
-              <Column xs={6}>
-                <Text>Airtime Balance</Text>
-                <Text size={18} color={Colors.darkGreen} weight="bold">
-                  {airtimeData?.airtimeModel.balance}
-                </Text>
-              </Column>
-              <Column xs={6}>
-                <Text>Data Balance</Text>
-                <Text size={18} color={Colors.darkGreen} weight="bold">
-                  {airtimeData?.dataModel.balance}
-                </Text>
-              </Column>
-            </Row>
-            <SizedBox height={35} />
+            <Column>
+              <Row justifyContent="space-between" alignItems="center">
+                <DropDownButton
+                  dropdownOptions={mobileNumbers}
+                  useDefaultName={false}
+                  variant="default"
+                  dropDownChange={(e) => setmobile(e.value)}
+                  style={{
+                    minWidth: '150px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    minHeight: 'unset',
+                    paddingLeft: 0,
+                  }}
+                >
+                  <Text size={18} color={Colors.darkGreen} weight={500}>
+                    {mobile || (mobileNumbers && mobileNumbers[0].value)}
+                  </Text>
+                </DropDownButton>
+                <RefreshIcon onClick={() => getAirtime()} />
+              </Row>
+              <SizedBox height={20} />
+              <Row>
+                <Column xs={6}>
+                  <Text>Airtime Balance</Text>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
+                    {airtimeData?.airtimeModel.balance}
+                  </Text>
+                </Column>
+                <Column xs={6}>
+                  <Text>Data Balance</Text>
+                  <Text size={18} color={Colors.darkGreen} weight="bold">
+                    {airtimeData?.dataModel.balance}
+                  </Text>
+                </Column>
+              </Row>
+            </Column>
+            {/* <SizedBox height={35} /> */}
             {activePlanLoading ? <Spinner /> : renderActivePlan()}
-            <SizedBox height={25} />
+            {/* <SizedBox height={25} /> */}
             <Row useAppMargin>
               <Column useAppMargin xs={6}>
                 <Button onClick={() => history.push('/airtime')} fullWidth>
