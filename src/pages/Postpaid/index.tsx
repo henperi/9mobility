@@ -38,7 +38,7 @@ export const PostpaidPage: React.FC = () => {
       </CardStyles.CardHeader>
       <SizedBox height={40} />
       <Row useAppMargin>
-        <Column useAppMargin md={6} lg={3} fullHeight>
+        <Column useAppMargin md={6} lg={4} xl={3} fullHeight>
           <Card
             fullWidth
             fullHeight
@@ -58,7 +58,7 @@ export const PostpaidPage: React.FC = () => {
           </Card>
         </Column>
 
-        <Column useAppMargin md={6} lg={3} fullHeight>
+        <Column useAppMargin md={6} lg={4} xl={3} fullHeight>
           <Card
             fullWidth
             fullHeight
@@ -77,7 +77,7 @@ export const PostpaidPage: React.FC = () => {
           </Card>
         </Column>
 
-        <Column useAppMargin md={6} lg={3} fullHeight>
+        <Column useAppMargin md={6} lg={4} xl={3} fullHeight>
           <Card fullWidth fullHeight onClick={() => null}>
             <SizedBox height={20} />
 
@@ -94,7 +94,7 @@ export const PostpaidPage: React.FC = () => {
           </Card>
         </Column>
 
-        <Column useAppMargin md={6} lg={3} fullHeight>
+        <Column useAppMargin md={6} lg={4} xl={3} fullHeight>
           <Card
             fullWidth
             fullHeight

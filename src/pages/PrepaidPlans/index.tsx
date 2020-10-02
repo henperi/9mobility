@@ -109,7 +109,7 @@ export const PrepaidPlansPage: React.FC = () => {
         {!allPlans && allPlansLoading && <Spinner isFixed />}
 
         {allPlans?.result.map((plan) => (
-          <Column useAppMargin md={6} lg={3} fullHeight key={plan.id}>
+          <Column useAppMargin md={6} lg={4} xl={3} fullHeight key={plan.id}>
             <Card fullWidth fullHeight onClick={() => setSelectedPlan(plan)}>
               <AsyncImage
                 src={`images/${plan.icon}`}
