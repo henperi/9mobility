@@ -23,6 +23,7 @@ import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
 import { BorrowEligibilityResp } from './Interface';
+import { generateShortId } from '../../utils/generateShortId';
 
 interface BorrowSuccessResp {
   responseCode: number;
@@ -244,7 +245,7 @@ export const BorrowData: React.FC = () => {
                   <Row useAppMargin>
                     {borrowingAmounts &&
                       borrowingAmounts[selectedNumber].map((options) => (
-                        <Column xs={4} useAppMargin key={options.id}>
+                        <Column xs={4} useAppMargin key={generateShortId()}>
                           <Button
                             fullWidth
                             onClick={() => {

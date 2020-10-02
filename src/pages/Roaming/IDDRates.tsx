@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -18,6 +18,7 @@ import { useFetch, useLazyFetch } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Row } from '../../components/Row';
 import { rem } from '../../utils/rem';
+import { Button } from '../../components/Button';
 
 interface SuccessResp {
   result: {
@@ -35,14 +36,10 @@ interface SuccessResp {
 }
 
 export const IDDRates: React.FC = () => {
-  const [getRoamingRate, { data, error }] = useLazyFetch<SuccessResp>(
-    'Mobility.Account/api/Roaming/GetRoamingRate',
-  );
-  const {
-    // loading: loadingRoamingOptions,
-    data: countries,
-    // error: errorRoamingOptions,
-  } = useFetch<{
+  const [getRoamingRate, { data, error, loading: loadingRates }] = useLazyFetch<
+    SuccessResp
+  >('Mobility.Account/api/Roaming/GetRoamingRate');
+  const { data: countries } = useFetch<{
     result: {
       id: number;
       name: string;
@@ -50,11 +47,7 @@ export const IDDRates: React.FC = () => {
     }[];
   }>('Mobility.Account/api/Countries/GetCountries');
 
-  const {
-    // loading: loadingRoamingOptions,
-    data: billingOptions,
-    // error: errorRoamingOptions,
-  } = useFetch<{
+  const { data: billingOptions } = useFetch<{
     result: {
       id: number;
       name: string;
@@ -70,14 +63,14 @@ export const IDDRates: React.FC = () => {
       countryId: Yup.number().required('This field is required'),
       billingOptionId: Yup.number().required('This field is required'),
     }),
-    onSubmit: async (formData) => {},
+    onSubmit: async () => {
+      getIDDRates();
+    },
   });
 
-  useEffect(() => {
-    if (formik.values.countryId && formik.values.billingOptionId) {
-      getRoamingRate(formik.values);
-    }
-  }, [formik.values, getRoamingRate]);
+  const getIDDRates = async () => {
+    getRoamingRate(formik.values);
+  };
 
   const renderResults = () =>
     data?.result ? (
@@ -132,10 +125,10 @@ export const IDDRates: React.FC = () => {
 
               <Column justifyContent="center">
                 <Text size={18} weight={500}>
-                  Roaming Data Bundles
+                  International call(IDD) rates
                 </Text>
                 <Text size={14} color={Colors.grey} weight={200}>
-                  Recharge with your airtime
+                  Rates in country visited &amp; back to Nigeria
                 </Text>
               </Column>
             </CardStyles.CardHeader>
@@ -184,6 +177,10 @@ export const IDDRates: React.FC = () => {
                     />
                   </Column>
                 </Row>
+                <SizedBox height={24} />
+                <Button type="submit" isLoading={loadingRates} fullWidth>
+                  Get Rate
+                </Button>
                 {renderResults()}
               </form>
             </Card>
