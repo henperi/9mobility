@@ -30,7 +30,11 @@ export const SubscribedServices = () => {
 
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
-      <Card fullWidth fullHeight style={{ padding: '28px' }}>
+      <Card
+        fullWidth
+        fullHeight
+        style={{ minHeight: '200px', padding: '28px' }}
+      >
         {loading ? (
           <Spinner isFixed />
         ) : (
