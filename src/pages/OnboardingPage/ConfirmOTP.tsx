@@ -129,7 +129,7 @@ export const ConfirmOTP: React.FC<SetScreen> = () => {
               </Button>
             </form>
             <SizedBox height={32} />
-            <ResendOTPIn time={40} trackingId={trackingId} />
+            <ResendOTPIn time={60} trackingId={trackingId} />
             <SizedBox height={52} />
           </Column>
         </Card>
