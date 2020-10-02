@@ -49,7 +49,9 @@ export const AppContainer: React.FC = ({ children }) => {
             <Column
               style={{
                 width:
-                  width > ScreenSizes.lg && hasValidAccess && !isOnboardingRoute
+                  width >= ScreenSizes.lg &&
+                  hasValidAccess &&
+                  !isOnboardingRoute
                     ? `calc(100% - ${rem(240)}`
                     : '100%',
               }}

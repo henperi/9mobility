@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { DropDownButton } from '../../components/Button/DropdownButton';
@@ -9,9 +9,10 @@ import { SizedBox } from '../../components/SizedBox';
 import { Spinner } from '../../components/Spinner';
 import { Text } from '../../components/Text';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
-import { useFetch } from '../../customHooks/useRequests';
+import { useLazyFetch } from '../../customHooks/useRequests';
 import { Colors } from '../../themes/colors';
 import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
+import { ReactComponent as RefreshIcon } from '../../assets/images/refreshIcon.svg';
 
 interface AirtimeDataResp {
   result: {
@@ -31,24 +32,35 @@ interface AirtimeDataResp {
 }
 
 export const SimBalances: React.FC = (props) => {
-  const { data, loading } = useFetch<AirtimeDataResp>(
-    'Mobility.Account/api/Balance/AirtimeAndData',
-  );
-
   const { mobileNumbers } = useGetMobileNumbers();
 
   const [mobile, setmobile] = useState('');
+
+  const [getAirtime, { data, loading }] = useLazyFetch<AirtimeDataResp>(
+    `Mobility.Account/api/Balance/AirtimeAndData/${mobile}`,
+  );
 
   const [airtimeData, setAirtimeData] = useState<
     null | AirtimeDataResp['result']
   >();
 
+  const getAirtimeRef = useRef(getAirtime);
+
+  useEffect(() => {
+    getAirtimeRef.current();
+  }, []);
+
   useEffect(() => {
     if (data) {
       setAirtimeData(data.result);
-      setmobile(data.result.mobileNumber);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (mobile) {
+      getAirtime();
+    }
+  }, [getAirtime, mobile]);
 
   const history = useHistory();
 
@@ -79,24 +91,27 @@ export const SimBalances: React.FC = (props) => {
           <Spinner isFixed />
         ) : (
           <Column fullHeight alignItems="space-between">
-            <DropDownButton
-              dropdownOptions={mobileNumbers}
-              useDefaultName={false}
-              variant="default"
-              dropDownChange={(e) => setmobile(e.value)}
-              style={{
-                minWidth: '180px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                minHeight: 'unset',
-                paddingLeft: 0,
-              }}
-            >
-              <Text size={18} color={Colors.darkGreen} weight={500}>
-                {mobile}
-              </Text>
-            </DropDownButton>
+            <Row justifyContent="space-between" alignItems="center">
+              <DropDownButton
+                dropdownOptions={mobileNumbers}
+                useDefaultName={false}
+                variant="default"
+                dropDownChange={(e) => setmobile(e.value)}
+                style={{
+                  minWidth: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  minHeight: 'unset',
+                  paddingLeft: 0,
+                }}
+              >
+                <Text size={18} color={Colors.darkGreen} weight={500}>
+                  {mobile || (mobileNumbers && mobileNumbers[0].value)}
+                </Text>
+              </DropDownButton>
+              <RefreshIcon onClick={() => getAirtime()} />
+            </Row>
             <SizedBox height={20} />
             <Row>
               <Column xs={6}>

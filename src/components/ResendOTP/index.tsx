@@ -26,7 +26,8 @@ export const ResendOTPIn: React.FC<IAvatar> = ({ time, trackingId }) => {
 
       await resendOTP({ trackingNumber: trackingId });
       setLoading(false);
-      setTime((prev) => (prev < 120 ? prev + 30 : prev));
+      setTime(0);
+      setTime(60);
     } catch (error) {
       setLoading(false);
       setErrorMessage((error as Error).message);
