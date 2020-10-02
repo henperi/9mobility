@@ -32,16 +32,8 @@ interface SuccessResp {
 }
 
 export const BuyRoamingBundles: React.FC = () => {
-  const {
-    RadioInput: SelectBundleRadio,
-    checked: selectBundle,
-    setChecked: setSelectBundle,
-  } = useRadioInput(true);
-  const {
-    RadioInput: CustomizeBundleRadio,
-    checked: customizeBundle,
-    setChecked: setCustomizeBundle,
-  } = useRadioInput(false);
+  const { RadioInput: SelectBundleRadio } = useRadioInput(true);
+
   const [activeTab, setactiveTab] = useState(1);
 
   const [buyDataWithAirtime, { loading, data, error }] = usePost<SuccessResp>(
@@ -138,16 +130,6 @@ export const BuyRoamingBundles: React.FC = () => {
       }
     } catch (errorResp) {
       logger.log(errorResp);
-    }
-  };
-
-  const bundleHandler = () => {
-    if (selectBundle) {
-      setCustomizeBundle(true);
-      setSelectBundle(false);
-    } else {
-      setCustomizeBundle(false);
-      setSelectBundle(true);
     }
   };
 
@@ -320,28 +302,12 @@ export const BuyRoamingBundles: React.FC = () => {
                 <Row justifyContent="flex-start">
                   <Column xs={12} md={5}>
                     <Text variant="lighter">
-                      <SelectBundleRadio
-                        onClick={() => bundleHandler()}
-                        onKeyDown={() => bundleHandler()}
-                      >
-                        Select bundle
-                      </SelectBundleRadio>
-                    </Text>
-                  </Column>
-
-                  <Column xs={12} md={6}>
-                    <Text variant="lighter">
-                      <CustomizeBundleRadio
-                        onClick={() => bundleHandler()}
-                        onKeyDown={() => bundleHandler()}
-                      >
-                        Customize bundle
-                      </CustomizeBundleRadio>
+                      <SelectBundleRadio>Select bundle</SelectBundleRadio>
                     </Text>
                   </Column>
                 </Row>
 
-                {selectBundle && (
+                {activeTab === 1 && (
                   <Fragment>
                     <SizedBox height={16} />
 
@@ -366,39 +332,29 @@ export const BuyRoamingBundles: React.FC = () => {
                   </Fragment>
                 )}
 
-                <SizedBox height={24} />
+                {activeTab === 2 && (
+                  <Fragment>
+                    <SizedBox height={16} />
 
-                {customizeBundle && (
-                  <Row justifyContent="space-between">
-                    {/* <Column xs={12} md={6}>
                     <TextField
-                      label="Amount in Naira"
-                      placeholder="Enter Amount"
-                      {...formik.getFieldProps('amount')}
+                      label="Data Bundle"
+                      placeholder="Select Data Bundle"
+                      dropDown
+                      dropDownOptions={dataPlans}
+                      value={formik.values.bundleId}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          'bundleId',
+                          String(e.target.value),
+                        );
+                      }}
                       type="text"
-                      minLength={11}
-                      maxLength={11}
                       error={getFieldError(
-                        formik.errors.amount,
-                        formik.touched.amount,
+                        formik.errors.bundleId,
+                        formik.touched.bundleId,
                       )}
                     />
-                  </Column>
-                  <Column xs={12} md={5}>
-                    <TextField
-                      label="Value in MB/GB"
-                      placeholder=""
-                      {...formik.getFieldProps('datavalue')}
-                      type="text"
-                      minLength={11}
-                      maxLength={11}
-                      error={getFieldError(
-                        formik.errors.dataValue,
-                        formik.touched.dataValue,
-                      )}
-                    />
-                  </Column> */}
-                  </Row>
+                  </Fragment>
                 )}
 
                 <SizedBox height={24} />
