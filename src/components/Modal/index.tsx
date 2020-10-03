@@ -22,6 +22,7 @@ export const Modal: React.FC<
     showDefaultFooter,
     onClose = () => null,
     isVisible,
+    showCloseButton,
     ...rest
   } = props;
 
@@ -60,9 +61,11 @@ export const Modal: React.FC<
     ? createPortal(
         <Styles.Modal {...rest}>
           <Card className="child">
-            <Button onClick={closeModal} type="button" className="x-close">
-              x
-            </Button>
+            {showCloseButton && (
+              <Button onClick={closeModal} type="button" className="x-close">
+                x
+              </Button>
+            )}
 
             {header && (
               <Column>
@@ -99,4 +102,8 @@ export const Modal: React.FC<
         modalRoot as HTMLElement,
       )
     : null;
+};
+
+Modal.defaultProps = {
+  showCloseButton: true,
 };

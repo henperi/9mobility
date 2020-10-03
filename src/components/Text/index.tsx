@@ -21,7 +21,8 @@ const getChildren = (
 export const Text: React.FC<
   TextProps & { children: string | React.ReactNode }
 > = (props) => {
-  const { children, casing, ...rest } = props;
+  const { children, ...rest } = props;
+  const { casing } = props;
 
   return <Styles.Text {...rest}>{getChildren(children, casing)}</Styles.Text>;
 };
