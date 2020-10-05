@@ -145,7 +145,12 @@ export function usePost<T>(url: string, payload?: any) {
         setLoading(false);
         setData(result.data);
 
-        return { loading: false, data: result.data, error: null };
+        return {
+          loading: false,
+          data: result.data,
+          error: null,
+          config: result.config,
+        };
       })
       .catch((error: AxiosError<Error1 | Error2>) => {
         const errorRes = handleAxiosError(error);

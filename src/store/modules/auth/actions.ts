@@ -4,6 +4,7 @@ import {
   removeAuthHeader,
 } from '../../../services/htttpService';
 import { types } from './types';
+import { logger } from '../../../utils/logger';
 
 /**
  * @description method to set the auth user
@@ -13,6 +14,8 @@ import { types } from './types';
 export const setAuthUser = (authUser: AuthUser) => {
   setAuthHeader(authUser.accesssToken);
   localStorage.setItem('authUser', JSON.stringify(authUser));
+
+  logger.log('setting auth user');
 
   return {
     type: types.SET_AUTH_USER,

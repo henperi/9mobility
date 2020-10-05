@@ -1,4 +1,4 @@
-import React, { HtmlHTMLAttributes, useEffect } from 'react';
+import React, { HtmlHTMLAttributes } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Styles } from './style';
 
@@ -11,11 +11,11 @@ import { ReactComponent as SettingsIcon } from '../../assets/images/settings.svg
 import { Row } from '../Row';
 import { useGlobalStore } from '../../store';
 import { removeAuthUser } from '../../store/modules/auth/actions';
-import { useTokenRefresher } from '../../customHooks/useTokenHandler';
 import { Text } from '../Text';
 import { Colors } from '../../themes/colors';
 import { useWindowSize } from '../../customHooks/useWindowSize';
 import { ScreenSizes } from '../Column/styles';
+import { useInterceptor } from '../../customHooks/useInterceptor';
 
 export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
   auth: boolean;
@@ -24,14 +24,15 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 
 export const TopBar: React.FC<ITopBar> = (props) => {
   const { auth, setShowSidebar = () => null, ...rest } = props;
-  const { dispatch, state } = useGlobalStore();
+  const { dispatch } = useGlobalStore();
   const history = useHistory();
+  useInterceptor();
 
-  const [refresh] = useTokenRefresher(state);
+  // const [refresh] = useTokenRefresher(state);
 
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
+  // useEffect(() => {
+  // refresh();
+  // }, [refresh]);
 
   const handleLogout = () => {
     dispatch(removeAuthUser());

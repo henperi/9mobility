@@ -12,7 +12,6 @@ import { SizedBox } from '../../components/SizedBox';
 
 import packageAdvisor from '../../assets/images/packageAdvisor.svg';
 import { useFetch } from '../../customHooks/useRequests';
-import { Button } from '../../components/Button';
 import { Spinner } from '../../components/Spinner';
 import { AsyncImage } from '../../components/AsyncImage';
 import { SinglePlan } from './SinglePlan';
@@ -111,16 +110,6 @@ export const PrepaidPlansPage: React.FC = () => {
                   <Text weight={900} casing="lowercase">
                     {data?.result.name}
                   </Text>
-                  <Button
-                    variant="secondary"
-                    style={{
-                      marginLeft: '10px',
-                      minHeight: 'fit-content',
-                      padding: '5px 20px',
-                    }}
-                  >
-                    Manage Plan
-                  </Button>
                 </Row>
               )}
             </Column>
