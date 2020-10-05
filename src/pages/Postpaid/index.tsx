@@ -77,7 +77,14 @@ export const PostpaidPage: React.FC = () => {
           </Card>
         </Column>
 
-        <Column useAppMargin md={6} lg={4} xl={3} fullHeight>
+        <Column
+          useAppMargin
+          md={6}
+          lg={4}
+          xl={3}
+          fullHeight
+          onClick={() => history.push('/postpaid/buy-bundle')}
+        >
           <Card fullWidth fullHeight onClick={() => null}>
             <SizedBox height={20} />
 
