@@ -48,7 +48,8 @@ export const SubscribedServices = () => {
                 <Column>
                   <Text>As of 11:04AM, 26th March 2019</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
-                    {data?.result.length} Services
+                    {data?.result.length}{' '}
+                    {data?.result.length === 1 ? 'Service' : 'Services'}
                   </Text>
                 </Column>
               </Row>
