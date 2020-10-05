@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { usePost } from './useRequests';
-import { useGlobalStore } from '../store';
-import { OnboardingAuthResponse } from '../pages/OnboardingPage/ConfirmOTP';
-import { setAuthUser, removeAuthUser } from '../store/modules/auth/actions';
+// import { usePost } from './useRequests';
+// import { useGlobalStore } from '../store';
+// import { OnboardingAuthResponse } from '../pages/OnboardingPage/ConfirmOTP';
+// import { setAuthUser, removeAuthUser } from '../store/modules/auth/actions';
 import { initialState } from '../store/modules';
 import { useCountdown } from './useCountdown';
 import { logger } from '../utils/logger';
 
 export const useTokenRefresher = (state: typeof initialState) => {
-  const { dispatch } = useGlobalStore();
-  const [refreshToken] = usePost<OnboardingAuthResponse>(
-    'Mobility.Onboarding/api/Verification/refreshtoken',
-  );
+  // const { dispatch } = useGlobalStore();
+  // const [refreshToken] = usePost<OnboardingAuthResponse>(
+  //   'Mobility.Onboarding/api/Verification/refreshtoken',
+  // );
 
   const [expiresIn, setExpiresIn] = useState<number | null>();
 
@@ -29,7 +29,7 @@ export const useTokenRefresher = (state: typeof initialState) => {
 
   useEffect(() => {
     if (state.auth.user) {
-      // logger.log(timeRemaining);
+      logger.log(timeRemaining);
     }
   }, [state.auth.user, timeRemaining]);
 
@@ -45,18 +45,18 @@ export const useTokenRefresher = (state: typeof initialState) => {
         -100 &&
       timeRemaining < 100
     ) {
-      try {
-        logger.log('timeRemaining', timeRemaining, state.auth);
-        const result = await refreshToken({
-          refreshToken: state.auth.user?.refreshToken,
-        });
-        dispatch(setAuthUser(result.data.result));
-      } catch (error) {
-        logger.log(error);
-        dispatch(removeAuthUser());
-      }
+      // try {
+      //   logger.log('timeRemaining', timeRemaining, state.auth);
+      //   const result = await refreshToken({
+      //     refreshToken: state.auth.user?.refreshToken,
+      //   });
+      //   dispatch(setAuthUser(result.data.result));
+      // } catch (error) {
+      //   logger.log(error);
+      //   dispatch(removeAuthUser());
+      // }
     }
-  }, [dispatch, refreshToken, state.auth, timeRemaining]);
+  }, [state.auth, timeRemaining]);
 
   return [refresh];
 };
