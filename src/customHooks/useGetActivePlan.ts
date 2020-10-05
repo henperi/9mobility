@@ -1,4 +1,4 @@
-import { useFetch } from './useRequests';
+import { useFetch, useLazyFetch } from './useRequests';
 
 export interface ActivePlan {
   result: {
@@ -14,6 +14,14 @@ export interface ActivePlan {
 
 export const useGetActivePlan = () => {
   const { data, loading, error, refetch } = useFetch<ActivePlan>(
+    'Mobility.Account/api/Plans/GetActivePlan',
+  );
+
+  return { data, loading, error, refetch };
+};
+
+export const useLazyGetActivePlan = () => {
+  const [refetch, { data, loading, error }] = useLazyFetch<ActivePlan>(
     'Mobility.Account/api/Plans/GetActivePlan',
   );
 

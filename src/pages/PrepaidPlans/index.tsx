@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
 import { Styles as CardStyles } from '../../components/Card/styles';
 import { PageBody } from '../../components/PageBody';
@@ -16,7 +16,8 @@ import { Button } from '../../components/Button';
 import { Spinner } from '../../components/Spinner';
 import { AsyncImage } from '../../components/AsyncImage';
 import { SinglePlan } from './SinglePlan';
-import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
+import { useLazyGetActivePlan } from '../../customHooks/useGetActivePlan';
+import { PackageAdvisor } from './PackageAdvisor';
 
 export interface ActivePlan {
   result: {
@@ -31,13 +32,20 @@ export interface ActivePlan {
 }
 
 export const PrepaidPlansPage: React.FC = () => {
-  const { data, loading } = useGetActivePlan();
+  const { refetch: refetchCurrentPlan, loading, data } = useLazyGetActivePlan();
+
+  const [showPackageAdvisor, setShowPackageAdvisor] = useState(false);
+  const [showConfirmationPrompt, setShowConfirmationPrompt] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const { data: allPlans, loading: allPlansLoading } = useFetch<{
     result: ActivePlan['result'][];
   }>('Mobility.Account/api/Plans/GetAllPlans');
 
   const [selectedPlan, setSelectedPlan] = useState<ActivePlan['result']>();
+  useEffect(() => {
+    refetchCurrentPlan();
+  }, [refetchCurrentPlan]);
 
   if (selectedPlan && allPlans) {
     return <SinglePlan plan={selectedPlan} allPlans={allPlans.result} />;
@@ -66,7 +74,12 @@ export const PrepaidPlansPage: React.FC = () => {
                 padding: '15px',
               }}
             >
-              <Row wrap justifyContent="space-between">
+              <Row
+                wrap
+                justifyContent="space-between"
+                style={{ cursor: 'pointer' }}
+                onClick={() => setShowPackageAdvisor(true)}
+              >
                 <img style={{ all: 'unset' }} src={packageAdvisor} alt="" />
                 <Column xs={9}>
                   <Text color={Colors.blackGrey} weight={600}>
@@ -80,6 +93,8 @@ export const PrepaidPlansPage: React.FC = () => {
             </Card>
 
             <Column>
+              <pre>{JSON.stringify(showPackageAdvisor, null, 2)}</pre>
+
               <Text size={32} weight={500}>
                 Prepaid Plans
               </Text>
@@ -146,6 +161,17 @@ export const PrepaidPlansPage: React.FC = () => {
             ))}
           </Row>
         </>
+      )}
+      {showPackageAdvisor && (
+        <PackageAdvisor
+          showPackageAdvisor={showPackageAdvisor}
+          setShowPackageAdvisor={setShowPackageAdvisor}
+          showConfirmationPrompt={showConfirmationPrompt}
+          setShowConfirmationPrompt={setShowConfirmationPrompt}
+          showSuccessModal={showSuccessModal}
+          setShowSuccessModal={setShowSuccessModal}
+          refetchCurrentPlan={refetchCurrentPlan}
+        />
       )}
     </PageBody>
   );

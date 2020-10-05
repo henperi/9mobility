@@ -20,6 +20,7 @@ export interface IModalProps {
     closeText?: string;
   };
   showDefaultFooter?: boolean;
+  showCloseButton?: boolean;
   onClose?: () => any;
   isVisible?: boolean;
   size?: 'sm' | 'md' | 'lg';
@@ -86,6 +87,10 @@ const Modal = styled.div.attrs({})<IModalProps>`
       outline: none;
       border: none;
     }
+  }
+
+  .child::-webkit-scrollbar {
+    width: 0;
   }
 
   /* 
