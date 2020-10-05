@@ -26,17 +26,16 @@ export const useInterceptor = async () => {
           // Return a successful response back to the calling service
           logger.log(
             'Using interceptor to handle success',
-            User.current?.refreshToken,
             User.current?.expiresIn,
           );
 
           return response;
         },
         async (error) => {
-          logger.log('error.status', User.current?.expiresIn);
+          // logger.log('error.status', User.current?.expiresIn);
           // Return any error which is not due to authentication back to the calling service
           if (error.response.status !== 401) {
-            logger.log('Not a 401 error');
+            // logger.log('Not a 401 error');
 
             return new Promise((_, reject) => {
               reject(error);
@@ -72,11 +71,11 @@ export const useInterceptor = async () => {
 
               httpService.defaults.headers.common.authorization = `Bearer ${User.current?.accesssToken}`;
 
-              logger.log('refresh token successful setting auth user');
+              logger.log('refresh token successful setting user');
             } catch (err) {
-              logger.log(err);
+              // logger.log(err);
               logger.log('refresh token failed removing auth user');
-              // dispatch(removeAuthUser())
+              dispatch(removeAuthUser());
 
               return new Promise((_, reject) => {
                 reject(err);
