@@ -92,61 +92,8 @@ export const SubscribedServices = () => {
                     </Column>
                   </Card>
                 ))}
-                <Card
-                  key={99388474}
-                  style={{
-                    background: '#EDF6F8',
-                    minWidth: '92px',
-                    marginRight: '2.5%',
-                    height: '100%',
-                  }}
-                >
-                  <Column
-                    justifyContent="center"
-                    alignItems="center"
-                    fullHeight
-                  >
-                    <Text
-                      casing="titleCase"
-                      size={12}
-                      color={Colors.darkGreen}
-                      weight={700}
-                      alignment="center"
-                    >
-                      Test 1
-                    </Text>
-                    <SizedBox height={7} />
-                  </Column>
-                </Card>
-                <Card
-                  key={3980948}
-                  style={{
-                    background: '#EDF6F8',
-                    minWidth: '92px',
-                    marginRight: '2.5%',
-                    height: '100%',
-                  }}
-                >
-                  <Column
-                    justifyContent="center"
-                    alignItems="center"
-                    fullHeight
-                  >
-                    <Text
-                      casing="titleCase"
-                      size={12}
-                      color={Colors.darkGreen}
-                      weight={700}
-                      alignment="center"
-                    >
-                      Test 2
-                    </Text>
-                    <SizedBox height={7} />
-                  </Column>
-                </Card>
               </Scrollable>
             ) : null}
-            {/* <SizedBox height={15} /> */}
             <Row>
               <Button
                 onClick={() => history.push('/subscribed-services')}
