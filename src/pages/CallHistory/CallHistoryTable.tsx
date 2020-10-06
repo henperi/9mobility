@@ -13,7 +13,7 @@ import { SizedBox } from '../../components/SizedBox';
 import { SimpleTable } from '../../components/Table';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-import { getFieldError } from '../../utils/formikHelper';
+import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 
 interface CallHistoryResp {
   responseCode: number;
@@ -40,8 +40,16 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
       endDate: '',
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required('This field is required'),
-      endDate: Yup.date().required('This field is required'),
+      startDate: Yup.string()
+        .test('StartDate', 'Future dates are not allowed', (value) => {
+          return !isFutureDate(value);
+        })
+        .required('Start date is required'),
+      endDate: Yup.string()
+        .test('EndDate', 'Future dates are not allowed', (value) => {
+          return !isFutureDate(value);
+        })
+        .required('End date is required'),
     }),
     onSubmit: async (formData) => {
       await getCallHistory();
