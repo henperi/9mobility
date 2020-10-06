@@ -27,6 +27,7 @@ const Scrollable = styled.div.attrs({})<IScrollableProps>`
   scroll-behavior: smooth;
   align-items: center;
   height: 100%;
+  position: relative;
 
   ${({ hideScrollBar }) =>
     hideScrollBar &&
@@ -49,7 +50,6 @@ const ScrollableArrowsContainer = styled.div.attrs({})<{
   height: 100%;
   width: ${({ width }) => width || '100%'};
   display: ${({ hideScrollArrows }) => hideScrollArrows && 'none'};
-  z-index: 10;
   align-items: center;
 
   .arrow {
@@ -60,6 +60,7 @@ const ScrollableArrowsContainer = styled.div.attrs({})<{
     padding: 5px;
     cursor: pointer;
     box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    z-index: 10;
   }
 
   .fade-2 {

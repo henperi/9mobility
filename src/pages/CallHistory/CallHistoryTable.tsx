@@ -107,7 +107,7 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
-            <Row useAppMargin alignItems="flex-end">
+            <Row useAppMargin alignItems="center">
               <Column useAppMargin md={4} lg={3}>
                 <TextField
                   type="date"
