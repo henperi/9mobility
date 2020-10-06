@@ -72,7 +72,7 @@ export const Dashboard: React.FC<any> = () => {
           <Column justifyContent="flex-start">
             <GetLoan style={{ width: '100%' }} />
             <SizedBox height={24} />
-            <Text>
+            <Text weight={500}>
               Get a loan <br />
               in 60 seconds
             </Text>
@@ -92,7 +92,7 @@ export const Dashboard: React.FC<any> = () => {
           <Column justifyContent="flex-start">
             <StreamMovies style={{ width: '100%' }} />
             <SizedBox height={24} />
-            <Text>
+            <Text weight={500}>
               Stream movies, <br />
               shows & reality TV
             </Text>
@@ -112,7 +112,7 @@ export const Dashboard: React.FC<any> = () => {
           <Column justifyContent="flex-start">
             <PlayMusic style={{ width: '100%' }} />
             <SizedBox height={24} />
-            <Text>
+            <Text weight={500}>
               Play music <br /> & rock ringback tunes
             </Text>
             <SizedBox height={16} />
@@ -131,9 +131,9 @@ export const Dashboard: React.FC<any> = () => {
           <Column justifyContent="flex-start">
             <PlayGames style={{ width: '100%' }} />
             <SizedBox height={24} />
-            <Text>
-              Get a loan <br />
-              in 60 seconds
+            <Text weight={500}>
+              Play &amp; <br />
+              download games
             </Text>
             <SizedBox height={16} />
             <Button fullWidth outline variant="orange">
@@ -151,9 +151,9 @@ export const Dashboard: React.FC<any> = () => {
           <Column justifyContent="flex-start">
             <BuyPhone style={{ width: '100%' }} />
             <SizedBox height={24} />
-            <Text>
-              Get a loan <br />
-              in 60 seconds
+            <Text weight={500}>
+              Buy smartphones <br />
+              &amp; routers
             </Text>
             <SizedBox height={16} />
             <Button fullWidth outline>

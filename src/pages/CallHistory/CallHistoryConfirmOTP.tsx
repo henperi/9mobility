@@ -94,7 +94,7 @@ export const CallHistoryConfirmOTP: React.FC<{
             </Text>
             <SizedBox height={6} />
             <Text weight={300} alignment="center">
-              To access your call history, kindly enter the OPT sent to your
+              To access your call history, kindly enter the OTP sent to your
               registered number
             </Text>
             <SizedBox height={36} />

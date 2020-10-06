@@ -132,7 +132,7 @@ export const PackageAdvisor: React.FC<{
       >
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>
             You have successfully migrated to{' '}
@@ -166,7 +166,7 @@ export const PackageAdvisor: React.FC<{
         {migrationError && <ErrorBox>{migrationError.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>
             You are about to migrate to{' '}

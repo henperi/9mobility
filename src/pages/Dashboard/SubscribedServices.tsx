@@ -46,7 +46,7 @@ export const SubscribedServices = () => {
               <SizedBox height={20} />
               <Row>
                 <Column>
-                  <Text>As of 11:04AM, 26th March 2019</Text>
+                  <Text size={14}>As of 11:04AM, 26th March 2019</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {data?.result.length}{' '}
                     {data?.result.length === 1 ? 'Service' : 'Services'}
@@ -94,7 +94,6 @@ export const SubscribedServices = () => {
                 ))}
               </Scrollable>
             ) : null}
-            {/* <SizedBox height={15} /> */}
             <Row>
               <Button
                 onClick={() => history.push('/subscribed-services')}

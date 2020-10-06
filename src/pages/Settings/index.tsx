@@ -144,7 +144,7 @@ export const Settings = () => {
         {profileUpdateErr && <ErrorBox>{profileUpdateErr.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           {profileUpdateData?.message && (
             <Text>{profileUpdateData?.message}</Text>
