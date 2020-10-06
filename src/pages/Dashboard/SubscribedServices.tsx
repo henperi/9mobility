@@ -33,7 +33,7 @@ export const SubscribedServices = () => {
       <Card
         fullWidth
         fullHeight
-        style={{ minHeight: '200px', padding: '28px' }}
+        style={{ minHeight: '250px', padding: '28px' }}
       >
         {loading ? (
           <Spinner isFixed />
@@ -54,9 +54,9 @@ export const SubscribedServices = () => {
                 </Column>
               </Row>
             </Column>
-            {/* <SizedBox height={35} /> */}
             {data?.result.length ? (
               <Scrollable
+                hideScrollArrows={data.result.length <= 2}
                 style={{ width: '95%', marginLeft: '2.5%' }}
                 arrowStyles={{
                   width: '25px',
@@ -70,6 +70,7 @@ export const SubscribedServices = () => {
                     style={{
                       background: '#EDF6F8',
                       minWidth: '92px',
+                      width: '130px',
                       marginRight: '2.5%',
                       height: '100%',
                     }}
