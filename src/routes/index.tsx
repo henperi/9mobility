@@ -13,7 +13,7 @@ import { TransferAirtime } from '../pages/Airtime/TransferAirtime';
 import { BorrowAirtime } from '../pages/Airtime/BorrowAirtime';
 import { BuyWithDebitCard } from '../pages/Airtime/BuyWithDebitCard';
 import { TransactionHistoryPage } from '../pages/TransactionHistory';
-import { DataUsagePage } from '../pages/DataUsage';
+import { ValidateDataUsage } from '../pages/DataUsage';
 import { DataPage } from '../pages/Data';
 import { BuyDataWithCard } from '../pages/Data/BuyDataWithCard';
 import { BuyDataWithAirtime } from '../pages/Data/BuyDataWithAirtime';
@@ -84,7 +84,7 @@ export const Routes = () => {
       <ProtectedRoute
         exact
         path="/data-usage/history"
-        component={DataUsagePage}
+        component={ValidateDataUsage}
       />
 
       <ProtectedRoute
