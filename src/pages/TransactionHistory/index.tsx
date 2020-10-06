@@ -17,7 +17,7 @@ import { useLazyFetch } from '../../customHooks/useRequests';
 
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-import { getFieldError } from '../../utils/formikHelper';
+import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import { Spinner } from '../../components/Spinner';
 import { SimpleTable } from '../../components/Table';
 
@@ -50,8 +50,20 @@ export const TransactionHistoryPage: React.FC = () => {
       endDate: '',
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required('This field is required'),
-      endDate: Yup.date().required('This field is required'),
+      startDate: Yup.string().test(
+        'DOB',
+        'Future dates are not allowed',
+        (value) => {
+          return !isFutureDate(value);
+        },
+      ),
+      endDate: Yup.string().test(
+        'DOB',
+        'Future dates are not allowed',
+        (value) => {
+          return !isFutureDate(value);
+        },
+      ),
     }),
     onSubmit: async (formData) => {
       await getTransactionHistory();
