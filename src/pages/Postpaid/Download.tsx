@@ -102,7 +102,7 @@ export const Download = () => {
         {downloadError && <ErrorBox>{downloadError.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>You are about to download your postpaid bill</Text>
           <SizedBox height={10} />
@@ -136,7 +136,7 @@ export const Download = () => {
       >
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>Your request was successful</Text>
           <SizedBox height={15} />

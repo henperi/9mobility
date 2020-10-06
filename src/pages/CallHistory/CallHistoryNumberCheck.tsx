@@ -82,7 +82,7 @@ export const CallHistoryNumberCheck: React.FC = () => {
             fullWidth
             isLoading={loading}
           >
-            Generate OTP
+            View call history
           </Button>
         </Column>
       </Card>

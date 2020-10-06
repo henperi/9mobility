@@ -144,7 +144,7 @@ export const BuyRoamingBundles: React.FC = () => {
         {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>
             You are about to purchase data for &nbsp;
@@ -184,7 +184,7 @@ export const BuyRoamingBundles: React.FC = () => {
         {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>Your request was successful</Text>
           <SizedBox height={15} />

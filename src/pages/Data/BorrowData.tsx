@@ -138,7 +138,7 @@ export const BorrowData: React.FC = () => {
         {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           <Text>
             You are about to borrow data worth &nbsp;
@@ -172,7 +172,7 @@ export const BorrowData: React.FC = () => {
         {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
-          <Text>Hi {user?.firstName}</Text>
+          <Text>Hi {user?.firstName},</Text>
           <SizedBox height={15} />
           {data?.message && <Text>{data?.message}</Text>}
           <SizedBox height={10} />

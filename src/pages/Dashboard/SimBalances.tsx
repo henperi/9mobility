@@ -136,13 +136,13 @@ export const SimBalances: React.FC = (props) => {
               <SizedBox height={20} />
               <Row>
                 <Column xs={6}>
-                  <Text>Airtime Balance</Text>
+                  <Text size={14}>Airtime Balance</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {airtimeData?.airtimeModel.balance}
                   </Text>
                 </Column>
                 <Column xs={6}>
-                  <Text>Data Balance</Text>
+                  <Text size={14}>Data Balance</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {airtimeData?.dataModel.balance}
                   </Text>

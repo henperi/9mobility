@@ -202,7 +202,7 @@ export const TextField: React.FC<ITextField> = (props) => {
         )}
         <SizedBox height={5} />
         {renderChildren()}
-        {error && (
+        {error ? (
           <>
             <SizedBox height={2.5} />
             <Text
@@ -211,6 +211,17 @@ export const TextField: React.FC<ITextField> = (props) => {
               size={12}
             >
               {error}
+            </Text>
+          </>
+        ) : (
+          <>
+            <SizedBox height={2.5} />
+            <Text
+              casing="sentenceCase"
+              color={convertHexToRGBA(Colors.error, 0.8)}
+              size={12}
+            >
+              &nbsp;
             </Text>
           </>
         )}

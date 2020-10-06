@@ -46,7 +46,7 @@ export const SubscribedServices = () => {
               <SizedBox height={20} />
               <Row>
                 <Column>
-                  <Text>As of 11:04AM, 26th March 2019</Text>
+                  <Text size={14}>As of 11:04AM, 26th March 2019</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {data?.result.length}{' '}
                     {data?.result.length === 1 ? 'Service' : 'Services'}
@@ -92,6 +92,58 @@ export const SubscribedServices = () => {
                     </Column>
                   </Card>
                 ))}
+                <Card
+                  key={99388474}
+                  style={{
+                    background: '#EDF6F8',
+                    minWidth: '92px',
+                    marginRight: '2.5%',
+                    height: '100%',
+                  }}
+                >
+                  <Column
+                    justifyContent="center"
+                    alignItems="center"
+                    fullHeight
+                  >
+                    <Text
+                      casing="titleCase"
+                      size={12}
+                      color={Colors.darkGreen}
+                      weight={700}
+                      alignment="center"
+                    >
+                      Test 1
+                    </Text>
+                    <SizedBox height={7} />
+                  </Column>
+                </Card>
+                <Card
+                  key={3980948}
+                  style={{
+                    background: '#EDF6F8',
+                    minWidth: '92px',
+                    marginRight: '2.5%',
+                    height: '100%',
+                  }}
+                >
+                  <Column
+                    justifyContent="center"
+                    alignItems="center"
+                    fullHeight
+                  >
+                    <Text
+                      casing="titleCase"
+                      size={12}
+                      color={Colors.darkGreen}
+                      weight={700}
+                      alignment="center"
+                    >
+                      Test 2
+                    </Text>
+                    <SizedBox height={7} />
+                  </Column>
+                </Card>
               </Scrollable>
             ) : null}
             {/* <SizedBox height={15} /> */}

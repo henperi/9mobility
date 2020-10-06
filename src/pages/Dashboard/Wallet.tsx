@@ -123,7 +123,7 @@ export const Wallet: React.FC = () => {
         </Text>
 
         {/* <SizedBox height={35} /> */}
-        <Text>
+        <Text alignment="center" size={14}>
           You preserntly don’t have a 9PSB wallet. Create a wallet to enjoy
           unlimited possibilities
         </Text>
