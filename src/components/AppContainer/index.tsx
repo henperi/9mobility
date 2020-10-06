@@ -40,7 +40,7 @@ export const AppContainer: React.FC = ({ children }) => {
       <Styles.AppContainer>
         <BrowserRouter>
           <Row wrap={false}>
-            {Boolean(hasValidAccess) && !isOnboardingRoute && (
+            {auth.isAuthenticated && (
               <SideBar
                 style={{ maxWidth: rem(240) }}
                 showSidebar={showSidebar}
