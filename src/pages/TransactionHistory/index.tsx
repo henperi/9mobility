@@ -50,20 +50,16 @@ export const TransactionHistoryPage: React.FC = () => {
       endDate: '',
     },
     validationSchema: Yup.object({
-      startDate: Yup.string().test(
-        'DOB',
-        'Future dates are not allowed',
-        (value) => {
+      startDate: Yup.string()
+        .test('StartDate', 'Future dates are not allowed', (value) => {
           return !isFutureDate(value);
-        },
-      ),
-      endDate: Yup.string().test(
-        'DOB',
-        'Future dates are not allowed',
-        (value) => {
+        })
+        .required('Start date is required'),
+      endDate: Yup.string()
+        .test('EndDate', 'Future dates are not allowed', (value) => {
           return !isFutureDate(value);
-        },
-      ),
+        })
+        .required('End date is required'),
     }),
     onSubmit: async (formData) => {
       await getTransactionHistory();
