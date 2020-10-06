@@ -75,12 +75,6 @@ export const DataPage: React.FC = () => {
                     Valid till {data?.result.dataModel.expiryDate}
                   </Text>
                   <SizedBox height={5} />
-
-                  <Text size={12} weight={500} color={Colors.grey}>
-                    {data?.result.dataModel.isRollOver
-                      ? 'Roll-Over Applicable'
-                      : 'Roll-Over not Applicable'}
-                  </Text>
                 </Column>
                 <Column useAppMargin xs={6} md={3} lg={2}>
                   <Text size={12} weight={500} color={Colors.grey}>
@@ -95,12 +89,6 @@ export const DataPage: React.FC = () => {
                     Valid till {data?.result.dataModel.bonusExpiryDate}
                   </Text>
                   <SizedBox height={5} />
-
-                  <Text size={12} weight={500} color={Colors.grey}>
-                    {data?.result.dataModel.isRollOver
-                      ? 'Roll-Over Applicable'
-                      : 'Roll-Over not Applicable'}
-                  </Text>
                 </Column>
               </>
             )}
