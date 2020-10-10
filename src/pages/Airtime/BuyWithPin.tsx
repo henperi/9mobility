@@ -103,8 +103,7 @@ export const BuyWithPin: React.FC = () => {
           <Text>
             You are about to purchase airtime for{' '}
             <Text variant="darker">{formik.values.recipientMobileNumber}</Text>{' '}
-            with a voucher pin of{' '}
-            <Text variant="darker">{formik.values.voucherPin}</Text>
+            with a voucher
           </Text>
           <SizedBox height={10} />
           <Row useAppMargin>

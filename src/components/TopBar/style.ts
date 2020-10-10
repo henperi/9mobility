@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITopBar } from '.';
-import { Colors } from '../../themes/colors';
+// import { Colors } from '../../themes/colors';
 import { ScreenSizes } from '../Column/styles';
 
 const TopBar = styled.div<ITopBar>`
@@ -20,7 +20,7 @@ const TopBar = styled.div<ITopBar>`
   ${({ auth }) =>
     auth &&
     css`
-      background-color: ${Colors.lightGreen};
+      background: linear-gradient(to right bottom, #889403 0%, #00543b 100%); ;
     `}
 
   div {

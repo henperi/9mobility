@@ -9,6 +9,7 @@ import httpService from '../services/htttpService';
 import { usePost } from './useRequests';
 
 // authUser:"{"expiresIn":"2020-10-05T20:23:41.4992381+01:00","accesssToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA5LzA5L2lkZW50aXR5L2NsYWltcy9hY3RvciI6IjA5MDgxMDEzNjIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOlsiNTQiLCIwOTA4MTAxMzYyMyJdLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiS2VsdmluIE9yaHVuZ3VsIiwiZW1haWwiOiJrZWx2aW4ub3JodW5ndWxAeWFob28uY29tIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbW9iaWxlcGhvbmUiOiIwOTA4MTAxMzYyMyIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlJlZ2lzdGVyZWQiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoie1wiVXNlcklkXCI6NTQsXCJVc2VyVHlwZVwiOlwiQ3VzdG9tZXJcIixcIk1vYmlsZU51bWJlclwiOlwiMDkwODEwMTM2MjNcIixcIldhbGxldEFjY291bnROb1wiOm51bGwsXCJDdXN0b21lck5hbWVcIjpcIktlbHZpbiBPcmh1bmd1bFwiLFwiVXNlckVtYWlsXCI6XCJrZWx2aW4ub3JodW5ndWxAeWFob28uY29tXCJ9IiwibmJmIjoxNjAxOTI2NzIxLCJleHAiOjE2MDE5Mjg1MjEsImlzcyI6Imh0dHA6Ly93d3cubW9iaWxpdHkubmciLCJhdWQiOiJodHRwOi8vd3d3Lm1vYmlsaXR5Lm5nIn0.jC9LDeQhw3-byAj_KT_NasGlKeO28X1aXOK2_0zWAwk","firstName":"Kelvin","lastName":"Orhungul","email":"kelvin.orhungul@yahoo.com","hasWallet":false,"dob":"","walletAccount":"","refreshToken":"SxGWjpBR4eKdGDc5PEvUdZ1xoBBFn4Dj6+ejs+l2ycg="}"
+// 09081013623
 
 export const useInterceptor = async () => {
   const { dispatch, state } = useGlobalStore();
@@ -57,6 +58,11 @@ export const useInterceptor = async () => {
             return new Promise((_, reject) => {
               reject(error);
             });
+          }
+
+          if (error.response.status === 401) {
+            logger.log(error.response);
+            logger.log(error.response?.result);
           }
 
           if (User.current && error.response.status === 401) {
