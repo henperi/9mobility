@@ -99,6 +99,33 @@ export const TextField: React.FC<ITextField> = (props) => {
     return () => window.removeEventListener('click', closeDropDown);
   }, [showDropDown]);
 
+  const getDropDownProps = () => {
+    if (dropDown) {
+      return {
+        readOnly: true,
+        value: dropDownOptions?.length
+          ? value.label || value.value
+          : 'loading...',
+        onClick: toggleDropDown,
+      };
+    }
+    return null;
+  };
+
+  const getTelProps = () => {
+    if (inputProps.type === 'tel') {
+      return {
+        onKeyPress: (e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (isNaN(Number(e.key))) {
+            e.preventDefault();
+          }
+        },
+      };
+    }
+
+    return null;
+  };
+
   const renderChildren = () => {
     if (multiUnits) {
       return (
@@ -112,19 +139,6 @@ export const TextField: React.FC<ITextField> = (props) => {
       );
     }
 
-    const getDropDownProps = () => {
-      if (dropDown) {
-        return {
-          readOnly: true,
-          value: dropDownOptions?.length
-            ? value.label || value.value
-            : 'loading...',
-          onClick: toggleDropDown,
-        };
-      }
-      return null;
-    };
-
     return (
       <>
         <Styles.TextField
@@ -136,7 +150,11 @@ export const TextField: React.FC<ITextField> = (props) => {
           ref={ref as React.RefObject<HTMLDivElement>}
         >
           {leftIcon && <div className="inputIcon">{leftIcon}</div>}
-          <Styles.Input {...inputProps} {...getDropDownProps()} />
+          <Styles.Input
+            {...getTelProps()}
+            {...inputProps}
+            {...getDropDownProps()}
+          />
           {rightIcon ||
             (dropDown && (
               <div className="inputIcon">

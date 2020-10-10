@@ -58,7 +58,9 @@ export const BuyWithDebitCard: React.FC = () => {
       mobileNumber: Yup.string()
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
-      amount: Yup.number().required('This field is required'),
+      amount: Yup.number()
+        .min(10, 'Amount must be at least ₦10')
+        .required('This field is required'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -253,6 +255,7 @@ export const BuyWithDebitCard: React.FC = () => {
                 placeholder="Enter an amount e.g 500"
                 {...formik.getFieldProps('amount')}
                 type="number"
+                min={10}
                 error={getFieldError(
                   formik.errors.amount,
                   formik.touched.amount,
