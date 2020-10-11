@@ -20,7 +20,7 @@ const SideBar = styled.div<{ showSidebar?: boolean }>`
     /* display: none; */
     position: fixed;
     transform: ${({ showSidebar }) =>
-      showSidebar ? 'translateX(0)' : 'translateX(-240rem)'};
+      showSidebar ? 'translateX(0)' : `translateX(-${rem(240)})`};
     transition: transform 600ms ease-in-out;
   }
 `;
