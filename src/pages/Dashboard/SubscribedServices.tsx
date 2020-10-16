@@ -10,6 +10,7 @@ import { Spinner } from '../../components/Spinner';
 import { Text } from '../../components/Text';
 import { useFetch } from '../../customHooks/useRequests';
 import { Colors } from '../../themes/colors';
+import { generateShortId } from '../../utils/generateShortId';
 
 interface SubscribedServiceResp {
   result: {
@@ -66,7 +67,7 @@ export const SubscribedServices = () => {
               >
                 {data?.result.map((service) => (
                   <Card
-                    key={service.id}
+                    key={generateShortId()}
                     style={{
                       background: '#EDF6F8',
                       minWidth: '92px',
