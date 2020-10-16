@@ -21,6 +21,9 @@ interface AirtimeDataResp {
     airtimeModel: {
       balance: string;
       bonusBalance: string;
+      subscriberType: 'PREPAID' | 'POSTPAID' | 'HYBRID';
+      creditLimit: string;
+      creditUsage: string;
     };
     dataModel: {
       balance: string;
@@ -100,6 +103,36 @@ export const SimBalances: React.FC = (props) => {
       </Text>
     );
 
+  const isHybrid = () => {
+    if (airtimeData?.airtimeModel.subscriberType === 'HYBRID') {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isPostpaid = () => {
+    // return true;
+
+    if (airtimeData?.airtimeModel.subscriberType === 'POSTPAID') {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isPrepaid = () => {
+    if (airtimeData?.airtimeModel.subscriberType === 'PREPAID') {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isHybridOrPostpaid = () => {
+    return isPostpaid() || isHybrid();
+  };
+
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
       <Card
@@ -135,23 +168,42 @@ export const SimBalances: React.FC = (props) => {
               </Row>
               <SizedBox height={20} />
               <Row>
-                <Column xs={6}>
-                  <Text size={14}>Airtime Balance</Text>
-                  <Text size={18} color={Colors.darkGreen} weight="bold">
-                    {airtimeData?.airtimeModel.balance}
+                {isHybridOrPostpaid() && (
+                  <Column xs={6} md={isHybrid() ? 4 : 6}>
+                    <Text weight={100} size={12} variant="lighter">
+                      Credit Usage
+                    </Text>
+                    <Text size={18} color={Colors.darkGreen} weight="bold">
+                      {airtimeData?.airtimeModel.creditUsage}
+                    </Text>
+                    {isPostpaid() && (
+                      <Text weight={100} size={12} variant="lighter">
+                        Credit Limit: {airtimeData?.airtimeModel.creditLimit}
+                      </Text>
+                    )}
+                  </Column>
+                )}
+                {(isPrepaid() || isHybrid()) && (
+                  <Column xs={6} md={isHybrid() ? 4 : 6}>
+                    <Text weight={100} size={12} variant="lighter">
+                      Airtime Balance
+                    </Text>
+                    <Text size={18} color={Colors.darkGreen} weight="bold">
+                      {airtimeData?.airtimeModel.balance}
+                    </Text>
+                  </Column>
+                )}
+                <Column xs={6} md={isHybrid() ? 4 : 6}>
+                  <Text weight={100} size={12} variant="lighter">
+                    Data Balance
                   </Text>
-                </Column>
-                <Column xs={6}>
-                  <Text size={14}>Data Balance</Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {airtimeData?.dataModel.balance}
                   </Text>
                 </Column>
               </Row>
             </Column>
-            {/* <SizedBox height={35} /> */}
             {activePlanLoading ? <Spinner /> : renderActivePlan()}
-            {/* <SizedBox height={25} /> */}
             <Row useAppMargin>
               <Column useAppMargin xs={6}>
                 <Button onClick={() => history.push('/airtime')} fullWidth>
