@@ -54,8 +54,8 @@ export const BuyWithPin: React.FC = () => {
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
       voucherPin: Yup.string()
-        .min(16, 'Must be a 16 digit number')
-        .max(16, 'Must be a 16 digit number')
+        .min(15, 'Must be a 15 digit number')
+        .max(15, 'Must be a 15 digit number')
         .required('This field is required'),
     }),
     onSubmit: async (formData) => {
@@ -249,11 +249,11 @@ export const BuyWithPin: React.FC = () => {
               <SizedBox height={16} />
               <TextField
                 label="Voucher"
-                placeholder="Enter 16 digit PIN"
+                placeholder="Enter 15 digit PIN"
                 {...formik.getFieldProps('voucherPin')}
                 type="text"
-                minLength={16}
-                maxLength={16}
+                minLength={15}
+                maxLength={15}
                 error={getFieldError(
                   formik.errors.voucherPin,
                   formik.touched.voucherPin,
