@@ -53,7 +53,7 @@ export const useInterceptor = async () => {
             error.response.message === 'Account is disabled.'
           ) {
             logger.log('failed to refresh, logging user out');
-            dispatch(removeAuthUser());
+            // dispatch(removeAuthUser());
 
             return new Promise((_, reject) => {
               reject(error);
@@ -75,9 +75,8 @@ export const useInterceptor = async () => {
 
               dispatch(setAuthUser(result.data.result));
 
-              httpService.defaults.headers.common.authorization = `Bearer ${User.current?.accesssToken}`;
-
               logger.log('refresh token successful setting user');
+              httpService.defaults.headers.common.authorization = `Bearer ${User.current?.accesssToken}`;
             } catch (err) {
               // logger.log(err);
               logger.log('refresh token failed removing auth user');
@@ -113,69 +112,3 @@ export const useInterceptor = async () => {
     }
   }, [authUser, interceptorHandler]);
 };
-
-/*
-export const helper = async (httpService: AxiosInstance) => {
-  httpService.interceptors.response.use(
-    (response) => {
-      // Return a successful response back to the calling service
-      logger.log('res');
-      return response;
-    },
-    async (error) => {
-      logger.log('res');
-      // Return any error which is not due to authentication back to the calling service
-      if (error.response.status !== 401) {
-        return new Promise((_, reject) => {
-          reject(error);
-        });
-      }
-
-      // Logout user if token refresh didn't work or user is disabled
-      if (
-        error.config.url.contains(
-          'Mobility.Onboarding/api/Verification/refreshtoken',
-        ) ||
-        error.response.message === 'Account is disabled.'
-      ) {
-        // TokenStorage.clear();
-        // router.push({ name: 'root' });
-
-        return new Promise((_, reject) => {
-          reject(error);
-        });
-      }
-
-      const user = localStorage.getItem('authUser');
-
-      const { config } = error;
-
-      if (user) {
-        const authUser: AuthUser = JSON.parse(user);
-        const accessToken = authUser.accesssToken;
-
-        const result = await httpService.post<OnboardingAuthResponse>(
-          'Mobility.Onboarding/api/Verification/refreshtoken',
-          {
-            refreshtoken: accessToken,
-          },
-        );
-
-        // dispatch(setAuthUser(result.data.result));
-
-        config.headers.Authorization = `Bearer ${result.data.result.accesssToken}`;
-      }
-
-      return new Promise((resolve, reject) => {
-        Axios.request(config)
-          .then((response) => {
-            resolve(response);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      });
-    },
-  );
-};
-*/

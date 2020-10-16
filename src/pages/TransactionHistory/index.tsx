@@ -37,6 +37,8 @@ interface TransactionHistorryResp {
       transactionType: number;
       transactionSource: number;
       id: number;
+      transactionTypeName: string;
+      transactionSourceName: string;
     }[];
   };
 }
@@ -92,8 +94,8 @@ export const TransactionHistoryPage: React.FC = () => {
       const tableResults = data.result.results.map((result, i) => {
         return Object.values({
           'S/N': i + 1,
-          Type: result.transactionType,
-          Source: result.transactionSource,
+          Type: result.transactionTypeName,
+          Source: result.transactionSourceName,
           Amount: getAmount(result.transactionAmount),
           Date: DateTime.fromISO(result.createdDate, {
             locale: 'fr',
