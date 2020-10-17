@@ -170,10 +170,10 @@ export const PayBill = () => {
 
             <Column justifyContent="center">
               <Text size={18} weight={500}>
-                International call (IDD) rates
+                Pay Postpaid bills
               </Text>
               <Text size={14} color={Colors.grey} weight={200}>
-                Rates in country visited & back to Nigeria
+                Pay pending or outstanding bills
               </Text>
             </Column>
           </CardStyles.CardHeader>

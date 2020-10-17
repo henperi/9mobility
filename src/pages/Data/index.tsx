@@ -109,9 +109,7 @@ export const DataPage: React.FC = () => {
               Buy with debit card
             </Text>
             <SizedBox height={8} />
-            <Text variant="lighter">
-              Buy data using using your debit card or bank account
-            </Text>
+            <Text variant="lighter">Buy data from airtime balance</Text>
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={3} fullHeight>
@@ -126,10 +124,7 @@ export const DataPage: React.FC = () => {
               Buy with airtime
             </Text>
             <SizedBox height={8} />
-            <Text variant="lighter">
-              Use your airtime balance to subscribe to any of our awesome data
-              packages.
-            </Text>
+            <Text variant="lighter">Buy data from airtime balance</Text>
           </Card>
         </Column>
         <Column useAppMargin md={6} lg={3} fullHeight>
@@ -145,8 +140,7 @@ export const DataPage: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Transfer data from your account to to friends and family with our
-              s
+              Send data to another number from your balance
             </Text>
           </Card>
         </Column>
@@ -163,8 +157,7 @@ export const DataPage: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Ran out of data during an important online process? No worries, we
-              got you covered.
+              Borrow data and payback on your next recharge
             </Text>
           </Card>
         </Column>

@@ -114,7 +114,7 @@ export const AirtimePage: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Buy airtime using debit card or bank account
+              Use the PIN code of airtime recharge voucher
             </Text>
           </Card>
         </Column>
@@ -131,7 +131,7 @@ export const AirtimePage: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Buy airtime using debit card or bank account
+              Send airtime to another number from your balance
             </Text>
           </Card>
         </Column>
@@ -148,7 +148,7 @@ export const AirtimePage: React.FC = () => {
             </Text>
             <SizedBox height={8} />
             <Text variant="lighter">
-              Buy airtime using debit card or bank account
+              Borrow airtime and payback on your next recharge
             </Text>
           </Card>
         </Column>

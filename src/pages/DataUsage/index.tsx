@@ -28,6 +28,18 @@ interface DataHistorryResp {
     | null;
 }
 
+// const today = Date.now();
+// const initialDates = {
+//   startDate: DateTime.fromMillis(today, {
+//     locale: 'fr',
+//   })
+//     .minus({ days: 3 })
+//     .toISODate(),
+//   endDate: DateTime.fromMillis(today, {
+//     locale: 'fr',
+//   }).toISODate(),
+// };
+
 export const DataUsagePage: React.FC = () => {
   const { mobileNumbers } = useGetMobileNumbers();
 
@@ -56,7 +68,7 @@ export const DataUsagePage: React.FC = () => {
     locale: 'fr',
   }).toISODate();
 
-  const [getDataUsageHistory, { data, loading }] = useLazyFetch<
+  const [getDataUsageHistory, { data, loading, error }] = useLazyFetch<
     DataHistorryResp
   >(`Mobility.Account/api/Data/getdatausage/${start}/${end}`);
 
@@ -97,7 +109,9 @@ export const DataUsagePage: React.FC = () => {
         />
       </Card>
     ) : (
-      <Text variant="lighter">No data histories at the moment</Text>
+      <Text variant="lighter">
+        {error?.message || 'No data histories at the moment'}
+      </Text>
     );
 
   return (
@@ -125,7 +139,7 @@ export const DataUsagePage: React.FC = () => {
               />
             </Column>
             <SizedBox height={20} />
-            <Row useAppMargin alignItems="flex-end">
+            <Row useAppMargin alignItems="center">
               <Column useAppMargin md={4} lg={3}>
                 <TextField
                   type="date"
@@ -156,7 +170,7 @@ export const DataUsagePage: React.FC = () => {
                 xs={6}
                 md={4}
                 lg={3}
-                style={{ marginLeft: 'auto' }}
+                style={{ marginLeft: 'auto', marginBottom: '12px' }}
               >
                 <Button type="submit" fullWidth>
                   Apply
@@ -187,6 +201,7 @@ export const DataUsagePage: React.FC = () => {
 };
 
 export const ValidateDataUsage = () => (
+  // <DataUsagePage />
   <ValidateOTP
     title="Data Usage"
     subtitle="Your data spending history"

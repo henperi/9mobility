@@ -30,15 +30,24 @@ interface CallHistoryResp {
   }[];
 }
 
+const today = Date.now();
+const initialDates = {
+  startDate: DateTime.fromMillis(today, {
+    locale: 'fr',
+  })
+    .minus({ days: 3 })
+    .toISODate(),
+  endDate: DateTime.fromMillis(today, {
+    locale: 'fr',
+  }).toISODate(),
+};
+
 export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
   const [tableData, setTableData] = useState<(string | number)[][]>();
   const { trackingId } = props;
 
   const formik = useFormik({
-    initialValues: {
-      startDate: '',
-      endDate: '',
-    },
+    initialValues: initialDates,
     validationSchema: Yup.object({
       startDate: Yup.string()
         .test('StartDate', 'Future dates are not allowed', (value) => {
@@ -65,11 +74,15 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
     }).toISODate(),
   };
 
-  // console.log(date);
-
   const [getCallHistory, { data, loading }] = useLazyFetch<CallHistoryResp>(
     `Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`,
   );
+
+  useEffect(() => {
+    if (date.start && date.end) {
+      getCallHistory();
+    }
+  }, [date.end, date.start, getCallHistory]);
 
   useEffect(() => {
     if (data?.result) {

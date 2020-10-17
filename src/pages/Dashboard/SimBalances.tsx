@@ -112,8 +112,6 @@ export const SimBalances: React.FC = (props) => {
   };
 
   const isPostpaid = () => {
-    // return true;
-
     if (airtimeData?.airtimeModel.subscriberType === 'POSTPAID') {
       return true;
     }

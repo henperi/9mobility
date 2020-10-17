@@ -22,7 +22,27 @@ import { ReactComponent as PrepaidPlanIcon } from '../../assets/images/prepaidPl
 import { ReactComponent as PostPaidIcon } from '../../assets/images/postPaidIcon.svg';
 import { ReactComponent as RoamingIcon } from '../../assets/images/roamingIcon.svg';
 import { ReactComponent as SubscribedIcon } from '../../assets/images/subscribedIcon.svg';
+import { useFetch } from '../../customHooks/useRequests';
 
+interface AirtimeDataResp {
+  result: {
+    mobileNumber: string;
+    airtimeModel: {
+      balance: string;
+      bonusBalance: string;
+      subscriberType: 'PREPAID' | 'POSTPAID' | 'HYBRID';
+      creditLimit: string;
+      creditUsage: string;
+    };
+    dataModel: {
+      balance: string;
+      bonusBalance: string;
+      isRollOver: boolean;
+      expiryDate: string;
+      bonusExpiryDate: string;
+    };
+  };
+}
 interface ISidebar extends HtmlHTMLAttributes<HTMLDivElement> {
   showSidebar?: boolean;
 }
@@ -32,6 +52,34 @@ export const SideBar: React.FC<ISidebar> = (props) => {
       auth: { user },
     },
   } = useGlobalStore();
+
+  const { data } = useFetch<AirtimeDataResp>(
+    `Mobility.Account/api/Balance/AirtimeAndData`,
+  );
+
+  const isHybrid = () => {
+    if (data?.result.airtimeModel.subscriberType === 'HYBRID') {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isPostpaid = () => {
+    if (data?.result.airtimeModel.subscriberType === 'POSTPAID') {
+      return true;
+    }
+
+    return false;
+  };
+
+  const isPrepaid = () => {
+    if (data?.result.airtimeModel.subscriberType === 'PREPAID') {
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <Styles.SideBar {...props}>
@@ -101,20 +149,24 @@ export const SideBar: React.FC<ISidebar> = (props) => {
           <TimeIcon />
           Transaction History
         </Styles.SideBarLink>
-        <Styles.SideBarLink
-          activeClassName="active-sidebar-link"
-          to="/prepaid-plans"
-        >
-          <PrepaidPlanIcon />
-          Prepaid Plans
-        </Styles.SideBarLink>
-        <Styles.SideBarLink
-          activeClassName="active-sidebar-link"
-          to="/postpaid"
-        >
-          <PostPaidIcon />
-          Postpaid/Corporate
-        </Styles.SideBarLink>
+        {(isHybrid() || isPrepaid()) && (
+          <Styles.SideBarLink
+            activeClassName="active-sidebar-link"
+            to="/prepaid-plans"
+          >
+            <PrepaidPlanIcon />
+            Prepaid Plans
+          </Styles.SideBarLink>
+        )}
+        {(isHybrid() || isPostpaid()) && (
+          <Styles.SideBarLink
+            activeClassName="active-sidebar-link"
+            to="/postpaid"
+          >
+            <PostPaidIcon />
+            Postpaid/Corporate
+          </Styles.SideBarLink>
+        )}
         <Styles.SideBarLink activeClassName="active-sidebar-link" to="/roaming">
           <RoamingIcon />
           Roaming

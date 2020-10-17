@@ -169,10 +169,10 @@ export const Download = () => {
 
             <Column justifyContent="center">
               <Text size={18} weight={500}>
-                International call (IDD) rates
+                View/Download Postpaid Bill
               </Text>
               <Text size={14} color={Colors.grey} weight={200}>
-                Rates in country visited & back to Nigeria
+                Bill statement download
               </Text>
             </Column>
           </CardStyles.CardHeader>

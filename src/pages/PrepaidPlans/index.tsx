@@ -92,8 +92,6 @@ export const PrepaidPlansPage: React.FC = () => {
             </Card>
 
             <Column>
-              <pre>{JSON.stringify(showPackageAdvisor, null, 2)}</pre>
-
               <Text size={32} weight={500}>
                 Prepaid Plans
               </Text>
