@@ -103,29 +103,13 @@ export const SimBalances: React.FC = (props) => {
       </Text>
     );
 
-  const isHybrid = () => {
-    if (airtimeData?.airtimeModel.subscriberType === 'HYBRID') {
-      return true;
-    }
+  const isHybrid = () => data?.result.airtimeModel.subscriberType === 'HYBRID';
 
-    return false;
-  };
+  const isPostpaid = () =>
+    data?.result.airtimeModel.subscriberType === 'POSTPAID';
 
-  const isPostpaid = () => {
-    if (airtimeData?.airtimeModel.subscriberType === 'POSTPAID') {
-      return true;
-    }
-
-    return false;
-  };
-
-  const isPrepaid = () => {
-    if (airtimeData?.airtimeModel.subscriberType === 'PREPAID') {
-      return true;
-    }
-
-    return false;
-  };
+  const isPrepaid = () =>
+    data?.result.airtimeModel.subscriberType === 'PREPAID';
 
   const isHybridOrPostpaid = () => {
     return isPostpaid() || isHybrid();

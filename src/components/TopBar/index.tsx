@@ -28,12 +28,6 @@ export const TopBar: React.FC<ITopBar> = (props) => {
   const history = useHistory();
   useInterceptor();
 
-  // const [refresh] = useTokenRefresher(state);
-
-  // useEffect(() => {
-  // refresh();
-  // }, [refresh]);
-
   const handleLogout = () => {
     dispatch(removeAuthUser());
   };

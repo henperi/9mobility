@@ -62,8 +62,8 @@ const HanburgerMenu = styled.div`
     content: '';
     top: 0;
     left: 0;
-    width: 100%;
-    height: 2px;
+    width: 150%;
+    height: 3px;
     background-color: #fff;
   }
 
@@ -73,7 +73,7 @@ const HanburgerMenu = styled.div`
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 3px;
     background-color: #fff;
   }
 `;

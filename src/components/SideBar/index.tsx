@@ -23,6 +23,7 @@ import { ReactComponent as PostPaidIcon } from '../../assets/images/postPaidIcon
 import { ReactComponent as RoamingIcon } from '../../assets/images/roamingIcon.svg';
 import { ReactComponent as SubscribedIcon } from '../../assets/images/subscribedIcon.svg';
 import { useFetch } from '../../customHooks/useRequests';
+import { Spinner } from '../Spinner';
 
 interface AirtimeDataResp {
   result: {
@@ -53,33 +54,17 @@ export const SideBar: React.FC<ISidebar> = (props) => {
     },
   } = useGlobalStore();
 
-  const { data } = useFetch<AirtimeDataResp>(
+  const { data, loading } = useFetch<AirtimeDataResp>(
     `Mobility.Account/api/Balance/AirtimeAndData`,
   );
 
-  const isHybrid = () => {
-    if (data?.result.airtimeModel.subscriberType === 'HYBRID') {
-      return true;
-    }
+  const isHybrid = () => data?.result.airtimeModel.subscriberType === 'HYBRID';
 
-    return false;
-  };
+  const isPostpaid = () =>
+    data?.result.airtimeModel.subscriberType === 'POSTPAID';
 
-  const isPostpaid = () => {
-    if (data?.result.airtimeModel.subscriberType === 'POSTPAID') {
-      return true;
-    }
-
-    return false;
-  };
-
-  const isPrepaid = () => {
-    if (data?.result.airtimeModel.subscriberType === 'PREPAID') {
-      return true;
-    }
-
-    return false;
-  };
+  const isPrepaid = () =>
+    data?.result.airtimeModel.subscriberType === 'PREPAID';
 
   return (
     <Styles.SideBar {...props}>
@@ -90,7 +75,7 @@ export const SideBar: React.FC<ISidebar> = (props) => {
           <Row wrap={false}>
             <Avatar
               style={{ marginRight: '10px' }}
-              image="https://cdn.cnn.com/cnnnext/dam/assets/140217175126-15-mixed-biracial-black-horizontal-large-gallery.jpg"
+              image="https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png"
             />
             <Column>
               <Text size={14}>
@@ -149,6 +134,16 @@ export const SideBar: React.FC<ISidebar> = (props) => {
           <TimeIcon />
           Transaction History
         </Styles.SideBarLink>
+        {loading && (
+          <Styles.SideBarLink
+            activeClassName="active-sidebar-link"
+            to="..."
+            onClick={(e) => e.preventDefault()}
+          >
+            Getting your plan...
+            <Spinner size={20} />
+          </Styles.SideBarLink>
+        )}
         {(isHybrid() || isPrepaid()) && (
           <Styles.SideBarLink
             activeClassName="active-sidebar-link"

@@ -208,9 +208,9 @@ export const Settings = () => {
                   <Avatar
                     name="profile-avatar"
                     style={{ width: '50px', height: '50px' }}
-                    image="https://cdn.cnn.com/cnnnext/dam/assets/140217175126-15-mixed-biracial-black-horizontal-large-gallery.jpg"
+                    image="https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png"
                   />
-                  <Text>Tap to change pic</Text>
+                  {/* <Text>Tap to change pic</Text> */}
                 </Column>
 
                 <SizedBox height={20} />
