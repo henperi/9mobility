@@ -3,6 +3,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import { useHistory } from 'react-router-dom';
+import { GoogleLoginResponse } from 'react-google-login';
+
 import { Card } from '../../components/Card';
 import { PageBody } from '../../components/PageBody';
 import { Text } from '../../components/Text';
@@ -18,6 +20,8 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { OnboardingAuthResponse } from './ConfirmOTP';
 import { useGlobalStore } from '../../store';
 import { setAuthUser } from '../../store/modules/auth/actions';
+import { FacebookLogin } from '../../components/FacebookLogin';
+import { GoogleSocialLogin } from '../../components/GoogleLogin';
 
 export enum SignUpChannel {
   Mobile = 1,
@@ -150,13 +154,33 @@ export const Register: React.FC<SetScreen> = () => {
               Or complete signup with social
             </Text>
             <SizedBox height={16} />
-            <Button border elevated={false} rounded variant="default" fullWidth>
-              Sign up with google
-            </Button>
-            <SizedBox height={10} />
-            <Button border elevated={false} rounded variant="default" fullWidth>
-              Sign up with facebook
-            </Button>
+            <GoogleSocialLogin
+              onSuccess={(response) => {
+                const profile = (response as GoogleLoginResponse)?.profileObj;
+                profile &&
+                  formik.setValues({
+                    email: profile.email,
+                    firstName: profile.givenName,
+                    lastName: profile.familyName,
+                    channel: SignUpChannel.Mobile,
+                    dataSource: DataSourceEnum.Google,
+                  });
+              }}
+              onFailure={(user) => logger.log(user)}
+            />
+            <FacebookLogin
+              onSuccess={(user) => {
+                const { profile } = user;
+                formik.setValues({
+                  email: profile.email,
+                  firstName: profile.first_name,
+                  lastName: profile.last_name,
+                  channel: SignUpChannel.Mobile,
+                  dataSource: DataSourceEnum.Facebook,
+                });
+              }}
+              onFailure={(user) => logger.log(user)}
+            />
           </Column>
         </Card>
       </Column>

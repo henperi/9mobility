@@ -24,3 +24,5 @@ yarn-error.log*
 
 emailTemplates
 dump.rdb
+.cert/
+.env
