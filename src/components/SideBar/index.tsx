@@ -153,10 +153,19 @@ export const SideBar: React.FC<ISidebar> = (props) => {
             Prepaid Plans
           </Styles.SideBarLink>
         )}
-        {(isHybrid() || isPostpaid()) && (
+        {isHybrid() || isPostpaid() ? (
           <Styles.SideBarLink
             activeClassName="active-sidebar-link"
             to="/postpaid"
+          >
+            <PostPaidIcon />
+            Postpaid/Corporate
+          </Styles.SideBarLink>
+        ) : (
+          <Styles.SideBarLink
+            to="any"
+            onClick={(e) => e.preventDefault()}
+            style={{ color: `${Colors.grey}` }}
           >
             <PostPaidIcon />
             Postpaid/Corporate
