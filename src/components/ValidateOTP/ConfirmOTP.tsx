@@ -94,7 +94,7 @@ export const ConfirmOTPScreen: React.FC<{
             </Text>
             <SizedBox height={6} />
             <Text weight={300} alignment="center">
-              To access this page, kindly enter the OPT sent to your registered
+              To access this page, kindly enter the OTP sent to your registered
               number
             </Text>
             <SizedBox height={36} />
