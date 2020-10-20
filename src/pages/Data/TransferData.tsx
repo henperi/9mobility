@@ -56,7 +56,10 @@ export const TransferData: React.FC = () => {
         .min(4, 'Must be a 4 digit number')
         .max(4, 'Must be a 16 digit number')
         .required('This field is required'),
-      amount: Yup.number().min(1, 'Amount must be at least N1').required(),
+      amount: Yup.number()
+        .min(10, 'Amount must be at least ₦10')
+        .typeError("Value must be a valid integer")
+        .required(),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -195,7 +198,7 @@ export const TransferData: React.FC = () => {
                   label="Amount"
                   placeholder="Enter data amount you want to transfer"
                   {...formik.getFieldProps('amount')}
-                  type="number"
+                  type="tel"
                   minLength={1}
                   error={getFieldError(
                     formik.errors.amount,

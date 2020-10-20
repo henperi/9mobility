@@ -63,7 +63,10 @@ export const PayBill = () => {
       amount: '',
     },
     validationSchema: Yup.object({
-      amount: Yup.number().required('This field is required'),
+      amount: Yup.number()
+      .min(10, 'Amount must be at least ₦10')
+      .typeError("Value must be a valid integer")
+      .required(),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -225,7 +228,8 @@ export const PayBill = () => {
                             label="Amount"
                             placeholder="Enter An Amount e.g 500"
                             {...formik.getFieldProps('amount')}
-                            type="text"
+                            type="tel"
+                            min={1}
                             error={getFieldError(
                               formik.errors.amount,
                               formik.touched.amount,
