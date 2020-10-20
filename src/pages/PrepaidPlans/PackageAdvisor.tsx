@@ -97,11 +97,10 @@ export const PackageAdvisor: React.FC<{
       <Row
         style={{
           padding: '5%',
-          border: `solid ${
-            packageProps.offeringId === selectedPackage?.offeringId
+          border: `solid ${packageProps.offeringId === selectedPackage?.offeringId
               ? '2px'
               : '1px'
-          } ${Colors.darkGreen}`,
+            } ${Colors.darkGreen}`,
           borderRadius: `${rem(5)}`,
           marginBottom: `${rem(15)}`,
           cursor: 'pointer',
@@ -159,7 +158,8 @@ export const PackageAdvisor: React.FC<{
     return (
       <Modal
         isVisible={showConfirmationPrompt}
-        onClose={() => setShowConfirmationPrompt(false)}
+        onClose={() => { setShowConfirmationPrompt(false);
+           setShowPackageAdvisor(false) }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
@@ -234,12 +234,12 @@ export const PackageAdvisor: React.FC<{
               <Spinner isFixed>Fetching Advisory</Spinner>
             </SizedBox>
           ) : (
-            <>
-              {data?.result.map((pack) => (
-                <Package key={generateShortId()} {...pack} />
-              ))}
-            </>
-          )}
+              <>
+                {data?.result.map((pack) => (
+                  <Package key={generateShortId()} {...pack} />
+                ))}
+              </>
+            )}
         </Column>
         <SizedBox height={20} />
 
