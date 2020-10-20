@@ -60,7 +60,8 @@ export const BuyWithDebitCard: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .required('This field is required'),
+        .typeError("Value must be a valid integer")
+        .required(),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -254,8 +255,8 @@ export const BuyWithDebitCard: React.FC = () => {
                 label="Amount"
                 placeholder="Enter an amount e.g 500"
                 {...formik.getFieldProps('amount')}
-                type="number"
-                min={10}
+                type="tel"
+                min={1}
                 error={getFieldError(
                   formik.errors.amount,
                   formik.touched.amount,

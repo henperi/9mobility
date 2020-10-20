@@ -55,7 +55,8 @@ export const TransferAirtime: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .required('Amount field is required'),
+        .typeError("Value must be a valid integer")
+        .required(),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -190,8 +191,8 @@ export const TransferAirtime: React.FC = () => {
                 label="Amount"
                 placeholder="Enter amount"
                 {...formik.getFieldProps('amount')}
-                type="number"
-                min={10}
+                type="tel"
+                min={1}
                 error={getFieldError(
                   formik.errors.amount,
                   formik.touched.amount,
