@@ -22,7 +22,7 @@ import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { generateShortId } from '../../utils/generateShortId';
 import { Modal } from '../../components/Modal';
 import { logger } from '../../utils/logger';
-import { useLazyFetch, usePost } from '../../customHooks/useRequests';
+import { usePost } from '../../customHooks/useRequests';
 import { useGlobalStore } from '../../store';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Spinner } from '../../components/Spinner';
@@ -47,9 +47,9 @@ export const ManageNumbers = () => {
   const [selectedPhone, setSelectedPhone] = useState('');
 
   const [addNumberOTP, setAddNumberOTP] = useState(false);
-  const [removeNumberOTP, setRemoveNumberOTP] = useState(false);
   const [activateNumberOTP, setActivateNumberOTP] = useState(false);
-  const [deactivateNumberOTP, setDeactivateNumberOTP] = useState(false);
+  const [deactivateNumberConfirm, setDeactivateNumberConfirm] = useState(false);
+  const [removeNumberConfirm, setRemoveNumberConfirm] = useState(false);
 
   const {
     loading: loadingNumbers,
@@ -70,22 +70,22 @@ export const ManageNumbers = () => {
     validationSchema: Yup.object({
       simNumber: Yup.string().required('This field is required'),
     }),
-    onSubmit: async () => {
+    onSubmit: async ({ simNumber }) => {
+      getOTP(simNumber);
       setAddNumberOTP(true);
-      getOTP();
     },
   });
 
-  const getOTP = async () => {
+  const getOTP = async (mobileNumber: string) => {
     try {
-      await requestOTP();
+      await requestOTP({ mobileNumber });
     } catch (err) {
       logger.log(err);
     }
   };
 
-  const [requestOTP, { data: OTPData }] = useLazyFetch<VerifyNumberResponse>(
-    'Mobility.Onboarding/api/Verification/initiateinappotp',
+  const [requestOTP, { data: OTPData }] = usePost<VerifyNumberResponse>(
+    'Mobility.Onboarding/api/Verification/initsimotp',
   );
 
   const [addNumber, { loading: adding, error: addError }] = usePost<
@@ -138,7 +138,6 @@ export const ManageNumbers = () => {
       const response = await deactivateNumber({ simNumber: selectedPhone });
       if (response?.data) {
         refetchMobileNumbers();
-        setDeactivateNumberOTP(false);
         setShowSuccessModal(true);
       }
     } catch (errorResp) {
@@ -151,7 +150,6 @@ export const ManageNumbers = () => {
       const response = await removeNumber({ simNumber: selectedPhone });
       if (response?.data) {
         refetchMobileNumbers();
-        setRemoveNumberOTP(false);
         setShowSuccessModal(true);
       }
     } catch (errorResp) {
@@ -179,53 +177,103 @@ export const ManageNumbers = () => {
           </Button>
         </Column>
       </Modal>
+
+      <Modal
+        isVisible={removeNumberConfirm}
+        onClose={() => setRemoveNumberConfirm(false)}
+        header={{ title: 'Transaction Confirmation' }}
+        size="sm"
+      >
+        {removeError && <ErrorBox>{removeError.message}</ErrorBox>}
+        <SizedBox height={15} />
+        <Column>
+          <Text>Hi {user?.firstName},</Text>
+          <SizedBox height={15} />
+          <Text>
+            Are you sure you want to remove{' '}
+            <Text variant="darker">{selectedPhone}</Text> from your sim numbers?
+          </Text>
+          <SizedBox height={10} />
+          <Row useAppMargin>
+            <Column xs={6} useAppMargin>
+              <Button onClick={removeSimNumber} isLoading={removing} fullWidth>
+                Confirm
+              </Button>
+            </Column>
+            <Column xs={6} useAppMargin>
+              <Button
+                onClick={() => setRemoveNumberConfirm(false)}
+                outline
+                fullWidth
+              >
+                Cancel
+              </Button>
+            </Column>
+          </Row>
+        </Column>
+      </Modal>
+
+      <Modal
+        isVisible={deactivateNumberConfirm}
+        onClose={() => setDeactivateNumberConfirm(false)}
+        header={{ title: 'Transaction Confirmation' }}
+        size="sm"
+      >
+        {deactivationError && <ErrorBox>{deactivationError.message}</ErrorBox>}
+        <SizedBox height={15} />
+        <Column>
+          <Text>Hi {user?.firstName},</Text>
+          <SizedBox height={15} />
+          <Text>
+            Are you sure you want to deactivate{' '}
+            <Text variant="darker">{selectedPhone}</Text>?
+          </Text>
+          <SizedBox height={10} />
+          <Row useAppMargin>
+            <Column xs={6} useAppMargin>
+              <Button
+                onClick={deactivateSimNumber}
+                isLoading={deactivating}
+                fullWidth
+              >
+                Confirm
+              </Button>
+            </Column>
+            <Column xs={6} useAppMargin>
+              <Button
+                onClick={() => setDeactivateNumberConfirm(false)}
+                outline
+                fullWidth
+              >
+                Cancel
+              </Button>
+            </Column>
+          </Row>
+        </Column>
+      </Modal>
     </>
   );
 
-  if (addNumberOTP && OTPData && numbersData) {
+  if (addNumberOTP && OTPData) {
     return (
       <ConfirmOTP
         message={OTPData?.message}
         setshowOTPScreen={setAddNumberOTP}
         callbackFunction={addSimNumber}
         trackingId={OTPData.result.trackingId}
-        mobileNumber={numbersData.result[0].mobileNumber}
+        mobileNumber={formik.values.simNumber}
       />
     );
   }
 
-  if (removeNumberOTP && OTPData && numbersData) {
-    return (
-      <ConfirmOTP
-        message={OTPData?.message}
-        setshowOTPScreen={setRemoveNumberOTP}
-        callbackFunction={removeSimNumber}
-        trackingId={OTPData.result.trackingId}
-        mobileNumber={numbersData.result[0].mobileNumber}
-      />
-    );
-  }
-
-  if (activateNumberOTP && OTPData && numbersData) {
+  if (activateNumberOTP && OTPData && selectedPhone) {
     return (
       <ConfirmOTP
         message={OTPData?.message}
         setshowOTPScreen={setActivateNumberOTP}
         callbackFunction={activateSimNumber}
         trackingId={OTPData.result.trackingId}
-        mobileNumber={numbersData.result[0].mobileNumber}
-      />
-    );
-  }
-
-  if (deactivateNumberOTP && OTPData && numbersData) {
-    return (
-      <ConfirmOTP
-        message={OTPData?.message}
-        setshowOTPScreen={setDeactivateNumberOTP}
-        callbackFunction={deactivateSimNumber}
-        trackingId={OTPData.result.trackingId}
-        mobileNumber={numbersData.result[0].mobileNumber}
+        mobileNumber={selectedPhone}
       />
     );
   }
@@ -330,8 +378,7 @@ export const ManageNumbers = () => {
                               style={{ cursor: 'pointer' }}
                               onClick={() => {
                                 setSelectedPhone(num.mobileNumber);
-                                setRemoveNumberOTP(true);
-                                getOTP();
+                                setRemoveNumberConfirm(true);
                               }}
                             >
                               remove number
@@ -344,9 +391,8 @@ export const ManageNumbers = () => {
                                 color={Colors.darkGreen}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => {
-                                  setDeactivateNumberOTP(true);
                                   setSelectedPhone(num.mobileNumber);
-                                  getOTP();
+                                  setDeactivateNumberConfirm(true);
                                 }}
                               >
                                 Deactivate number
@@ -359,7 +405,7 @@ export const ManageNumbers = () => {
                                 onClick={() => {
                                   setActivateNumberOTP(true);
                                   setSelectedPhone(num.mobileNumber);
-                                  getOTP();
+                                  getOTP(num.mobileNumber);
                                 }}
                               >
                                 Activate number
