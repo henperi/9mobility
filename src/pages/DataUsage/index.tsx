@@ -12,10 +12,15 @@ import { useLazyFetch } from '../../customHooks/useRequests';
 
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
-import { getFieldError } from '../../utils/formikHelper';
+import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import { Spinner } from '../../components/Spinner';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { ValidateOTP } from '../../components/ValidateOTP';
+import {
+  Direction,
+  getDateFromSelected,
+  getIsoDate,
+} from '../../utils/dateHelper';
 
 interface DataHistorryResp {
   result:
@@ -42,6 +47,8 @@ interface DataHistorryResp {
 
 export const DataUsagePage: React.FC = () => {
   const { mobileNumbers } = useGetMobileNumbers();
+  const [minDate, setMinDate] = useState<string>('');
+  const [maxDate, setMaxDate] = useState<string>('');
 
   const formik = useFormik({
     initialValues: {
@@ -50,8 +57,16 @@ export const DataUsagePage: React.FC = () => {
       mobileNumber: '',
     },
     validationSchema: Yup.object({
-      startDate: Yup.date().required('This field is required'),
-      endDate: Yup.date().required('This field is required'),
+      startDate: Yup.string()
+        .required('Start date is required')
+        .test('startDate', 'Future dates are not allowed', (value) => {
+          return !isFutureDate(value);
+        }),
+      endDate: Yup.string()
+        .required('End date is required')
+        .test('endDate', 'Future dates are not allowed', (value) => {
+          return !isFutureDate(value);
+        }),
       mobileNumber: Yup.string()
         .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
@@ -61,16 +76,9 @@ export const DataUsagePage: React.FC = () => {
     },
   });
 
-  const start = DateTime.fromISO(formik.values.startDate, {
-    locale: 'fr',
-  }).toISODate();
-  const end = DateTime.fromISO(formik.values.endDate, {
-    locale: 'fr',
-  }).toISODate();
-
   const [getDataUsageHistory, { data, loading, error }] = useLazyFetch<
     DataHistorryResp
-  >(`Mobility.Account/api/Data/getdatausage/${start}/${end}`);
+  >(`Mobility.Account/api/Data/getdatausage/${minDate}/${maxDate}`);
 
   const [barData, setbarData] = useState<(string | number)[][] | null>();
 
@@ -86,6 +94,33 @@ export const DataUsagePage: React.FC = () => {
       setbarData(result);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (minDate) {
+      // calculate the maximum date from the minimum
+      const maxDateAllowed = getDateFromSelected(
+        minDate,
+        29,
+        Direction.Forward,
+      );
+
+      setMaxDate(maxDateAllowed);
+      formik.setFieldValue('endDate', maxDateAllowed);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minDate]);
+
+  useEffect(() => {
+    const today = getIsoDate(new Date().toString()).replace(/-/g, '/');
+
+    setMinDate(getDateFromSelected(today, 29, Direction.Back));
+    formik.setFieldValue(
+      'startDate',
+      getDateFromSelected(today, 29, Direction.Back),
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const options = {
     title: 'Data Usage',
@@ -110,7 +145,7 @@ export const DataUsagePage: React.FC = () => {
       </Card>
     ) : (
       <Text variant="lighter">
-        {error?.message || 'No data histories at the moment'}
+        {error?.message || `No data histories between at the moment`}
       </Text>
     );
 
@@ -145,11 +180,18 @@ export const DataUsagePage: React.FC = () => {
                   type="date"
                   label="Select Start Date"
                   placeholder="From"
-                  {...formik.getFieldProps('startDate')}
+                  name="startDate"
+                  value={minDate}
+                  onChange={(e) => {
+                    setMinDate(e.target.value);
+                    formik.setFieldValue('startDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.startDate,
                     formik.touched.startDate,
                   )}
+                  min={minDate}
+                  disabled={loading}
                 />
               </Column>
               <Column useAppMargin md={4} lg={3}>
@@ -157,11 +199,18 @@ export const DataUsagePage: React.FC = () => {
                   type="date"
                   label="Select End Date"
                   placeholder="To"
-                  {...formik.getFieldProps('endDate')}
+                  name="endDate"
+                  value={maxDate}
+                  onChange={(e) => {
+                    setMaxDate(e.target.value);
+                    formik.setFieldValue('endDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.endDate,
                     formik.touched.endDate,
                   )}
+                  min={maxDate}
+                  disabled={loading}
                 />
               </Column>
 
