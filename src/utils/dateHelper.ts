@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { logger } from './logger';
 
 export enum Direction {
   Back,
@@ -27,4 +28,17 @@ export const getIsoDate = (dateValue: string) => {
   const date = new Date(dateValue);
 
   return date.toISOString().slice(0, 10);
+};
+
+export const getDateDiff = (firstDate: string, secondDate: string) => {
+  logger.log(
+    'date from selected',
+    getDateFromSelected(secondDate, 2, Direction.Back),
+  );
+  logger.log('first date', firstDate);
+  if (getDateFromSelected(secondDate, 2, Direction.Back) !== firstDate) {
+    logger.log('date is not valid');
+  } else {
+    logger.log('date is valid');
+  }
 };

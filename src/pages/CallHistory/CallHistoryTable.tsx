@@ -14,6 +14,11 @@ import { SimpleTable } from '../../components/Table';
 import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 import { getFieldError, isFutureDate } from '../../utils/formikHelper';
+import {
+  Direction,
+  getDateFromSelected,
+  getIsoDate,
+} from '../../utils/dateHelper';
 
 interface CallHistoryResp {
   responseCode: number;
@@ -46,6 +51,10 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
   const [tableData, setTableData] = useState<(string | number)[][]>();
   const { trackingId } = props;
 
+  const [minDate, setMinDate] = useState<string>('');
+  const [maxDate, setMaxDate] = useState<string>('');
+  const [dateRangeError, setDateRangeError] = useState<string>('');
+
   const formik = useFormik({
     initialValues: initialDates,
     validationSchema: Yup.object({
@@ -61,7 +70,11 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
         .required('End date is required'),
     }),
     onSubmit: async (formData) => {
-      await getCallHistory();
+      if (getDateFromSelected(maxDate, 2, Direction.Back) !== minDate) {
+        setDateRangeError('You cannot view call history for more than 3 days');
+      } else {
+        await getCallHistory();
+      }
     },
   });
 
@@ -77,12 +90,6 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
   const [getCallHistory, { data, loading }] = useLazyFetch<CallHistoryResp>(
     `Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`,
   );
-
-  useEffect(() => {
-    if (date.start && date.end) {
-      getCallHistory();
-    }
-  }, [date.end, date.start, getCallHistory]);
 
   useEffect(() => {
     if (data?.result) {
@@ -102,6 +109,30 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
       setTableData(tableResults);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (minDate) {
+      // calculate the maximum date from the minimum
+      const maxDateAllowed = getDateFromSelected(minDate, 2, Direction.Forward);
+
+      setMaxDate(maxDateAllowed);
+      formik.setFieldValue('endDate', maxDateAllowed);
+      setDateRangeError('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minDate]);
+
+  useEffect(() => {
+    const dateNow = getIsoDate(new Date().toString()).replace(/-/g, '/');
+
+    setMinDate(getDateFromSelected(dateNow, 2, Direction.Back));
+    formik.setFieldValue(
+      'startDate',
+      getDateFromSelected(dateNow, 2, Direction.Back),
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderTable = () =>
     tableData?.length ? (
@@ -126,11 +157,17 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
                   type="date"
                   label="Select Start Date"
                   placeholder="From"
-                  {...formik.getFieldProps('startDate')}
+                  name="startDate"
+                  value={minDate}
+                  onChange={(e) => {
+                    setMinDate(e.target.value);
+                    formik.setFieldValue('startDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.startDate,
                     formik.touched.startDate,
                   )}
+                  disabled={loading}
                 />
               </Column>
               <Column useAppMargin md={4} lg={3}>
@@ -138,11 +175,17 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
                   type="date"
                   label="Select End Date"
                   placeholder="To"
-                  {...formik.getFieldProps('endDate')}
+                  name="endDate"
+                  value={maxDate}
+                  onChange={(e) => {
+                    setMaxDate(e.target.value);
+                    formik.setFieldValue('endDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.endDate,
                     formik.touched.endDate,
                   )}
+                  disabled={loading}
                 />
               </Column>
 
@@ -156,6 +199,11 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
                 <Button type="submit" fullWidth>
                   Apply
                 </Button>
+              </Column>
+              <Column useAppMargin md={12}>
+                {dateRangeError && (
+                  <Text variant="lighter">{dateRangeError}</Text>
+                )}
               </Column>
             </Row>
           </Card>

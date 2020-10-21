@@ -49,6 +49,7 @@ export const DataUsagePage: React.FC = () => {
   const { mobileNumbers } = useGetMobileNumbers();
   const [minDate, setMinDate] = useState<string>('');
   const [maxDate, setMaxDate] = useState<string>('');
+  const [dateRangeError, setDateRangeError] = useState<string>('');
 
   const formik = useFormik({
     initialValues: {
@@ -72,7 +73,11 @@ export const DataUsagePage: React.FC = () => {
         .required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      await getDataUsageHistory();
+      if (getDateFromSelected(maxDate, 2, Direction.Back) !== minDate) {
+        setDateRangeError('You cannot view data usage for more than 3 days');
+      } else {
+        await getDataUsageHistory();
+      }
     },
   });
 
@@ -98,14 +103,11 @@ export const DataUsagePage: React.FC = () => {
   useEffect(() => {
     if (minDate) {
       // calculate the maximum date from the minimum
-      const maxDateAllowed = getDateFromSelected(
-        minDate,
-        29,
-        Direction.Forward,
-      );
+      const maxDateAllowed = getDateFromSelected(minDate, 2, Direction.Forward);
 
       setMaxDate(maxDateAllowed);
       formik.setFieldValue('endDate', maxDateAllowed);
+      setDateRangeError('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minDate]);
@@ -113,10 +115,10 @@ export const DataUsagePage: React.FC = () => {
   useEffect(() => {
     const today = getIsoDate(new Date().toString()).replace(/-/g, '/');
 
-    setMinDate(getDateFromSelected(today, 29, Direction.Back));
+    setMinDate(getDateFromSelected(today, 2, Direction.Back));
     formik.setFieldValue(
       'startDate',
-      getDateFromSelected(today, 29, Direction.Back),
+      getDateFromSelected(today, 2, Direction.Back),
     );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,7 +192,6 @@ export const DataUsagePage: React.FC = () => {
                     formik.errors.startDate,
                     formik.touched.startDate,
                   )}
-                  min={minDate}
                   disabled={loading}
                 />
               </Column>
@@ -209,7 +210,6 @@ export const DataUsagePage: React.FC = () => {
                     formik.errors.endDate,
                     formik.touched.endDate,
                   )}
-                  min={maxDate}
                   disabled={loading}
                 />
               </Column>
@@ -224,6 +224,11 @@ export const DataUsagePage: React.FC = () => {
                 <Button type="submit" fullWidth>
                   Apply
                 </Button>
+              </Column>
+              <Column useAppMargin md={12}>
+                {dateRangeError && (
+                  <Text variant="lighter">{dateRangeError}</Text>
+                )}
               </Column>
             </Row>
           </Card>
