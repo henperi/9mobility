@@ -22,6 +22,7 @@ import { Spinner } from '../../components/Spinner';
 import { SimpleTable } from '../../components/Table';
 import {
   Direction,
+  getDateDiff,
   getDateFromSelected,
   getIsoDate,
 } from '../../utils/dateHelper';
@@ -51,6 +52,7 @@ interface TransactionHistorryResp {
 export const TransactionHistoryPage: React.FC = () => {
   const [minDate, setMinDate] = useState<string>('');
   const [maxDate, setMaxDate] = useState<string>('');
+  const [dateRangeError, setDateRangeError] = useState<string>('');
 
   const formik = useFormik({
     initialValues: {
@@ -70,7 +72,11 @@ export const TransactionHistoryPage: React.FC = () => {
         .required('End date is required'),
     }),
     onSubmit: async (formData) => {
-      await getTransactionHistory();
+      if (getDateFromSelected(maxDate, 29, Direction.Back) !== minDate) {
+        setDateRangeError('You cannot view transactions for more than 30 days');
+      } else {
+        await getTransactionHistory();
+      }
     },
   });
 
@@ -125,6 +131,7 @@ export const TransactionHistoryPage: React.FC = () => {
 
       setMaxDate(maxDateAllowed);
       formik.setFieldValue('endDate', maxDateAllowed);
+      setDateRangeError('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minDate]);
@@ -140,6 +147,13 @@ export const TransactionHistoryPage: React.FC = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (maxDate) {
+      getDateDiff(minDate, maxDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxDate]);
 
   const renderTable = () =>
     data?.result.results.length ? (
@@ -192,7 +206,6 @@ export const TransactionHistoryPage: React.FC = () => {
                     formik.errors.startDate,
                     formik.touched.startDate,
                   )}
-                  min={minDate}
                   disabled={loading}
                 />
               </Column>
@@ -211,7 +224,6 @@ export const TransactionHistoryPage: React.FC = () => {
                     formik.errors.endDate,
                     formik.touched.endDate,
                   )}
-                  min={maxDate}
                   disabled={loading}
                 />
               </Column>
@@ -226,6 +238,11 @@ export const TransactionHistoryPage: React.FC = () => {
                 <Button type="submit" fullWidth>
                   Apply
                 </Button>
+              </Column>
+              <Column useAppMargin md={12}>
+                {dateRangeError && (
+                  <Text variant="lighter">{dateRangeError}</Text>
+                )}
               </Column>
             </Row>
           </Card>
