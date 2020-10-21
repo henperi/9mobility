@@ -20,6 +20,11 @@ import { Button } from '../../components/Button';
 import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import { Spinner } from '../../components/Spinner';
 import { SimpleTable } from '../../components/Table';
+import {
+  Direction,
+  getDateFromSelected,
+  getIsoDate,
+} from '../../utils/dateHelper';
 
 interface TransactionHistorryResp {
   result: {
@@ -44,7 +49,8 @@ interface TransactionHistorryResp {
 }
 
 export const TransactionHistoryPage: React.FC = () => {
-  // const history = useHistory();
+  const [minDate, setMinDate] = useState<string>('');
+  const [maxDate, setMaxDate] = useState<string>('');
 
   const formik = useFormik({
     initialValues: {
@@ -108,6 +114,33 @@ export const TransactionHistoryPage: React.FC = () => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (minDate) {
+      // calculate the maximum date from the minimum
+      const maxDateAllowed = getDateFromSelected(
+        minDate,
+        29,
+        Direction.Forward,
+      );
+
+      setMaxDate(maxDateAllowed);
+      formik.setFieldValue('endDate', maxDateAllowed);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minDate]);
+
+  useEffect(() => {
+    const today = getIsoDate(new Date().toString()).replace(/-/g, '/');
+
+    setMinDate(getDateFromSelected(today, 29, Direction.Back));
+    formik.setFieldValue(
+      'startDate',
+      getDateFromSelected(today, 29, Direction.Back),
+    );
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const renderTable = () =>
     data?.result.results.length ? (
       <div style={{ margin: '-28px' }}>
@@ -149,11 +182,18 @@ export const TransactionHistoryPage: React.FC = () => {
                   type="date"
                   label="Select Start Date"
                   placeholder="From"
-                  {...formik.getFieldProps('startDate')}
+                  name="startDate"
+                  value={minDate}
+                  onChange={(e) => {
+                    setMinDate(e.target.value);
+                    formik.setFieldValue('startDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.startDate,
                     formik.touched.startDate,
                   )}
+                  min={minDate}
+                  disabled={loading}
                 />
               </Column>
               <Column useAppMargin md={4} lg={3}>
@@ -161,11 +201,18 @@ export const TransactionHistoryPage: React.FC = () => {
                   type="date"
                   label="Select End Date"
                   placeholder="To"
-                  {...formik.getFieldProps('endDate')}
+                  name="endDate"
+                  value={maxDate}
+                  onChange={(e) => {
+                    setMaxDate(e.target.value);
+                    formik.setFieldValue('endDate', e.target.value);
+                  }}
                   error={getFieldError(
                     formik.errors.endDate,
                     formik.touched.endDate,
                   )}
+                  min={maxDate}
+                  disabled={loading}
                 />
               </Column>
 
