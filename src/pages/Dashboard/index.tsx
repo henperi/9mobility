@@ -16,7 +16,6 @@ import { ReactComponent as PlayGames } from '../../assets/images/playGames.svg';
 import { ReactComponent as BuyPhone } from '../../assets/images/buyPhone.svg';
 import { SimBalances } from './SimBalances';
 import { SubscribedServices } from './SubscribedServices';
-// import { Wallet } from './Wallet';
 
 export interface OnboardingAuthResponse {
   result: {
