@@ -188,7 +188,10 @@ export const PayBill = () => {
             ) : (
               <>
                 {corporateDataError ? (
-                  <ErrorBox>{corporateDataError?.message}</ErrorBox>
+                  <ErrorBox>
+                    Corporate details were not found for your profile, corporate
+                    details are needed to use this feature
+                  </ErrorBox>
                 ) : (
                   <>
                     <Card
