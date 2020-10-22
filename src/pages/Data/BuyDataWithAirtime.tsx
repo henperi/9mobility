@@ -21,7 +21,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
-import { BundlesResp } from './Interface';
+import { BundlesResp, emptyError, IError } from './Interface';
 import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { logger } from '../../utils/logger';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
@@ -102,6 +102,7 @@ export const BuyDataWithAirtime: React.FC = () => {
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [buyDataError, setBuyDataError] = useState<IError>(emptyError);
 
   const handleBuyDataWithAirtime = async () => {
     try {
@@ -117,15 +118,28 @@ export const BuyDataWithAirtime: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setBuyDataError(error);
+    }
+  }, [error]);
+
+  const DataPurchaseError = buyDataError.message && (
+    <ErrorBox>{buyDataError.message}</ErrorBox>
+  );
+
   const renderModals = () => (
     <>
       <Modal
         isVisible={showConfirmationModal}
-        onClose={() => setShowConfirmationModal(false)}
+        onClose={() => {
+          setShowConfirmationModal(false);
+          setBuyDataError(emptyError);
+        }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
+        {DataPurchaseError}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -149,7 +163,10 @@ export const BuyDataWithAirtime: React.FC = () => {
             </Column>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={() => setShowConfirmationModal(false)}
+                onClick={() => {
+                  setShowConfirmationModal(false);
+                  setBuyDataError(emptyError);
+                }}
                 outline
                 fullWidth
               >
@@ -245,7 +262,6 @@ export const BuyDataWithAirtime: React.FC = () => {
                     </Column>
                   </Row>
                   <SizedBox height={24} />
-                  {error && <ErrorBox>{error.message}</ErrorBox>}
                   {data && <SuccessBox>{data.message}</SuccessBox>}
 
                   <form onSubmit={formik.handleSubmit}>

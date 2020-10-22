@@ -17,6 +17,7 @@ import { AsyncImage } from '../../components/AsyncImage';
 import { SinglePlan } from './SinglePlan';
 import { useLazyGetActivePlan } from '../../customHooks/useGetActivePlan';
 import { PackageAdvisor } from './PackageAdvisor';
+import { rem } from '../../utils/rem';
 
 export interface ActivePlan {
   result: {
@@ -135,7 +136,7 @@ export const PrepaidPlansPage: React.FC = () => {
                       <AsyncImage
                         src={`images/${plan.icon}`}
                         alt={plan.name}
-                        style={{ width: 'fit-content', maxHeight: '3rem' }}
+                        style={{ width: 'fit-content', height: rem(40) }}
                       />
                     </Column>
                     <SizedBox height={80} />

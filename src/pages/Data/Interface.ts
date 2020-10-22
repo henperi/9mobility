@@ -24,3 +24,13 @@ export interface BundlesResp {
     categoryName: string;
   }[];
 }
+
+export interface IError {
+  responseCode: number;
+  message: string;
+}
+
+export const emptyError = {
+  responseCode: 0,
+  message: '',
+};

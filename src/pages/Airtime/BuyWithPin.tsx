@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -23,6 +23,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { logger } from '../../utils/logger';
+import { emptyError, IError } from '../Data/Interface';
 
 interface SuccessResp {
   responseCode: number;
@@ -73,6 +74,7 @@ export const BuyWithPin: React.FC = () => {
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [buyWithPinError, setBuyWithPinError] = useState<IError>(emptyError);
 
   const handleRechargeWithPin = async () => {
     try {
@@ -87,15 +89,28 @@ export const BuyWithPin: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setBuyWithPinError(error);
+    }
+  }, [error]);
+
+  const BuyDataWithPinError = buyWithPinError.message && (
+    <ErrorBox>{buyWithPinError.message}</ErrorBox>
+  );
+
   const renderModals = () => (
     <>
       <Modal
         isVisible={showConfirmationModal}
-        onClose={() => setShowConfirmationModal(false)}
+        onClose={() => {
+          setShowConfirmationModal(false);
+          setBuyWithPinError(emptyError);
+        }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
+        {BuyDataWithPinError}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -118,7 +133,10 @@ export const BuyWithPin: React.FC = () => {
             </Column>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={() => setShowConfirmationModal(false)}
+                onClick={() => {
+                  setShowConfirmationModal(false);
+                  setBuyWithPinError(emptyError);
+                }}
                 outline
                 fullWidth
               >
@@ -134,7 +152,6 @@ export const BuyWithPin: React.FC = () => {
         onClose={() => setShowSuccessModal(false)}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -207,7 +224,6 @@ export const BuyWithPin: React.FC = () => {
               </Column>
             </Row>
             <SizedBox height={24} />
-            {error && <ErrorBox>{error.message}</ErrorBox>}
             {data && <SuccessBox>{data.message}</SuccessBox>}
             <form onSubmit={formik.handleSubmit}>
               {activeTab === 1 && (
