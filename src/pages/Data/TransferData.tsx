@@ -205,6 +205,7 @@ export const TransferData: React.FC = () => {
                   minLength={4}
                   maxLength={4}
                   helperText="Default code is 0000"
+                  type="tel"
                   error={getFieldError(
                     formik.errors.securityCode,
                     formik.touched.securityCode,

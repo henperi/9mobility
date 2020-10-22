@@ -26,6 +26,7 @@ import {
   getDateFromSelected,
   getIsoDate,
 } from '../../utils/dateHelper';
+import { logger } from '../../utils/logger';
 
 interface TransactionHistorryResp {
   result: {
@@ -72,11 +73,7 @@ export const TransactionHistoryPage: React.FC = () => {
         .required('End date is required'),
     }),
     onSubmit: async (formData) => {
-      if (getDateFromSelected(maxDate, 29, Direction.Back) !== minDate) {
-        setDateRangeError('You cannot view transactions for more than 30 days');
-      } else {
-        await getTransactionHistory();
-      }
+      loadHistory();
     },
   });
 
@@ -150,17 +147,33 @@ export const TransactionHistoryPage: React.FC = () => {
 
   useEffect(() => {
     if (maxDate) {
-      getDateDiff(minDate, maxDate);
+      loadHistory();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxDate]);
 
-  const renderTable = () =>
+  const loadHistory = async () => {
+    const dateDiff = getDateDiff(minDate, maxDate);
+
+    if (dateDiff > 29) {
+      setDateRangeError('You cannot view transactions for more than 30 days');
+    } else if (dateDiff < 0) {
+      setDateRangeError('Invalid date range selection');
+    } else {
+      try {
+        await getTransactionHistory();
+      } catch (errorResp) {
+        logger.log(errorResp);
+      }
+    }
+  };
+
+  const renderTable = (historyData: (string | number)[][]) =>
     data?.result.results.length ? (
       <div style={{ margin: '-28px' }}>
         <SimpleTable
           columns={['S/N', 'Type', 'Source', 'Amount', 'Date', 'Time']}
-          data={tableData}
+          data={historyData}
         />
       </div>
     ) : (
@@ -260,7 +273,7 @@ export const TransactionHistoryPage: React.FC = () => {
           {loading ? (
             <Spinner isFixed />
           ) : (
-            <Column fullHeight>{renderTable()}</Column>
+            <Column fullHeight>{tableData && renderTable(tableData)}</Column>
           )}
         </Card>
       </Column>

@@ -200,6 +200,7 @@ export const TransferAirtime: React.FC = () => {
                 {...formik.getFieldProps('securityCode')}
                 minLength={4}
                 maxLength={4}
+                type="tel"
                 error={getFieldError(
                   formik.errors.securityCode,
                   formik.touched.securityCode,

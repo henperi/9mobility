@@ -17,8 +17,8 @@ import { getFieldError } from '../../utils/formikHelper';
 import { useFetch, useLazyFetch } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Row } from '../../components/Row';
-import { rem } from '../../utils/rem';
 import { Button } from '../../components/Button';
+import { logger } from '../../utils/logger';
 
 interface SuccessResp {
   result: {
@@ -35,10 +35,24 @@ interface SuccessResp {
   message: string;
 }
 
+const billingOptions = [
+  {
+    id: 2,
+    name: 'Per Second',
+  },
+  {
+    id: 1,
+    name: 'Per Minute',
+  },
+];
+
 export const IDDRates: React.FC = () => {
-  const [getRoamingRate, { data, error, loading: loadingRates }] = useLazyFetch<
-    SuccessResp
-  >('Mobility.Account/api/Roaming/GetRoamingRate');
+  const [
+    getInternationalCallRate,
+    { data, error, loading: loadingRates },
+  ] = useLazyFetch<SuccessResp>(
+    'Mobility.Account/api/Roaming/GetInternationalCallRate',
+  );
   const { data: countries } = useFetch<{
     result: {
       id: number;
@@ -46,13 +60,6 @@ export const IDDRates: React.FC = () => {
       code: string;
     }[];
   }>('Mobility.Account/api/Countries/GetCountries');
-
-  const { data: billingOptions } = useFetch<{
-    result: {
-      id: number;
-      name: string;
-    }[];
-  }>('Mobility.Account/api/Roaming/GetBillingOptions');
 
   const formik = useFormik({
     initialValues: {
@@ -69,7 +76,11 @@ export const IDDRates: React.FC = () => {
   });
 
   const getIDDRates = async () => {
-    getRoamingRate(formik.values);
+    try {
+      await getInternationalCallRate(formik.values);
+    } catch (errorResp) {
+      logger.log(errorResp);
+    }
   };
 
   const renderResults = () =>
@@ -81,28 +92,14 @@ export const IDDRates: React.FC = () => {
           padding="4%"
           style={{
             border: `solid 1px ${Colors.darkGreen}`,
-            minHeight: rem(100),
           }}
         >
-          <Text size={18} weight="600">
-            {data?.result?.callRateWithinLocation}
+          <Text size={13}>
+            Calls within this location:{' '}
+            <Text size={18} weight={600}>
+              {data?.result?.callRateWithinLocation}
+            </Text>
           </Text>
-          <SizedBox height={5} />
-          <Text size={13}>Calls within location:</Text>
-          <SizedBox height={10} />
-
-          <Text size={18} weight="600">
-            {data?.result?.callRateToNigeria}
-          </Text>
-          <SizedBox height={5} />
-          <Text size={13}>Calls rate to Nigeria:</Text>
-          <SizedBox height={10} />
-
-          <Text size={18} weight="600">
-            {data?.result?.receivingCallRate}
-          </Text>
-          <SizedBox height={5} />
-          <Text size={13}>Receiving call rate:</Text>
           <SizedBox height={10} />
         </Card>
         <SizedBox height={20} />
@@ -141,7 +138,7 @@ export const IDDRates: React.FC = () => {
                       label="Billing"
                       placeholder="Billing Options"
                       dropDown
-                      dropDownOptions={billingOptions?.result.map((option) => ({
+                      dropDownOptions={billingOptions?.map((option) => ({
                         label: option.name,
                         value: option.id,
                       }))}

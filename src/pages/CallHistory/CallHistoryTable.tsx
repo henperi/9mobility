@@ -16,9 +16,11 @@ import { Button } from '../../components/Button';
 import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import {
   Direction,
+  getDateDiff,
   getDateFromSelected,
   getIsoDate,
 } from '../../utils/dateHelper';
+import { logger } from '../../utils/logger';
 
 interface CallHistoryResp {
   responseCode: number;
@@ -70,25 +72,12 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
         .required('End date is required'),
     }),
     onSubmit: async (formData) => {
-      if (getDateFromSelected(maxDate, 2, Direction.Back) !== minDate) {
-        setDateRangeError('You cannot view call history for more than 3 days');
-      } else {
-        await getCallHistory();
-      }
+      loadHistory();
     },
   });
 
-  const date = {
-    start: DateTime.fromISO(formik.values.startDate, {
-      locale: 'fr',
-    }).toISODate(),
-    end: DateTime.fromISO(formik.values.endDate, {
-      locale: 'fr',
-    }).toISODate(),
-  };
-
   const [getCallHistory, { data, loading }] = useLazyFetch<CallHistoryResp>(
-    `Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${date.start}/${date.end}`,
+    `Mobility.Account/api/Airtime/getcallhistories/${trackingId}/${minDate}/${maxDate}`,
   );
 
   useEffect(() => {
@@ -123,6 +112,13 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
   }, [minDate]);
 
   useEffect(() => {
+    if (maxDate) {
+      loadHistory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxDate]);
+
+  useEffect(() => {
     const dateNow = getIsoDate(new Date().toString()).replace(/-/g, '/');
 
     setMinDate(getDateFromSelected(dateNow, 2, Direction.Back));
@@ -134,12 +130,28 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderTable = () =>
-    tableData?.length ? (
+  const loadHistory = async () => {
+    const dateDiff = getDateDiff(minDate, maxDate);
+
+    if (dateDiff > 2) {
+      setDateRangeError('You cannot view transactions for more than 3 days');
+    } else if (dateDiff < 0) {
+      setDateRangeError('Invalid date range selection');
+    } else {
+      try {
+        await getCallHistory();
+      } catch (errorResp) {
+        logger.log(errorResp);
+      }
+    }
+  };
+
+  const renderTable = (historyData: (string | number)[][]) =>
+    data?.result?.length ? (
       <div style={{ margin: '-28px' }}>
         <SimpleTable
           columns={['S/N', 'Phone Number', 'Type', 'Charge', 'Date', 'Time']}
-          data={tableData}
+          data={historyData}
         />
       </div>
     ) : (
@@ -222,7 +234,7 @@ export const CallHistoryTable: React.FC<{ trackingId: string }> = (props) => {
             <Spinner isFixed />
           ) : (
             <Column fullHeight alignItems="center">
-              {renderTable()}
+              {tableData && renderTable(tableData)}
             </Column>
           )}
         </Card>

@@ -267,7 +267,7 @@ export const BuyWithPin: React.FC = () => {
                 label="Voucher"
                 placeholder="Enter 15 digit PIN"
                 {...formik.getFieldProps('voucherPin')}
-                type="text"
+                type="tel"
                 minLength={15}
                 maxLength={15}
                 error={getFieldError(

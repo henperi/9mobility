@@ -90,7 +90,7 @@ export const AirtimePage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/airtime/buy-with-debit-card')}
           >
-            <CreditCard />
+            <CreditCard title="Buy with debit card" />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Buy with debit card
@@ -107,7 +107,7 @@ export const AirtimePage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/airtime/buy-with-pin')}
           >
-            <NotePin />
+            <NotePin title="Recharge with PIN" />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Recharge with PIN
@@ -124,7 +124,7 @@ export const AirtimePage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/airtime/transfer')}
           >
-            <TransferForward />
+            <TransferForward title="Transfer airtime" />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Transfer airtime
@@ -141,7 +141,7 @@ export const AirtimePage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/airtime/borrow')}
           >
-            <MobileBorrow />
+            <MobileBorrow title="Borrow airtime" />
             <SizedBox height={45} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Borrow airtime
