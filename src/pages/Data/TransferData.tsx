@@ -58,7 +58,7 @@ export const TransferData: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .typeError("Value must be a valid integer")
+        .typeError('Value must be a valid integer')
         .required(),
     }),
     onSubmit: async (formData) => {
@@ -187,6 +187,7 @@ export const TransferData: React.FC = () => {
                   minLength={4}
                   maxLength={4}
                   helperText="Default code is 0000"
+                  type="tel"
                   error={getFieldError(
                     formik.errors.securityCode,
                     formik.touched.securityCode,

@@ -76,10 +76,10 @@ export const Roaming: React.FC = () => {
             fullHeight
             onClick={() => history.push('/roaming/idd-rates')}
           >
-            <RoamingIcon />
+            <RoamingIcon title="Check for Int'l call rates (IDD)" />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
-              Check for Int’ll call rates (IDD)
+              Check for Int’l call rates (IDD)
             </Text>
             <SizedBox height={8} />
             <Text casing="sentenceCase" variant="lighter">
@@ -93,7 +93,7 @@ export const Roaming: React.FC = () => {
             fullHeight
             onClick={() => history.push(`${match.path}/rates`)}
           >
-            <TelephoneIcon />
+            <TelephoneIcon title="Get Roaming rates" />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Get Roaming rates
@@ -110,7 +110,7 @@ export const Roaming: React.FC = () => {
             fullHeight
             onClick={() => history.push('/roaming/buy-bundle')}
           >
-            <ShoppingIcon />
+            <ShoppingIcon title="Buy roaming internet bundles" />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.lightGreen}>
               Buy roaming internet bundles

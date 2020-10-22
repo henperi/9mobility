@@ -70,11 +70,14 @@ export const DataPage: React.FC = () => {
                     {data?.result.dataModel.balance}
                   </Text>
                   <SizedBox height={10} />
-
-                  <Text size={12} weight={500} color={Colors.grey}>
-                    Valid till {data?.result.dataModel.expiryDate}
-                  </Text>
-                  <SizedBox height={5} />
+                  {data?.result.dataModel?.expiryDate !== 'N/A' && (
+                    <>
+                      <Text size={12} weight={500} color={Colors.grey}>
+                        Valid till {data?.result.dataModel.expiryDate}
+                      </Text>
+                      <SizedBox height={5} />
+                    </>
+                  )}
                 </Column>
                 <Column useAppMargin xs={6} md={3} lg={2}>
                   <Text size={12} weight={500} color={Colors.grey}>
@@ -84,11 +87,14 @@ export const DataPage: React.FC = () => {
                     {data?.result.dataModel.bonusBalance}
                   </Text>
                   <SizedBox height={10} />
-
-                  <Text size={12} weight={500} color={Colors.grey}>
-                    Valid till {data?.result.dataModel.bonusExpiryDate}
-                  </Text>
-                  <SizedBox height={5} />
+                  {data?.result.dataModel.bonusExpiryDate !== 'N/A' && (
+                    <>
+                      <Text size={12} weight={500} color={Colors.grey}>
+                        Valid till {data?.result.dataModel.bonusExpiryDate}
+                      </Text>
+                      <SizedBox height={5} />
+                    </>
+                  )}
                 </Column>
               </>
             )}
@@ -103,7 +109,7 @@ export const DataPage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/data/buy-with-debit-card')}
           >
-            <CreditCard />
+            <CreditCard title="Buy with debit card" />
             <SizedBox height={60} />
             <Text size={18} weight={500} color={Colors.darkGreen}>
               Buy with debit card
@@ -118,7 +124,7 @@ export const DataPage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/data/buy-with-airtime')}
           >
-            <NotePin />
+            <NotePin title="Buy with airtime" />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.darkGreen}>
               Buy with airtime
@@ -133,7 +139,7 @@ export const DataPage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/data/transfer')}
           >
-            <TransferForward />
+            <TransferForward title="Transfer Data" />
             <SizedBox height={50} />
             <Text size={18} weight={500} color={Colors.darkGreen}>
               Transfer data
@@ -150,7 +156,7 @@ export const DataPage: React.FC = () => {
             fullHeight
             onClick={() => history.push('/data/borrow')}
           >
-            <MobileBorrow />
+            <MobileBorrow title="Borrow data" />
             <SizedBox height={45} />
             <Text size={18} weight={500} color={Colors.darkGreen}>
               Borrow data

@@ -55,7 +55,7 @@ export const TransferAirtime: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .typeError("Value must be a valid integer")
+        .typeError('Value must be a valid integer')
         .required(),
     }),
     onSubmit: async (formData) => {
@@ -180,6 +180,7 @@ export const TransferAirtime: React.FC = () => {
                 {...formik.getFieldProps('securityCode')}
                 minLength={4}
                 maxLength={4}
+                type="tel"
                 error={getFieldError(
                   formik.errors.securityCode,
                   formik.touched.securityCode,

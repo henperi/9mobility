@@ -31,14 +31,13 @@ export const getIsoDate = (dateValue: string) => {
 };
 
 export const getDateDiff = (firstDate: string, secondDate: string) => {
-  logger.log(
-    'date from selected',
-    getDateFromSelected(secondDate, 2, Direction.Back),
-  );
-  logger.log('first date', firstDate);
-  if (getDateFromSelected(secondDate, 2, Direction.Back) !== firstDate) {
-    logger.log('date is not valid');
-  } else {
-    logger.log('date is valid');
-  }
+  logger.log('call me nah');
+  // One day Time in ms (milliseconds)
+  const one_day = 1000 * 60 * 60 * 24;
+  const date1 = new Date(firstDate);
+  const date2 = new Date(secondDate);
+
+  // To Calculate the result in milliseconds and then converting into days
+  const Result = Math.round(date2.getTime() - date1.getTime()) / one_day;
+  return Number(Result.toFixed(0));
 };

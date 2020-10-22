@@ -18,9 +18,11 @@ import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { ValidateOTP } from '../../components/ValidateOTP';
 import {
   Direction,
+  getDateDiff,
   getDateFromSelected,
   getIsoDate,
 } from '../../utils/dateHelper';
+import { logger } from '../../utils/logger';
 
 interface DataHistorryResp {
   result:
@@ -55,7 +57,7 @@ export const DataUsagePage: React.FC = () => {
     initialValues: {
       startDate: '',
       endDate: '',
-      mobileNumber: '',
+      mobileNumber: '09081013644',
     },
     validationSchema: Yup.object({
       startDate: Yup.string()
@@ -73,11 +75,7 @@ export const DataUsagePage: React.FC = () => {
         .required('This field is required'),
     }),
     onSubmit: async (formData) => {
-      if (getDateFromSelected(maxDate, 2, Direction.Back) !== minDate) {
-        setDateRangeError('You cannot view data usage for more than 3 days');
-      } else {
-        await getDataUsageHistory();
-      }
+      loadHistory();
     },
   });
 
@@ -124,6 +122,20 @@ export const DataUsagePage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (maxDate) {
+      loadHistory();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxDate]);
+
+  useEffect(() => {
+    if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileNumbers?.length]);
+
   const options = {
     title: 'Data Usage',
     hAxis: { title: 'Date/Time' },
@@ -131,6 +143,22 @@ export const DataUsagePage: React.FC = () => {
     colors: ['#B4C404'],
     chartArea: { width: '50%' },
     isStacked: true,
+  };
+
+  const loadHistory = async () => {
+    const dateDiff = getDateDiff(minDate, maxDate);
+
+    if (dateDiff > 2) {
+      setDateRangeError('You cannot view transactions for more than 3 days');
+    } else if (dateDiff < 0) {
+      setDateRangeError('Invalid date range selection');
+    } else {
+      try {
+        await getDataUsageHistory();
+      } catch (errorResp) {
+        logger.log(errorResp);
+      }
+    }
   };
 
   const renderChart = () =>
@@ -156,7 +184,7 @@ export const DataUsagePage: React.FC = () => {
       <Column>
         <form onSubmit={formik.handleSubmit}>
           <Card fullWidth fullHeight padding="28px">
-            <Column md={6}>
+            {/* <Column md={6}>
               <TextField
                 label="Select Phone Number"
                 placeholder="Select Phone"
@@ -175,7 +203,7 @@ export const DataUsagePage: React.FC = () => {
                 )}
               />
             </Column>
-            <SizedBox height={20} />
+            <SizedBox height={20} /> */}
             <Row useAppMargin alignItems="center">
               <Column useAppMargin md={4} lg={3}>
                 <TextField
