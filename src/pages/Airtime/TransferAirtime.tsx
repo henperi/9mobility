@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -22,6 +22,7 @@ import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
+import { emptyError, IError } from '../Data/Interface';
 
 interface SuccessResp {
   responseCode: number;
@@ -55,7 +56,7 @@ export const TransferAirtime: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .typeError("Value must be a valid integer")
+        .typeError('Value must be a valid integer')
         .required(),
     }),
     onSubmit: async (formData) => {
@@ -65,10 +66,14 @@ export const TransferAirtime: React.FC = () => {
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [transferError, setTransferError] = useState<IError>(emptyError);
 
   const handleTransferAirtime = async () => {
     try {
-      const response = await transferAirtime(formik.values);
+      const response = await transferAirtime({
+        ...formik.values,
+        amount: Number(formik.values.amount),
+      });
 
       if (response.data) {
         setShowConfirmationModal(false);
@@ -79,15 +84,29 @@ export const TransferAirtime: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setTransferError(error);
+    }
+  }, [error]);
+
+  const TransferError = transferError.message && (
+    <ErrorBox>{transferError.message}</ErrorBox>
+  );
+
   const renderModals = () => (
     <>
       <Modal
         isVisible={showConfirmationModal}
-        onClose={() => setShowConfirmationModal(false)}
+        onClose={() => {
+          setShowConfirmationModal(false);
+          setTransferError(emptyError);
+        }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
+        {TransferError}
+
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -110,7 +129,10 @@ export const TransferAirtime: React.FC = () => {
             </Column>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={() => setShowConfirmationModal(false)}
+                onClick={() => {
+                  setShowConfirmationModal(false);
+                  setTransferError(emptyError);
+                }}
                 outline
                 fullWidth
               >
@@ -126,7 +148,6 @@ export const TransferAirtime: React.FC = () => {
         onClose={() => setShowSuccessModal(false)}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -171,7 +192,6 @@ export const TransferAirtime: React.FC = () => {
           </CardStyles.CardHeader>
           <Card showOverlayedDesign fullWidth padding="12% 15%">
             <SizedBox height={24} />
-            {error && <ErrorBox>{error.message}</ErrorBox>}
             {data && <SuccessBox>{data.message}</SuccessBox>}
             <form onSubmit={formik.handleSubmit}>
               <TextField

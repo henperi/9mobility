@@ -36,25 +36,23 @@ export const AppContainer: React.FC = ({ children }) => {
     return () => window.removeEventListener('click', closeSidebar);
   }, [showSidebar]);
 
-  logger.log("Is authenticated: ", auth.isAuthenticated);
-  logger.log("route: ", window.location.pathname);
-  logger.log("Is onboarding route: ", !isOnboardingRoute);
-  logger.log("*************************");
-
-  
+  logger.log('Is authenticated: ', auth.isAuthenticated);
+  logger.log('route: ', window.location.pathname);
+  logger.log('Is onboarding route: ', !isOnboardingRoute);
+  logger.log('*************************');
 
   return (
     <ThemeProvider theme={{ mode: 'light' }}>
       <Styles.AppContainer>
         <BrowserRouter>
           <Row wrap={false}>
-            {auth.isAuthenticated && window.location.pathname !== '/onboarding/register' ?
+            {auth.isAuthenticated &&
+            window.location.pathname !== '/onboarding/register' ? (
               <SideBar
-                style={{ maxWidth: rem(240) }}
+                style={{ maxWidth: rem(240), minWidth: rem(240) }}
                 showSidebar={showSidebar}
               />
-              :null
-            }
+            ) : null}
             <Column
               style={{
                 width:

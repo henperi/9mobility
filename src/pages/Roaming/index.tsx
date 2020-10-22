@@ -18,13 +18,40 @@ import { useFetch } from '../../customHooks/useRequests';
 import { Button } from '../../components/Button';
 import { Spinner } from '../../components/Spinner';
 
+interface AirtimeDataResp {
+  result: {
+    mobileNumber: string;
+    airtimeModel: {
+      balance: string;
+      bonusBalance: string;
+      subscriberType: 'PREPAID' | 'POSTPAID' | 'HYBRID';
+      creditLimit: string;
+      creditUsage: string;
+    };
+    dataModel: {
+      balance: string;
+      bonusBalance: string;
+      isRollOver: boolean;
+      expiryDate: string;
+      bonusExpiryDate: string;
+    };
+  };
+}
+
 export const Roaming: React.FC = () => {
-  const { data, loading } = useFetch<{
-    result: boolean;
-  }>('Mobility.Account/api/Roaming/GetIsRoamingEnabledValue');
+  const { data: subscriberData, loading } = useFetch<AirtimeDataResp>(
+    `Mobility.Account/api/Balance/AirtimeAndData`,
+  );
+
   const history = useHistory();
 
   const match = useRouteMatch();
+
+  const isHybrid = () =>
+    subscriberData?.result.airtimeModel.subscriberType === 'HYBRID';
+
+  const isPrepaid = () =>
+    subscriberData?.result.airtimeModel.subscriberType === 'PREPAID';
 
   return (
     <PageBody>
@@ -53,16 +80,20 @@ export const Roaming: React.FC = () => {
                 <Spinner isFixed>Getting your roaming information</Spinner>
               </SizedBox>
             ) : (
-              <Button
-                variant="secondary"
-                style={{
-                  minHeight: 'fit-content',
-                  padding: '5px 20px',
-                }}
-                isLoading={loading}
-              >
-                Roaming {data?.result ? 'enabled' : 'disabled'}
-              </Button>
+              <>
+                {isHybrid || isPrepaid ? (
+                  <Button
+                    variant="secondary"
+                    style={{
+                      minHeight: 'fit-content',
+                      padding: '5px 20px',
+                    }}
+                    isLoading={loading}
+                  >
+                    Roaming enabled
+                  </Button>
+                ) : null}
+              </>
             )}
           </Column>
         </Row>

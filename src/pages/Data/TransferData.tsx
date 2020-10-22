@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -23,6 +23,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { emptyError, IError } from './Interface';
 
 interface SuccessResp {
   responseCode: number;
@@ -31,6 +32,7 @@ interface SuccessResp {
 
 export const TransferData: React.FC = () => {
   const { mobileNumbers } = useGetMobileNumbers();
+  const [transferError, setTransferError] = useState<IError>(emptyError);
 
   const [transferAirtime, { loading, data, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Data/Transfer',
@@ -58,7 +60,7 @@ export const TransferData: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .typeError("Value must be a valid integer")
+        .typeError('Value must be a valid integer')
         .required(),
     }),
     onSubmit: async (formData) => {
@@ -73,6 +75,7 @@ export const TransferData: React.FC = () => {
     try {
       const response = await transferAirtime({
         ...formik.values,
+        amount: Number(formik.values.amount),
         mobileNumber: mobileNumbers && mobileNumbers[0].value,
       });
 
@@ -85,15 +88,28 @@ export const TransferData: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (error) {
+      setTransferError(error);
+    }
+  }, [error]);
+
+  const TransferError = transferError.message && (
+    <ErrorBox>{transferError.message}</ErrorBox>
+  );
+
   const renderModals = () => (
     <>
       <Modal
         isVisible={showConfirmationModal}
-        onClose={() => setShowConfirmationModal(false)}
+        onClose={() => {
+          setShowConfirmationModal(false);
+          setTransferError(emptyError);
+        }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
-        {error && <ErrorBox>{error.message}</ErrorBox>}
+        {TransferError}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -117,7 +133,10 @@ export const TransferData: React.FC = () => {
             </Column>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={() => setShowConfirmationModal(false)}
+                onClick={() => {
+                  setShowConfirmationModal(false);
+                  setTransferError(emptyError);
+                }}
                 outline
                 fullWidth
               >
@@ -177,7 +196,6 @@ export const TransferData: React.FC = () => {
               </Column>
             </CardStyles.CardHeader>
             <Card showOverlayedDesign fullWidth padding="7% 20%">
-              {error && <ErrorBox>{error.message}</ErrorBox>}
               {data && <SuccessBox>{data.message}</SuccessBox>}
               <form onSubmit={formik.handleSubmit}>
                 <TextField

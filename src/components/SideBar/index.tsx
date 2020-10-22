@@ -144,12 +144,21 @@ export const SideBar: React.FC<ISidebar> = (props) => {
             <Spinner size={20} />
           </Styles.SideBarLink>
         )}
-        {(isHybrid() || isPrepaid()) && (
+        {isHybrid() || isPrepaid() ? (
           <Styles.SideBarLink
             activeClassName="active-sidebar-link"
             to="/prepaid-plans"
           >
             <PrepaidPlanIcon />
+            Prepaid Plans
+          </Styles.SideBarLink>
+        ) : (
+          <Styles.SideBarLink
+            to="any"
+            onClick={(e) => e.preventDefault()}
+            style={{ color: `${Colors.grey}` }}
+          >
+            <PostPaidIcon />
             Prepaid Plans
           </Styles.SideBarLink>
         )}

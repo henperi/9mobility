@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '../../components/Button';
@@ -29,6 +30,8 @@ export const SubscribedServices = () => {
 
   const history = useHistory();
 
+  const date = DateTime.fromISO(new Date().toISOString());
+
   return (
     <Column xs={12} md={6} lg={4} xl={4} useAppMargin fullHeight>
       <Card
@@ -47,7 +50,10 @@ export const SubscribedServices = () => {
               <SizedBox height={20} />
               <Row>
                 <Column>
-                  <Text size={14}>As of 11:04AM, 26th March 2019</Text>
+                  <Text size={14}>
+                    As of{' '}
+                    {date.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)}
+                  </Text>
                   <Text size={18} color={Colors.darkGreen} weight="bold">
                     {data?.result.length}{' '}
                     {data?.result.length === 1 ? 'Service' : 'Services'}
