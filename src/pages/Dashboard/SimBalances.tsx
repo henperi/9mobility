@@ -14,6 +14,20 @@ import { Colors } from '../../themes/colors';
 import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 import { ReactComponent as RefreshIcon } from '../../assets/images/refreshIcon.svg';
 import { logger } from '../../utils/logger';
+import { useSimStore } from '../../store/simStore';
+import { setSecondaryNumber } from '../../store/simModules/simNumbers/actions';
+
+export interface ActivePlan {
+  result: {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    isRoamingEnabled: boolean;
+    amount: string;
+    frequency: string;
+  };
+}
 
 interface AirtimeDataResp {
   result: {
@@ -37,11 +51,22 @@ interface AirtimeDataResp {
 
 export const SimBalances: React.FC = (props) => {
   const { mobileNumbers } = useGetMobileNumbers();
+  const [activePlan, setActivePlan] = useState<ActivePlan>();
 
-  const [mobile, setmobile] = useState('');
+  const {
+    state: { sim },
+    dispatch,
+  } = useSimStore();
 
   const [getAirtime, { data, loading }] = useLazyFetch<AirtimeDataResp>(
-    `Mobility.Account/api/Balance/AirtimeAndData/${mobile}`,
+    `Mobility.Account/api/Balance/AirtimeAndData/${sim.secondarySim}`,
+  );
+
+  const [
+    getActivePlan,
+    { data: lazyActivePlanData, loading: lazyActivePlanLoading },
+  ] = useLazyFetch<ActivePlan>(
+    `Mobility.Account/api/Plans/GetActivePlan?mobile=${sim.secondarySim}`,
   );
 
   const [airtimeData, setAirtimeData] = useState<
@@ -74,19 +99,40 @@ export const SimBalances: React.FC = (props) => {
     }
   }, [getAirtime]);
 
-  useEffect(() => {
-    if (mobile) {
-      handelGetAirtime();
+  const handelGetActivePlan = useCallback(() => {
+    try {
+      getActivePlan();
+    } catch (e) {
+      logger.log(e);
     }
-  }, [handelGetAirtime, mobile]);
+  }, [getActivePlan]);
+
+  useEffect(() => {
+    if (sim.secondarySim) {
+      handelGetAirtime();
+      handelGetActivePlan();
+    }
+  }, [handelGetAirtime, handelGetActivePlan, sim.secondarySim]);
 
   const history = useHistory();
 
   const {
-    data: activePlan,
+    data: activePlanData,
     loading: activePlanLoading,
     error: activePlanError,
   } = useGetActivePlan();
+
+  useEffect(() => {
+    if (activePlanData) {
+      setActivePlan(activePlanData);
+    }
+  }, [activePlanData]);
+
+  useEffect(() => {
+    if (lazyActivePlanData) {
+      setActivePlan(lazyActivePlanData);
+    }
+  }, [lazyActivePlanData]);
 
   const renderActivePlan = () =>
     activePlan?.result.name ? (
@@ -132,7 +178,9 @@ export const SimBalances: React.FC = (props) => {
                   dropdownOptions={mobileNumbers}
                   useDefaultName={false}
                   variant="default"
-                  dropDownChange={(e) => setmobile(e.value)}
+                  dropDownChange={(e) => {
+                    dispatch(setSecondaryNumber(e.value));
+                  }}
                   style={{
                     minWidth: '150px',
                     display: 'flex',
@@ -143,10 +191,18 @@ export const SimBalances: React.FC = (props) => {
                   }}
                 >
                   <Text size={18} color={Colors.darkGreen} weight={500}>
-                    {mobile || (mobileNumbers && mobileNumbers[0].value)}
+                    {sim.secondarySim ||
+                      (mobileNumbers && mobileNumbers[0].value)}
                   </Text>
                 </DropDownButton>
-                <RefreshIcon onClick={() => handelGetAirtime()} />
+                <RefreshIcon
+                  onClick={() => {
+                    handelGetAirtime();
+                    if (sim.secondarySim) {
+                      handelGetActivePlan();
+                    }
+                  }}
+                />
               </Row>
               <SizedBox height={20} />
               <Row>
@@ -185,7 +241,11 @@ export const SimBalances: React.FC = (props) => {
                 </Column>
               </Row>
             </Column>
-            {activePlanLoading ? <Spinner /> : renderActivePlan()}
+            {activePlanLoading || lazyActivePlanLoading ? (
+              <Spinner />
+            ) : (
+              renderActivePlan()
+            )}
             <Row useAppMargin>
               <Column useAppMargin xs={6}>
                 <Button onClick={() => history.push('/airtime')} fullWidth>

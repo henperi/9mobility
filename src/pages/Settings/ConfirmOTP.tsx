@@ -59,6 +59,8 @@ export const ConfirmOTP: React.FC<{
       if (result.data.responseCode === 1) {
         setshowOTPScreen(false);
         callbackFunction();
+      } else {
+        setErrorMessage(result.data.message);
       }
     } catch (error) {
       setLoading(false);
