@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Card } from '../../components/Card';
 import { Styles as CardStyles } from '../../components/Card/styles';
@@ -15,8 +15,10 @@ import { ReactComponent as CreditCard } from '../../assets/images/creditCard.svg
 import { ReactComponent as NotePin } from '../../assets/images/notePin.svg';
 import { ReactComponent as TransferForward } from '../../assets/images/transferForward.svg';
 import { ReactComponent as MobileBorrow } from '../../assets/images/mobileBorrow.svg';
-import { useFetch } from '../../customHooks/useRequests';
+import { useLazyFetch } from '../../customHooks/useRequests';
 import { Spinner } from '../../components/Spinner';
+import { useSimStore } from '../../store/simStore';
+import { logger } from '../../utils/logger';
 
 interface AirtimeDataResp {
   result: {
@@ -38,9 +40,49 @@ interface AirtimeDataResp {
 export const DataPage: React.FC = () => {
   const history = useHistory();
 
-  const { data, loading } = useFetch<AirtimeDataResp>(
-    'Mobility.Account/api/Balance/AirtimeAndData',
+  const {
+    state: { sim },
+  } = useSimStore();
+
+  const [getAirtime, { data, loading }] = useLazyFetch<AirtimeDataResp>(
+    `Mobility.Account/api/Balance/AirtimeAndData/${sim.secondarySim}`,
   );
+
+  const [airtimeData, setAirtimeData] = useState<
+    null | AirtimeDataResp['result']
+  >();
+
+  const getAirtimeRef = useRef(getAirtime);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await getAirtimeRef.current();
+      } catch (e) {
+        // console.log('object', error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setAirtimeData(data.result);
+    }
+  }, [data]);
+
+  const handelGetAirtime = useCallback(() => {
+    try {
+      getAirtime();
+    } catch (e) {
+      logger.log(e);
+    }
+  }, [getAirtime]);
+
+  useEffect(() => {
+    if (sim.secondarySim) {
+      handelGetAirtime();
+    }
+  }, [handelGetAirtime, sim.secondarySim]);
 
   return (
     <PageBody>
@@ -67,13 +109,14 @@ export const DataPage: React.FC = () => {
                   </Text>
 
                   <Text size={24} weight={500}>
-                    {data?.result.dataModel.balance}
+                    {airtimeData && airtimeData.dataModel.balance}
                   </Text>
                   <SizedBox height={10} />
-                  {data?.result.dataModel?.expiryDate !== 'N/A' && (
+                  {airtimeData && airtimeData.dataModel?.expiryDate !== 'N/A' && (
                     <>
                       <Text size={12} weight={500} color={Colors.grey}>
-                        Valid till {data?.result.dataModel.expiryDate}
+                        Valid till{' '}
+                        {airtimeData && airtimeData.dataModel.expiryDate}
                       </Text>
                       <SizedBox height={5} />
                     </>
@@ -84,17 +127,19 @@ export const DataPage: React.FC = () => {
                     Data Bonus
                   </Text>
                   <Text size={24} weight={500}>
-                    {data?.result.dataModel.bonusBalance}
+                    {airtimeData && airtimeData.dataModel.bonusBalance}
                   </Text>
                   <SizedBox height={10} />
-                  {data?.result.dataModel.bonusExpiryDate !== 'N/A' && (
-                    <>
-                      <Text size={12} weight={500} color={Colors.grey}>
-                        Valid till {data?.result.dataModel.bonusExpiryDate}
-                      </Text>
-                      <SizedBox height={5} />
-                    </>
-                  )}
+                  {airtimeData &&
+                    airtimeData.dataModel.bonusExpiryDate !== 'N/A' && (
+                      <>
+                        <Text size={12} weight={500} color={Colors.grey}>
+                          Valid till{' '}
+                          {airtimeData && airtimeData.dataModel.bonusExpiryDate}
+                        </Text>
+                        <SizedBox height={5} />
+                      </>
+                    )}
                 </Column>
               </>
             )}
