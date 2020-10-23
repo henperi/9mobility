@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -24,6 +24,8 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { logger } from '../../utils/logger';
+import { DropDownButton } from '../../components/Button/DropdownButton';
+import { useSimStore } from '../../store/simStore';
 
 interface SuccessResp {
   result: {
@@ -46,6 +48,10 @@ export const BuyWithDebitCard: React.FC = () => {
     },
   } = useGlobalStore();
 
+  const {
+    state: { sim },
+  } = useSimStore();
+
   const { mobileNumbers } = useGetMobileNumbers();
 
   const formik = useFormik({
@@ -60,7 +66,7 @@ export const BuyWithDebitCard: React.FC = () => {
         .required('This field is required'),
       amount: Yup.number()
         .min(10, 'Amount must be at least ₦10')
-        .typeError("Value must be a valid integer")
+        .typeError('Value must be a valid integer')
         .required(),
     }),
     onSubmit: async (formData) => {
@@ -69,12 +75,25 @@ export const BuyWithDebitCard: React.FC = () => {
   });
 
   const handleTabChange = () => {
-    formik.resetForm();
     if (activeTab === 1) {
       return setactiveTab(2);
     }
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+    }
     return setactiveTab(1);
   };
+
+  useEffect(() => {
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileNumbers, sim]);
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -215,26 +234,29 @@ export const BuyWithDebitCard: React.FC = () => {
             </Row>
             <SizedBox height={24} />
             {error && <ErrorBox>{error.message}</ErrorBox>}
-
             <form onSubmit={formik.handleSubmit}>
               {activeTab === 1 && (
-                <TextField
-                  label="Select Phone Number"
-                  placeholder="Select Phone"
-                  dropDown
-                  dropDownOptions={mobileNumbers}
-                  value={formik.values.mobileNumber}
-                  onChange={(e) =>
-                    formik.setFieldValue('mobileNumber', e.target.value)
-                  }
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.mobileNumber,
-                    formik.touched.mobileNumber,
-                  )}
-                />
+                <DropDownButton
+                  dropdownOptions={mobileNumbers}
+                  useDefaultName={false}
+                  variant="default"
+                  fullWidth
+                  style={{
+                    minWidth: '150px',
+                    display: 'flex',
+                    padding: '10px',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    minHeight: 'unset',
+                    background: `#FBFBFB`,
+                    border: `solid 1px ${Colors.grey}`,
+                  }}
+                >
+                  <Text size={18} color={Colors.darkGreen} weight={500}>
+                    {(sim && sim.secondarySim) ||
+                      (mobileNumbers && mobileNumbers[0]?.value)}
+                  </Text>
+                </DropDownButton>
               )}
               {activeTab === 2 && (
                 <TextField
