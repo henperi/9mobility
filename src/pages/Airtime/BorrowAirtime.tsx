@@ -13,15 +13,15 @@ import { Colors } from '../../themes/colors';
 import { SizedBox } from '../../components/SizedBox';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
-import { TextField } from '../../components/TextField';
 import { BackButton } from '../../components/BackButton';
-import { getFieldError } from '../../utils/formikHelper';
 import { useFetch, usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
+import { DropDownButton } from '../../components/Button/DropdownButton';
+import { useSimStore } from '../../store/simStore';
 
 interface BorrowEligibilityResp {
   result: {
@@ -106,15 +106,15 @@ export const BorrowAirtime: React.FC = () => {
     },
   } = useGlobalStore();
 
+  const {
+    state: { sim },
+  } = useSimStore();
+
   const formik = useFormik({
     initialValues: {
-      mobileNumber: '',
       amount: '',
     },
     validationSchema: Yup.object({
-      mobileNumber: Yup.string()
-        .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
-        .required('This field is required'),
       amount: Yup.number().required('Please select an amount'),
     }),
     onSubmit: async (formData) => {
@@ -127,11 +127,28 @@ export const BorrowAirtime: React.FC = () => {
 
   const handleborrowAirtime = async () => {
     try {
-      const response = await borrowAirtime(formik.values);
+      if (sim.secondarySim) {
+        const response = await borrowAirtime({
+          ...formik.values,
+          mobileNumber: sim.secondarySim,
+        });
 
-      if (response.data) {
-        setShowConfirmationModal(false);
-        setShowSuccessModal(true);
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
+      } else {
+        const response = await borrowAirtime({
+          ...formik.values,
+          mobileNumber: mobileNumbers[0].value,
+        });
+
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -231,24 +248,27 @@ export const BorrowAirtime: React.FC = () => {
               <Spinner />
             ) : (
               <form onSubmit={formik.handleSubmit}>
-                <TextField
-                  label="Select Phone Number"
-                  placeholder="Select Phone"
-                  dropDown
-                  dropDownOptions={mobileNumbers}
-                  value={formik.values.mobileNumber}
-                  onChange={(e) => {
-                    formik.setFieldValue('mobileNumber', e.target.value);
-                    setSelectedNumber(e.target.value);
+                <DropDownButton
+                  dropdownOptions={mobileNumbers}
+                  useDefaultName={false}
+                  variant="default"
+                  fullWidth
+                  style={{
+                    minWidth: '150px',
+                    display: 'flex',
+                    padding: '10px',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    minHeight: 'unset',
+                    background: `#FBFBFB`,
+                    border: `solid 1px ${Colors.grey}`,
                   }}
-                  type="tel"
-                  minLength={11}
-                  maxLength={11}
-                  error={getFieldError(
-                    formik.errors.mobileNumber,
-                    formik.touched.mobileNumber,
-                  )}
-                />
+                >
+                  <Text size={18} color={Colors.darkGreen} weight={500}>
+                    {sim.secondarySim ||
+                      (mobileNumbers && mobileNumbers[0]?.value)}
+                  </Text>
+                </DropDownButton>
                 <SizedBox height={16} />
                 <Row useAppMargin>
                   {borrowingAmounts &&
