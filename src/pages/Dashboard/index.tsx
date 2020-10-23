@@ -44,7 +44,6 @@ export const Dashboard: React.FC<any> = () => {
       <Row useAppMargin>
         <SimBalances />
         <SubscribedServices />
-        {/* <Wallet /> */}
       </Row>
 
       <SizedBox height={36} />
