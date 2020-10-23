@@ -23,6 +23,7 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
 import { emptyError, IError } from '../Data/Interface';
+import { useSimStore } from '../../store/simStore';
 
 interface SuccessResp {
   responseCode: number;
@@ -39,6 +40,10 @@ export const TransferAirtime: React.FC = () => {
       auth: { user },
     },
   } = useGlobalStore();
+
+  const {
+    state: { sim },
+  } = useSimStore();
 
   const formik = useFormik({
     initialValues: {
@@ -70,14 +75,29 @@ export const TransferAirtime: React.FC = () => {
 
   const handleTransferAirtime = async () => {
     try {
-      const response = await transferAirtime({
-        ...formik.values,
-        amount: Number(formik.values.amount),
-      });
+      if (sim.secondarySim) {
+        const response = await transferAirtime({
+          ...formik.values,
+          mobileNumber: sim.secondarySim,
+          amount: Number(formik.values.amount),
+        });
 
-      if (response.data) {
-        setShowConfirmationModal(false);
-        setShowSuccessModal(true);
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
+      } else {
+        const response = await transferAirtime({
+          ...formik.values,
+          amount: Number(formik.values.amount),
+        });
+
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
       }
     } catch (errorResp) {
       logger.log(errorResp);
