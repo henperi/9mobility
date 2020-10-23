@@ -30,6 +30,8 @@ import { BundlesResp } from './Interface';
 import { logger } from '../../utils/logger';
 import { Spinner } from '../../components/Spinner';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
+import { useSimStore } from '../../store/simStore';
+import { DropDownButton } from '../../components/Button/DropdownButton';
 
 interface SuccessResp {
   result: {
@@ -80,6 +82,10 @@ export const BuyDataWithCard: React.FC = () => {
     },
   } = useGlobalStore();
 
+  const {
+    state: { sim },
+  } = useSimStore();
+
   const formik = useFormik({
     initialValues: {
       mobileNumber: '',
@@ -100,13 +106,25 @@ export const BuyDataWithCard: React.FC = () => {
   });
 
   const handleTabChange = () => {
-    formik.resetForm();
-
     if (activeTab === 1) {
       return setactiveTab(2);
     }
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+    }
     return setactiveTab(1);
   };
+
+  useEffect(() => {
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileNumbers, sim]);
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -268,23 +286,27 @@ export const BuyDataWithCard: React.FC = () => {
 
                   <form onSubmit={formik.handleSubmit}>
                     {activeTab === 1 && (
-                      <TextField
-                        label="Select Phone Number"
-                        placeholder="Select Phone"
-                        dropDown
-                        dropDownOptions={mobileNumbers}
-                        value={formik.values.mobileNumber}
-                        onChange={(e) =>
-                          formik.setFieldValue('mobileNumber', e.target.value)
-                        }
-                        type="tel"
-                        minLength={11}
-                        maxLength={11}
-                        error={getFieldError(
-                          formik.errors.mobileNumber,
-                          formik.touched.mobileNumber,
-                        )}
-                      />
+                      <DropDownButton
+                        dropdownOptions={mobileNumbers}
+                        useDefaultName={false}
+                        variant="default"
+                        fullWidth
+                        style={{
+                          minWidth: '150px',
+                          display: 'flex',
+                          padding: '10px',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          minHeight: 'unset',
+                          background: `#FBFBFB`,
+                          border: `solid 1px ${Colors.grey}`,
+                        }}
+                      >
+                        <Text size={18} color={Colors.darkGreen} weight={500}>
+                          {(sim && sim.secondarySim) ||
+                            (mobileNumbers && mobileNumbers[0]?.value)}
+                        </Text>
+                      </DropDownButton>
                     )}
 
                     {activeTab === 2 && (
