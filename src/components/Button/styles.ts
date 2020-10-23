@@ -64,7 +64,7 @@ const Button = styled.button.attrs((props: IButtonProps) => ({
 
 export const DropDownStack = styled(StackStyles.Stack)`
   position: relative;
-  width: fit-content;
+  width: auto;
 `;
 
 export const DropDownContainer = styled(StackStyles.StackChild)`
