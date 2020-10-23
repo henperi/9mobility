@@ -26,6 +26,8 @@ import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { logger } from '../../utils/logger';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { Spinner } from '../../components/Spinner';
+import { DropDownButton } from '../../components/Button/DropdownButton';
+import { useSimStore } from '../../store/simStore';
 
 interface SuccessResp {
   responseCode: number;
@@ -48,6 +50,10 @@ export const BuyDataWithAirtime: React.FC = () => {
       auth: { user },
     },
   } = useGlobalStore();
+
+  const {
+    state: { sim },
+  } = useSimStore();
 
   const { data: bundlesData, loading: loadingBundles } = useFetch<BundlesResp>(
     'Mobility.Account/api/Data/GetBundle',
@@ -93,20 +99,48 @@ export const BuyDataWithAirtime: React.FC = () => {
 
   const handleTabChange = () => {
     if (activeTab === 1) {
-      formik.setFieldValue('beneficiaryMobileNumber', '');
       return setactiveTab(2);
     }
-    formik.setFieldValue('beneficiaryMobileNumber', formik.values.mobileNumber);
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+      formik.setFieldValue('beneficiaryMobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+      formik.setFieldValue('beneficiaryMobileNumber', mobileNumbers[0].value);
+    }
+
     return setactiveTab(1);
   };
+
+  useEffect(() => {
+    if (sim.secondarySim) {
+      formik.setFieldValue('mobileNumber', sim.secondarySim);
+      formik.setFieldValue('beneficiaryMobileNumber', sim.secondarySim);
+    } else if (mobileNumbers?.length) {
+      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
+      formik.setFieldValue('beneficiaryMobileNumber', mobileNumbers[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileNumbers, sim]);
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [buyDataError, setBuyDataError] = useState<IError>(emptyError);
 
+  const getDataCategory = (bundleID: string) => {
+    const allBundles = bundlesData?.result;
+    const bundleCategory = allBundles?.filter(
+      (b) => Number(b.dataPlanId) === Number(bundleID),
+    )[0].categoryName;
+    return bundleCategory;
+  };
+
   const handleBuyDataWithAirtime = async () => {
     try {
-      const response = await buyDataWithAirtime(formik.values);
+      const response = await buyDataWithAirtime({
+        ...formik.values,
+        dataCategory: getDataCategory(formik.values.bundleId),
+      });
 
       if (response.data) {
         setShowConfirmationModal(false);
@@ -127,6 +161,14 @@ export const BuyDataWithAirtime: React.FC = () => {
   const DataPurchaseError = buyDataError.message && (
     <ErrorBox>{buyDataError.message}</ErrorBox>
   );
+
+  const getBundleCost = (bundleID: string) => {
+    const allBundles = bundlesData?.result;
+    const bundleCost = allBundles?.filter(
+      (b) => Number(b.dataPlanId) === Number(bundleID),
+    )[0].cost;
+    return bundleCost;
+  };
 
   const renderModals = () => (
     <>
@@ -265,29 +307,29 @@ export const BuyDataWithAirtime: React.FC = () => {
                   {data && <SuccessBox>{data.message}</SuccessBox>}
 
                   <form onSubmit={formik.handleSubmit}>
-                    <TextField
-                      label="Select Phone Number"
-                      placeholder="Select Phone"
-                      dropDown
-                      dropDownOptions={mobileNumbers}
-                      value={formik.values.mobileNumber}
-                      onChange={(e) => {
-                        formik.setFieldValue('mobileNumber', e.target.value);
-                        if (activeTab === 1) {
-                          formik.setFieldValue(
-                            'beneficiaryMobileNumber',
-                            e.target.value,
-                          );
-                        }
-                      }}
-                      type="tel"
-                      minLength={11}
-                      maxLength={11}
-                      error={getFieldError(
-                        formik.errors.mobileNumber,
-                        formik.touched.mobileNumber,
-                      )}
-                    />
+                    {activeTab === 1 && (
+                      <DropDownButton
+                        dropdownOptions={mobileNumbers}
+                        useDefaultName={false}
+                        variant="default"
+                        fullWidth
+                        style={{
+                          minWidth: '150px',
+                          display: 'flex',
+                          padding: '10px',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          minHeight: 'unset',
+                          background: `#FBFBFB`,
+                          border: `solid 1px ${Colors.grey}`,
+                        }}
+                      >
+                        <Text size={18} color={Colors.darkGreen} weight={500}>
+                          {(sim && sim.secondarySim) ||
+                            (mobileNumbers && mobileNumbers[0]?.value)}
+                        </Text>
+                      </DropDownButton>
+                    )}
                     {activeTab === 2 && (
                       <TextField
                         label="Recipient phone number"
@@ -322,7 +364,6 @@ export const BuyDataWithAirtime: React.FC = () => {
                         value={formik.values.bundleId}
                         onChange={(e) => {
                           formik.setFieldValue('bundleId', e.target.value);
-                          formik.setFieldValue('amount', e.target.value);
                         }}
                         error={getFieldError(
                           formik.errors.bundleId,
@@ -340,7 +381,6 @@ export const BuyDataWithAirtime: React.FC = () => {
                         value={formik.values.bundleId}
                         onChange={(e) => {
                           formik.setFieldValue('bundleId', e.target.value);
-                          formik.setFieldValue('amount', e.target.value);
                         }}
                         error={getFieldError(
                           formik.errors.bundleId,
