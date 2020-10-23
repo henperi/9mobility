@@ -24,6 +24,7 @@ import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { emptyError, IError } from './Interface';
+import { useSimStore } from '../../store/simStore';
 
 interface SuccessResp {
   responseCode: number;
@@ -43,6 +44,10 @@ export const TransferData: React.FC = () => {
       auth: { user },
     },
   } = useGlobalStore();
+
+  const {
+    state: { sim },
+  } = useSimStore();
 
   const formik = useFormik({
     initialValues: {
@@ -71,17 +76,32 @@ export const TransferData: React.FC = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  const handleTransferAirtime = async () => {
+  const handleTransferData = async () => {
     try {
-      const response = await transferAirtime({
-        ...formik.values,
-        amount: Number(formik.values.amount),
-        mobileNumber: mobileNumbers && mobileNumbers[0].value,
-      });
+      if (sim.secondarySim) {
+        const response = await transferAirtime({
+          ...formik.values,
+          amount: Number(formik.values.amount),
+          mobileNumber: sim.secondarySim,
+        });
 
-      if (response.data) {
-        setShowConfirmationModal(false);
-        setShowSuccessModal(true);
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
+      } else {
+        const response = await transferAirtime({
+          ...formik.values,
+          amount: Number(formik.values.amount),
+          mobileNumber: mobileNumbers && mobileNumbers[0].value,
+        });
+
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -124,7 +144,7 @@ export const TransferData: React.FC = () => {
           <Row useAppMargin>
             <Column xs={6} useAppMargin>
               <Button
-                onClick={handleTransferAirtime}
+                onClick={handleTransferData}
                 isLoading={loading}
                 fullWidth
               >
