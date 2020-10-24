@@ -18,7 +18,6 @@ import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
-import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
@@ -31,7 +30,7 @@ interface SuccessResp {
 }
 
 export const TransferAirtime: React.FC = () => {
-  const [transferAirtime, { loading, data, error }] = usePost<SuccessResp>(
+  const [transferAirtime, { loading, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Airtime/Transfer',
   );
 
@@ -212,7 +211,6 @@ export const TransferAirtime: React.FC = () => {
           </CardStyles.CardHeader>
           <Card showOverlayedDesign fullWidth padding="12% 15%">
             <SizedBox height={24} />
-            {data && <SuccessBox>{data.message}</SuccessBox>}
             <form onSubmit={formik.handleSubmit}>
               <TextField
                 label="Security code"

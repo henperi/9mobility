@@ -18,7 +18,6 @@ import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { useFetch, usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
-import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { BundlesResp } from './Interface';
@@ -36,7 +35,7 @@ export const BuyRoamingBundles: React.FC = () => {
 
   const [activeTab, setactiveTab] = useState(1);
 
-  const [buyDataWithAirtime, { loading, data, error }] = usePost<SuccessResp>(
+  const [buyDataWithAirtime, { loading, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Roaming/BuyBundleWithAirtime',
   );
 
@@ -256,7 +255,6 @@ export const BuyRoamingBundles: React.FC = () => {
               </Row>
               <SizedBox height={24} />
               {error && <ErrorBox>{error.message}</ErrorBox>}
-              {data && <SuccessBox>{data.message}</SuccessBox>}
 
               <form onSubmit={formik.handleSubmit}>
                 <TextField
