@@ -162,14 +162,6 @@ export const BuyDataWithAirtime: React.FC = () => {
     <ErrorBox>{buyDataError.message}</ErrorBox>
   );
 
-  const getBundleCost = (bundleID: string) => {
-    const allBundles = bundlesData?.result;
-    const bundleCost = allBundles?.filter(
-      (b) => Number(b.dataPlanId) === Number(bundleID),
-    )[0].cost;
-    return bundleCost;
-  };
-
   const renderModals = () => (
     <>
       <Modal
@@ -313,6 +305,7 @@ export const BuyDataWithAirtime: React.FC = () => {
                         useDefaultName={false}
                         variant="default"
                         fullWidth
+                        type="button"
                         style={{
                           minWidth: '150px',
                           display: 'flex',

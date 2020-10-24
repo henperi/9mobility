@@ -256,6 +256,7 @@ export const BuyWithPin: React.FC = () => {
                   dropdownOptions={mobileNumbers}
                   useDefaultName={false}
                   variant="default"
+                  type="button"
                   fullWidth
                   style={{
                     minWidth: '150px',

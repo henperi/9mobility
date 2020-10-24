@@ -239,6 +239,7 @@ export const BorrowData: React.FC = () => {
                     useDefaultName={false}
                     variant="default"
                     fullWidth
+                    type="button"
                     style={{
                       minWidth: '150px',
                       display: 'flex',
