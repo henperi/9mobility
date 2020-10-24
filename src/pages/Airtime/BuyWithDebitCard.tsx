@@ -82,7 +82,10 @@ export const BuyWithDebitCard: React.FC = () => {
 
   const handleBuyWithDebitCard = async () => {
     try {
-      const response = await buyWithDebitCard(formik.values);
+      const response = await buyWithDebitCard({
+        ...formik.values,
+        amount: Number(formik.values.amount),
+      });
 
       if (response.data) {
         setShowConfirmationModal(false);

@@ -235,7 +235,7 @@ export const TransferData: React.FC = () => {
                 <SizedBox height={16} />
                 <TextField
                   label="Amount"
-                  placeholder="Enter data amount you want to transfer"
+                  placeholder="Enter amount"
                   {...formik.getFieldProps('amount')}
                   type="tel"
                   minLength={1}
