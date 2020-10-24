@@ -20,8 +20,8 @@ import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
-import { DropDownButton } from '../../components/Button/DropdownButton';
-import { useSimStore } from '../../store/simStore';
+import { TextField } from '../../components/TextField';
+import { getFieldError } from '../../utils/formikHelper';
 
 interface BorrowEligibilityResp {
   result: {
@@ -106,16 +106,16 @@ export const BorrowAirtime: React.FC = () => {
     },
   } = useGlobalStore();
 
-  const {
-    state: { sim },
-  } = useSimStore();
-
   const formik = useFormik({
     initialValues: {
+      mobileNumber: '',
       amount: '',
     },
     validationSchema: Yup.object({
-      amount: Yup.number().required('Please select an amount'),
+      mobileNumber: Yup.string()
+        .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
+        .required('This field is required'),
+      amount: Yup.string().required('Please select an amount'),
     }),
     onSubmit: async (formData) => {
       setShowConfirmationModal(true);
@@ -127,28 +127,12 @@ export const BorrowAirtime: React.FC = () => {
 
   const handleborrowAirtime = async () => {
     try {
-      if (sim.secondarySim) {
-        const response = await borrowAirtime({
-          ...formik.values,
-          mobileNumber: sim.secondarySim,
-        });
+      const response = await borrowAirtime(formik.values);
 
-        if (response.data) {
-          setShowConfirmationModal(false);
-          setShowSuccessModal(true);
-          formik.resetForm();
-        }
-      } else {
-        const response = await borrowAirtime({
-          ...formik.values,
-          mobileNumber: mobileNumbers[0].value,
-        });
-
-        if (response.data) {
-          setShowConfirmationModal(false);
-          setShowSuccessModal(true);
-          formik.resetForm();
-        }
+      if (response.data) {
+        setShowConfirmationModal(false);
+        setShowSuccessModal(true);
+        formik.resetForm();
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -248,28 +232,23 @@ export const BorrowAirtime: React.FC = () => {
               <Spinner />
             ) : (
               <form onSubmit={formik.handleSubmit}>
-                <DropDownButton
-                  dropdownOptions={mobileNumbers}
-                  useDefaultName={false}
-                  variant="default"
-                  type="button"
-                  fullWidth
-                  style={{
-                    minWidth: '150px',
-                    display: 'flex',
-                    padding: '10px',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    minHeight: 'unset',
-                    background: `#FBFBFB`,
-                    border: `solid 1px ${Colors.grey}`,
-                  }}
-                >
-                  <Text size={18} color={Colors.darkGreen} weight={500}>
-                    {sim.secondarySim ||
-                      (mobileNumbers && mobileNumbers[0]?.value)}
-                  </Text>
-                </DropDownButton>
+                <TextField
+                  label="Select Phone Number"
+                  placeholder="Select Phone"
+                  dropDown
+                  dropDownOptions={mobileNumbers}
+                  value={formik.values.mobileNumber}
+                  onChange={(e) =>
+                    formik.setFieldValue('mobileNumber', e.target.value)
+                  }
+                  type="tel"
+                  minLength={11}
+                  maxLength={11}
+                  error={getFieldError(
+                    formik.errors.mobileNumber,
+                    formik.touched.mobileNumber,
+                  )}
+                />
                 <SizedBox height={16} />
                 <Row useAppMargin>
                   {borrowingAmounts &&

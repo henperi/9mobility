@@ -26,7 +26,6 @@ import useRadioInput from '../../components/RadioInput/useRadioInput';
 import { logger } from '../../utils/logger';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { Spinner } from '../../components/Spinner';
-import { DropDownButton } from '../../components/Button/DropdownButton';
 import { useSimStore } from '../../store/simStore';
 
 interface SuccessResp {
@@ -99,31 +98,19 @@ export const BuyDataWithAirtime: React.FC = () => {
 
   const handleTabChange = () => {
     if (activeTab === 1) {
-      formik.setFieldValue('mobileNumber', '');
+      formik.setFieldValue(
+        'mobileNumber',
+        (sim && sim.secondarySim) || (mobileNumbers && mobileNumbers[0].value),
+      );
       formik.setFieldValue('beneficiaryMobileNumber', '');
       return setactiveTab(2);
     }
-    if (sim.secondarySim) {
-      formik.setFieldValue('mobileNumber', sim.secondarySim);
-      formik.setFieldValue('beneficiaryMobileNumber', sim.secondarySim);
-    } else if (mobileNumbers?.length) {
-      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
-      formik.setFieldValue('beneficiaryMobileNumber', mobileNumbers[0].value);
-    }
+
+    formik.setFieldValue('mobileNumber', '');
+    formik.setFieldValue('beneficiaryMobileNumber', '');
 
     return setactiveTab(1);
   };
-
-  useEffect(() => {
-    if (sim.secondarySim) {
-      formik.setFieldValue('mobileNumber', sim.secondarySim);
-      formik.setFieldValue('beneficiaryMobileNumber', sim.secondarySim);
-    } else if (mobileNumbers?.length) {
-      formik.setFieldValue('mobileNumber', mobileNumbers[0].value);
-      formik.setFieldValue('beneficiaryMobileNumber', mobileNumbers[0].value);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobileNumbers, sim]);
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -299,31 +286,29 @@ export const BuyDataWithAirtime: React.FC = () => {
                   </Row>
                   <SizedBox height={24} />
                   {data && <SuccessBox>{data.message}</SuccessBox>}
-
                   <form onSubmit={formik.handleSubmit}>
                     {activeTab === 1 && (
-                      <DropDownButton
-                        dropdownOptions={mobileNumbers}
-                        useDefaultName={false}
-                        variant="default"
-                        fullWidth
-                        type="button"
-                        style={{
-                          minWidth: '150px',
-                          display: 'flex',
-                          padding: '10px',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          minHeight: 'unset',
-                          background: `#FBFBFB`,
-                          border: `solid 1px ${Colors.grey}`,
+                      <TextField
+                        label="Select Phone Number"
+                        placeholder="Select Phone"
+                        dropDown
+                        dropDownOptions={mobileNumbers}
+                        value={formik.values.mobileNumber}
+                        onChange={(e) => {
+                          formik.setFieldValue('mobileNumber', e.target.value);
+                          formik.setFieldValue(
+                            'beneficiaryMobileNumber',
+                            e.target.value,
+                          );
                         }}
-                      >
-                        <Text size={18} color={Colors.darkGreen} weight={500}>
-                          {(sim && sim.secondarySim) ||
-                            (mobileNumbers && mobileNumbers[0]?.value)}
-                        </Text>
-                      </DropDownButton>
+                        type="tel"
+                        minLength={11}
+                        maxLength={11}
+                        error={getFieldError(
+                          formik.errors.mobileNumber,
+                          formik.touched.mobileNumber,
+                        )}
+                      />
                     )}
                     {activeTab === 2 && (
                       <TextField
@@ -343,12 +328,14 @@ export const BuyDataWithAirtime: React.FC = () => {
                     <SizedBox height={16} />
 
                     <Row justifyContent="flex-start">
-                      <Column xs={12} md={5}>
+                      <Column xs={12}>
                         <Text variant="lighter">
                           <SelectBundleRadio>Select bundle</SelectBundleRadio>
                         </Text>
                       </Column>
                     </Row>
+
+                    <SizedBox height={16} />
 
                     {activeTab === 1 && (
                       <TextField
