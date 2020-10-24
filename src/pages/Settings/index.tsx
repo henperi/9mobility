@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -17,12 +17,10 @@ import { TextField } from '../../components/TextField';
 import { Button } from '../../components/Button';
 import { getFieldError, isFutureDate } from '../../utils/formikHelper';
 import { ToggleSwitch } from '../../components/ToggleSwitch';
-import { useLazyFetch, usePost } from '../../customHooks/useRequests';
+import { usePost } from '../../customHooks/useRequests';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { ErrorBox } from '../../components/ErrorBox';
-import { ConfirmOTP } from './ConfirmOTP';
-import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { logger } from '../../utils/logger';
 import { Spinner } from '../../components/Spinner';
 import { setAuthUser } from '../../store/modules/auth/actions';
@@ -32,29 +30,13 @@ interface SuccessResp {
   message: string;
 }
 
-interface VerifyNumberResponse {
-  result: {
-    trackingId: string;
-    expiresIn: Date;
-  };
-  responseCode: number;
-  message: string;
-}
-
 export const Settings = () => {
-  const { mobileNumbers } = useGetMobileNumbers();
-
   const history = useHistory();
   const [activeDND, setActiveDND] = useState(false);
   const [activeVoicemail, setActiveVoicemail] = useState(false);
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const [showOTPScreen, setshowOTPScreen] = useState(false);
-
-  const [requestOTP, { loading: OTPLoading, data: OTPData }] = useLazyFetch<
-    VerifyNumberResponse
-  >('Mobility.Onboarding/api/Verification/initiateinappotp');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   const [
     updateProfile,
@@ -90,25 +72,12 @@ export const Settings = () => {
           }),
         );
         setShowSuccessModal(true);
+        setShowConfirmationModal(false);
       }
     } catch (err) {
       logger.log(err);
     }
   };
-
-  const getOTP = async () => {
-    try {
-      await requestOTP();
-    } catch (err) {
-      logger.log(err);
-    }
-  };
-
-  useEffect(() => {
-    if (OTPData?.result?.trackingId) {
-      setshowOTPScreen(true);
-    }
-  }, [OTPData]);
 
   const dob =
     user?.dob &&
@@ -130,12 +99,48 @@ export const Settings = () => {
       }),
     }),
     onSubmit: async (formData) => {
-      getOTP();
+      setShowConfirmationModal(true);
     },
   });
 
   const renderModals = () => (
     <>
+      <Modal
+        isVisible={showConfirmationModal}
+        onClose={() => setShowConfirmationModal(false)}
+        header={{ title: 'Transaction Confirmation' }}
+        size="sm"
+      >
+        {profileUpdateErr && <ErrorBox>{profileUpdateErr.message}</ErrorBox>}
+        <SizedBox height={15} />
+        <Column>
+          <Text>Hi {user?.firstName},</Text>
+          <SizedBox height={15} />
+          <Text>Please confirm profile update</Text>
+          <SizedBox height={10} />
+          <Row useAppMargin>
+            <Column xs={6} useAppMargin>
+              <Button
+                onClick={updateUserProfile}
+                isLoading={profildUpdateLoading}
+                fullWidth
+              >
+                Confirm
+              </Button>
+            </Column>
+            <Column xs={6} useAppMargin>
+              <Button
+                onClick={() => setShowConfirmationModal(false)}
+                outline
+                fullWidth
+              >
+                Cancel
+              </Button>
+            </Column>
+          </Row>
+        </Column>
+      </Modal>
+
       <Modal
         isVisible={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
@@ -157,18 +162,6 @@ export const Settings = () => {
       </Modal>
     </>
   );
-
-  if (showOTPScreen && OTPData && mobileNumbers) {
-    return (
-      <ConfirmOTP
-        message={OTPData?.message}
-        setshowOTPScreen={setshowOTPScreen}
-        callbackFunction={updateUserProfile}
-        trackingId={OTPData.result.trackingId}
-        mobileNumber={mobileNumbers[0].value}
-      />
-    );
-  }
 
   return (
     <PageBody>
@@ -255,7 +248,7 @@ export const Settings = () => {
                   <Button
                     type="submit"
                     fullWidth
-                    isLoading={OTPLoading}
+                    isLoading={profildUpdateLoading}
                     disabled={profildUpdateLoading}
                   >
                     Update
