@@ -18,7 +18,6 @@ import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
-import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
@@ -33,7 +32,7 @@ interface SuccessResp {
 export const BuyWithPin: React.FC = () => {
   const [activeTab, setactiveTab] = useState(1);
 
-  const [rechargeWithPin, { loading, data, error }] = usePost<SuccessResp>(
+  const [rechargeWithPin, { loading, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Airtime/RechargeWithPin',
   );
 
@@ -227,7 +226,6 @@ export const BuyWithPin: React.FC = () => {
               </Column>
             </Row>
             <SizedBox height={24} />
-            {data && <SuccessBox>{data.message}</SuccessBox>}
             <form onSubmit={formik.handleSubmit}>
               {activeTab === 1 && (
                 <TextField

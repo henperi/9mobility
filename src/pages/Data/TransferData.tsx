@@ -18,7 +18,6 @@ import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
-import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { logger } from '../../utils/logger';
@@ -35,7 +34,7 @@ export const TransferData: React.FC = () => {
   const { mobileNumbers } = useGetMobileNumbers();
   const [transferError, setTransferError] = useState<IError>(emptyError);
 
-  const [transferAirtime, { loading, data, error }] = usePost<SuccessResp>(
+  const [transferAirtime, { loading, error }] = usePost<SuccessResp>(
     'Mobility.Account/api/Data/Transfer',
   );
 
@@ -216,7 +215,6 @@ export const TransferData: React.FC = () => {
               </Column>
             </CardStyles.CardHeader>
             <Card showOverlayedDesign fullWidth padding="7% 20%">
-              {data && <SuccessBox>{data.message}</SuccessBox>}
               <form onSubmit={formik.handleSubmit}>
                 <TextField
                   label="Security code"

@@ -19,7 +19,6 @@ import { BackButton } from '../../components/BackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
-// import { SuccessBox } from '../../components/SuccessBox';
 import { Modal } from '../../components/Modal';
 import { useGlobalStore } from '../../store';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
