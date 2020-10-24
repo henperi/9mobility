@@ -353,7 +353,7 @@ export const ManageNumbers = () => {
                 <>
                   <Text weight={600}>Existing Numbers</Text>
 
-                  {numbersData?.result?.map((num) => (
+                  {numbersData?.result?.map((num, index) => (
                     <Column key={generateShortId()}>
                       <Card
                         style={{
@@ -367,49 +367,57 @@ export const ManageNumbers = () => {
                             <Text color={Colors.black} weight="500">
                               {num.mobileNumber}
                             </Text>
-                            <Text size={13} color={Colors.blackGrey}>
-                              Primary
-                            </Text>
+                            {index === 0 && (
+                              <Text size={13} color={Colors.blackGrey}>
+                                Primary
+                              </Text>
+                            )}
                           </Column>
                           <Column xs={4} alignItems="center">
-                            <Text
-                              size={13}
-                              color={Colors.darkGreen}
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => {
-                                setSelectedPhone(num.mobileNumber);
-                                setRemoveNumberConfirm(true);
-                              }}
-                            >
-                              remove number
-                            </Text>
+                            {index !== 0 && (
+                              <Text
+                                size={13}
+                                color={Colors.darkGreen}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                  setSelectedPhone(num.mobileNumber);
+                                  setRemoveNumberConfirm(true);
+                                }}
+                              >
+                                remove number
+                              </Text>
+                            )}
                           </Column>
                           <Column xs={4}>
-                            {num.isActive ? (
-                              <Text
-                                size={13}
-                                color={Colors.darkGreen}
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => {
-                                  setSelectedPhone(num.mobileNumber);
-                                  setDeactivateNumberConfirm(true);
-                                }}
-                              >
-                                Deactivate number
-                              </Text>
-                            ) : (
-                              <Text
-                                size={13}
-                                color={Colors.darkGreen}
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => {
-                                  setActivateNumberOTP(true);
-                                  setSelectedPhone(num.mobileNumber);
-                                  getOTP(num.mobileNumber);
-                                }}
-                              >
-                                Activate number
-                              </Text>
+                            {index !== 0 && (
+                              <>
+                                {num.isActive ? (
+                                  <Text
+                                    size={13}
+                                    color={Colors.darkGreen}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => {
+                                      setSelectedPhone(num.mobileNumber);
+                                      setDeactivateNumberConfirm(true);
+                                    }}
+                                  >
+                                    Deactivate number
+                                  </Text>
+                                ) : (
+                                  <Text
+                                    size={13}
+                                    color={Colors.darkGreen}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => {
+                                      setActivateNumberOTP(true);
+                                      setSelectedPhone(num.mobileNumber);
+                                      getOTP(num.mobileNumber);
+                                    }}
+                                  >
+                                    Activate number
+                                  </Text>
+                                )}
+                              </>
                             )}
                           </Column>
                         </Row>
