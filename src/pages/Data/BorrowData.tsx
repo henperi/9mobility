@@ -116,7 +116,10 @@ export const BorrowData: React.FC = () => {
 
   const handleborrowData = async () => {
     try {
-      const response = await borrowData(formik.values);
+      const response = await borrowData({
+        ...formik.values,
+        amount: Number(formik.values.amount),
+      });
 
       if (response.data) {
         setShowConfirmationModal(false);

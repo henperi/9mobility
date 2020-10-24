@@ -127,7 +127,10 @@ export const BorrowAirtime: React.FC = () => {
 
   const handleborrowAirtime = async () => {
     try {
-      const response = await borrowAirtime(formik.values);
+      const response = await borrowAirtime({
+        ...formik.values,
+        amount: Number(formik.values.amount),
+      });
 
       if (response.data) {
         setShowConfirmationModal(false);
