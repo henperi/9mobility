@@ -10,7 +10,6 @@ import { useGlobalStore } from '../../store';
 import { rem } from '../../utils/rem';
 import { useScreenSize } from '../../customHooks/useScreenSize';
 import { ScreenSizes } from '../Column/styles';
-import { logger } from '../../utils/logger';
 
 export const AppContainer: React.FC = ({ children }) => {
   const {
@@ -35,11 +34,6 @@ export const AppContainer: React.FC = ({ children }) => {
 
     return () => window.removeEventListener('click', closeSidebar);
   }, [showSidebar]);
-
-  logger.log('Is authenticated: ', auth.isAuthenticated);
-  logger.log('route: ', window.location.pathname);
-  logger.log('Is onboarding route: ', !isOnboardingRoute);
-  logger.log('*************************');
 
   return (
     <ThemeProvider theme={{ mode: 'light' }}>

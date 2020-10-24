@@ -31,7 +31,6 @@ export const getIsoDate = (dateValue: string) => {
 };
 
 export const getDateDiff = (firstDate: string, secondDate: string) => {
-  logger.log('call me nah');
   // One day Time in ms (milliseconds)
   const one_day = 1000 * 60 * 60 * 24;
   const date1 = new Date(firstDate);
