@@ -107,6 +107,7 @@ export const BuyDataWithCard: React.FC = () => {
 
   const handleTabChange = () => {
     if (activeTab === 1) {
+      formik.setFieldValue('mobileNumber', '');
       return setactiveTab(2);
     }
     if (sim.secondarySim) {

@@ -99,6 +99,8 @@ export const BuyDataWithAirtime: React.FC = () => {
 
   const handleTabChange = () => {
     if (activeTab === 1) {
+      formik.setFieldValue('mobileNumber', '');
+      formik.setFieldValue('beneficiaryMobileNumber', '');
       return setactiveTab(2);
     }
     if (sim.secondarySim) {
