@@ -1,7 +1,6 @@
 import React, { HtmlHTMLAttributes } from 'react';
 import { Styles } from './style';
-import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
-import { rem } from '../../utils/rem';
+import igniteLogo from '../../assets/images/ig9ite logo_main.png';
 import { Card } from '../Card';
 import { Column } from '../Column';
 import { Text } from '../Text';
@@ -24,6 +23,7 @@ import { ReactComponent as RoamingIcon } from '../../assets/images/roamingIcon.s
 import { ReactComponent as SubscribedIcon } from '../../assets/images/subscribedIcon.svg';
 import { useFetch } from '../../customHooks/useRequests';
 import { Spinner } from '../Spinner';
+import { rem } from '../../utils/rem';
 
 interface AirtimeDataResp {
   result: {
@@ -68,8 +68,15 @@ export const SideBar: React.FC<ISidebar> = (props) => {
 
   return (
     <Styles.SideBar {...props}>
-      <Logo style={{ marginLeft: rem(20) }} />
-      <SizedBox height={30} />
+      <Column>
+        <img
+          src={igniteLogo}
+          alt="appLogoBig"
+          style={{ marginLeft: rem(20), maxWidth: '100%', width: rem(80) }}
+        />
+      </Column>
+
+      <SizedBox height={25} />
       <Column>
         <Card color={convertHexToRGBA(Colors.yellowGreen, 0.3)}>
           <Row wrap={false}>
