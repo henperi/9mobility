@@ -19,7 +19,8 @@ export const AppContainer: React.FC = ({ children }) => {
   const { width } = useScreenSize();
   const isOnboardingRoute = window.location.pathname.includes('onboarding');
 
-  const hasValidAccess = auth.isAuthenticated && auth.user?.email;
+  const hasValidAccess =
+    auth.isAuthenticated && !!auth.user?.firstName && !!auth.user.lastName;
 
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -40,8 +41,7 @@ export const AppContainer: React.FC = ({ children }) => {
       <Styles.AppContainer>
         <BrowserRouter>
           <Row wrap={false}>
-            {auth.isAuthenticated &&
-            window.location.pathname !== '/onboarding/register' ? (
+            {hasValidAccess ? (
               <SideBar
                 style={{ maxWidth: rem(240), minWidth: rem(240) }}
                 showSidebar={showSidebar}
