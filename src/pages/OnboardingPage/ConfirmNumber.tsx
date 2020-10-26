@@ -59,17 +59,28 @@ export const ConfirmNumber: React.FC<SetScreen> = () => {
     }
   };
 
+  const checkMobileNumber = (phoneNumber: string) => {
+    const numArray = phoneNumber.split('');
+    if (numArray.length === 10 && numArray[0] !== '0') {
+      numArray.unshift('0');
+    }
+    return numArray.join('');
+  };
+
   const formik = useFormik({
     initialValues: {
       MobileNumber: '',
     },
     validationSchema: Yup.object({
       MobileNumber: Yup.string()
-        .matches(/^\d{11}$/, 'Must be an 11 digit phone number')
+        .matches(/^(\d{10}|\d{11})$/, 'Must be an 11 digit phone number')
         .required('This field is required'),
     }),
     onSubmit: (values) => {
-      handleVerifyNumber(values);
+      handleVerifyNumber({
+        ...values,
+        MobileNumber: checkMobileNumber(formik.values.MobileNumber),
+      });
     },
   });
 
@@ -102,7 +113,7 @@ export const ConfirmNumber: React.FC<SetScreen> = () => {
                 placeholder="Enter phone number"
                 {...formik.getFieldProps('MobileNumber')}
                 type="tel"
-                minLength={11}
+                minLength={10}
                 maxLength={11}
                 required
                 title="must be a valid phone number starting with 0 eg 08112322124"
