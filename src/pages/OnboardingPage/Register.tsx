@@ -86,12 +86,18 @@ export const Register: React.FC<SetScreen> = () => {
   });
 
   const { state } = useGlobalStore();
+  const isRegistered =
+    !!state?.auth?.user?.firstName && !!state?.auth?.user.lastName;
 
   useEffect(() => {
-    if (state.auth.isAuthenticated && state.auth.user?.firstName) {
-      history.push('/dashboard');
+    if (state?.auth?.isAuthenticated) {
+      if (isRegistered) {
+        history.push('/dashboard');
+      }
+    } else {
+      history.push('/');
     }
-  }, [history, state.auth]);
+  }, [history, state.auth, isRegistered]);
 
   return (
     <PageBody centeralize>

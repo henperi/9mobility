@@ -10,12 +10,17 @@ export const ProtectedRoute: React.FC<any> = ({
     state: { auth },
   } = useGlobalStore();
 
+  const isRegistered = !!auth.user?.firstName && !!auth.user.lastName;
+
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (auth.isAuthenticated) {
+        if (auth.isAuthenticated && isRegistered) {
           return <Component {...props} />;
+        }
+        if (auth.isAuthenticated && !isRegistered) {
+          return <Redirect to="/onboarding/register" />;
         }
         return <Redirect to="/" />;
       }}
