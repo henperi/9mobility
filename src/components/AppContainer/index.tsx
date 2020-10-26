@@ -59,7 +59,7 @@ export const AppContainer: React.FC = ({ children }) => {
             >
               <TopBar
                 auth={Boolean(hasValidAccess)}
-                style={{ height: !isOnboardingRoute ? '72px' : '92px' }}
+                style={{ height: hasValidAccess ? '72px' : '92px' }}
                 setShowSidebar={setShowSidebar}
               />
               {children}
