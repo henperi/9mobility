@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PageBody } from '../../components/PageBody';
 import { SizedBox } from '../../components/SizedBox';
 import { Text } from '../../components/Text';
@@ -16,6 +16,8 @@ import { ReactComponent as PlayGames } from '../../assets/images/playGames.svg';
 import { ReactComponent as BuyPhone } from '../../assets/images/buyPhone.svg';
 import { SimBalances } from './SimBalances';
 import { SubscribedServices } from './SubscribedServices';
+import { Modal } from '../../components/Modal';
+import { Colors } from '../../themes/colors';
 
 export interface OnboardingAuthResponse {
   result: {
@@ -33,6 +35,7 @@ export interface OnboardingAuthResponse {
 }
 
 export const Dashboard: React.FC<any> = () => {
+  const [comingSoon, setComingSoon] = useState(false);
   const {
     state: { auth },
   } = useGlobalStore();
@@ -75,7 +78,7 @@ export const Dashboard: React.FC<any> = () => {
               in 60 seconds
             </Text>
             <SizedBox height={16} />
-            <Button fullWidth outline>
+            <Button fullWidth outline onClick={() => setComingSoon(true)}>
               Apply Now
             </Button>
           </Column>
@@ -95,7 +98,12 @@ export const Dashboard: React.FC<any> = () => {
               shows & reality TV
             </Text>
             <SizedBox height={16} />
-            <Button fullWidth outline variant="blackGrey">
+            <Button
+              fullWidth
+              outline
+              variant="blackGrey"
+              onClick={() => setComingSoon(true)}
+            >
               Apply Now
             </Button>
           </Column>
@@ -114,7 +122,12 @@ export const Dashboard: React.FC<any> = () => {
               Play music <br /> & rock ringback tunes
             </Text>
             <SizedBox height={16} />
-            <Button fullWidth outline variant="lightBlue">
+            <Button
+              fullWidth
+              outline
+              variant="lightBlue"
+              onClick={() => setComingSoon(true)}
+            >
               Apply Now
             </Button>
           </Column>
@@ -134,7 +147,12 @@ export const Dashboard: React.FC<any> = () => {
               download games
             </Text>
             <SizedBox height={16} />
-            <Button fullWidth outline variant="orange">
+            <Button
+              fullWidth
+              outline
+              variant="orange"
+              onClick={() => setComingSoon(true)}
+            >
               Apply Now
             </Button>
           </Column>
@@ -154,12 +172,23 @@ export const Dashboard: React.FC<any> = () => {
               &amp; routers
             </Text>
             <SizedBox height={16} />
-            <Button fullWidth outline>
+            <Button fullWidth outline onClick={() => setComingSoon(true)}>
               Apply Now
             </Button>
           </Column>
         </Card>
       </Scrollable>
+      {comingSoon && (
+        <Modal
+          isVisible={comingSoon}
+          onClose={() => setComingSoon(false)}
+          size="sm"
+        >
+          <Text alignment="center" weight="600" color={`${Colors.darkGreen}`}>
+            Coming soon
+          </Text>
+        </Modal>
+      )}
     </PageBody>
   );
 };
