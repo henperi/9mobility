@@ -8,7 +8,7 @@ const SideBar = styled.div<{ showSidebar?: boolean }>`
   height: 100vh;
   width: fill-available;
   background-color: ${Colors.white};
-  padding: ${rem(32)} ${rem(16)};
+  padding: ${rem(16)} ${rem(16)};
   padding-left: 0;
   position: sticky;
   top: 0;
