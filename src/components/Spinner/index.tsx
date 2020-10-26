@@ -1,7 +1,8 @@
 import React from 'react';
 import { Styles } from './styles';
 
-import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
+import igniteLogo from '../../assets/images/ig9ite logo_main.png';
+import { rem } from '../../utils/rem';
 
 export const Spinner: React.FC<{
   isFixed?: boolean;
@@ -11,7 +12,13 @@ export const Spinner: React.FC<{
   const { isFixed = false, size = 50, withLogo, children } = props;
   return (
     <Styles.Spinner isFixed={isFixed} size={size}>
-      {withLogo && <Logo style={{ width: '100%' }} />}
+      {withLogo && (
+        <img
+          src={igniteLogo}
+          alt="appLogoBig"
+          style={{ marginLeft: rem(20), maxWidth: '100%', width: rem(80) }}
+        />
+      )}
       {children}
     </Styles.Spinner>
   );
