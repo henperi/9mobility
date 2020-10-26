@@ -2,7 +2,7 @@ import React, { HtmlHTMLAttributes } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Styles } from './style';
 
-import { ReactComponent as Logo } from '../../assets/images/9mobility-logo.svg';
+import igniteLogo from '../../assets/images/ig9ite logo_main.png';
 import GooglePlay from '../../assets/images/google-play.png';
 import AppStore from '../../assets/images/app-store.png';
 import { ReactComponent as PowerIcon } from '../../assets/images/power.svg';
@@ -16,6 +16,7 @@ import { Colors } from '../../themes/colors';
 import { useWindowSize } from '../../customHooks/useWindowSize';
 import { ScreenSizes } from '../Column/styles';
 import { useInterceptor } from '../../customHooks/useInterceptor';
+import { rem } from '../../utils/rem';
 
 export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
   auth: boolean;
@@ -38,7 +39,11 @@ export const TopBar: React.FC<ITopBar> = (props) => {
     <Styles.TopBar {...rest} auth={auth}>
       {!auth ? (
         <>
-          <Logo />
+          <img
+            src={igniteLogo}
+            alt="appLogoBig"
+            style={{ marginLeft: rem(20), maxWidth: '100%', width: rem(80) }}
+          />
           <Row alignItems="center">
             <span>Home</span>
             <span>FAQ</span>
