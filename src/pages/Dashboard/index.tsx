@@ -40,9 +40,24 @@ export const Dashboard: React.FC<any> = () => {
     state: { auth },
   } = useGlobalStore();
 
+  const userGreeting = () => {
+    let greeting;
+    const time = new Date().getHours();
+    if (time < 10) {
+      greeting = 'Good morning';
+    } else if (time < 20) {
+      greeting = 'Good afternoon';
+    } else {
+      greeting = 'Good evening';
+    }
+    return <Text>{greeting}</Text>;
+  };
+
   return (
     <PageBody>
-      <Text>Hello {auth.user?.firstName}, Good morning</Text>
+      <Text>
+        Hello {auth.user?.firstName}, {userGreeting()}
+      </Text>
       <SizedBox height={24} />
       <Row useAppMargin>
         <SimBalances />
