@@ -62,6 +62,10 @@ export const BuyDataWithAirtime: React.FC = () => {
     'Mobility.Account/api/Data/GetBundle',
   );
 
+  const { data: dataPointsData } = useFetch<BundlesResp>(
+    'Mobility.Account/api/Data/GetDataPointPrice',
+  );
+
   const [dataPlans, setDataPlans] = useState<
     {
       label: string;
@@ -79,6 +83,24 @@ export const BuyDataWithAirtime: React.FC = () => {
       setDataPlans(plansResults);
     }
   }, [bundlesData]);
+
+  const [dataPoints, setDataPoints] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (dataPointsData) {
+      const pointsResults = dataPointsData?.result?.map((option) => ({
+        label: option.description,
+        value: String(option.dataPlanId),
+      }));
+
+      setDataPoints(pointsResults);
+    }
+  }, [dataPointsData]);
 
   const formik = useFormik({
     initialValues: {
@@ -121,10 +143,10 @@ export const BuyDataWithAirtime: React.FC = () => {
   const [buyDataError, setBuyDataError] = useState<IError>(emptyError);
   const [giftDataError, setGiftDataError] = useState<IError>(emptyError);
 
-  const getDataCategory = (bundleID: string) => {
-    const allBundles = bundlesData?.result;
-    const bundleCategory = allBundles?.filter(
-      (b) => Number(b.dataPlanId) === Number(bundleID),
+  const getDataCategory = (id: string) => {
+    const allPoints = dataPointsData?.result;
+    const bundleCategory = allPoints?.filter(
+      (b) => Number(b.dataPlanId) === Number(id),
     )[0].categoryName;
     return bundleCategory;
   };
@@ -146,7 +168,8 @@ export const BuyDataWithAirtime: React.FC = () => {
       } else {
         const response = await giftDataWithAirtime({
           ...formik.values,
-          dataCategory: getDataCategory(formik.values.bundleId),
+          bundleId: String(formik.values.bundleId),
+          dataCategory: String(getDataCategory(formik.values.bundleId)),
         });
 
         if (response.data) {
@@ -387,7 +410,7 @@ export const BuyDataWithAirtime: React.FC = () => {
                         label="Data Bundle"
                         placeholder="Select Data Bundle"
                         dropDown
-                        dropDownOptions={dataPlans}
+                        dropDownOptions={dataPoints}
                         value={formik.values.bundleId}
                         onChange={(e) => {
                           formik.setFieldValue('bundleId', e.target.value);
