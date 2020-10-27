@@ -41,6 +41,11 @@ export const BuyDataWithAirtime: React.FC = () => {
     'Mobility.Account/api/Data/BuyWithAirtime',
   );
 
+  const [
+    giftDataWithAirtime,
+    { loading: giftLoading, error: giftError },
+  ] = usePost<SuccessResp>('Mobility.Account/api/Data/BuyMetoYouWithAirtime');
+
   const { mobileNumbers } = useGetMobileNumbers();
 
   const {
@@ -114,6 +119,7 @@ export const BuyDataWithAirtime: React.FC = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [buyDataError, setBuyDataError] = useState<IError>(emptyError);
+  const [giftDataError, setGiftDataError] = useState<IError>(emptyError);
 
   const getDataCategory = (bundleID: string) => {
     const allBundles = bundlesData?.result;
@@ -125,15 +131,29 @@ export const BuyDataWithAirtime: React.FC = () => {
 
   const handleBuyDataWithAirtime = async () => {
     try {
-      const response = await buyDataWithAirtime({
-        ...formik.values,
-        dataCategory: getDataCategory(formik.values.bundleId),
-      });
+      if (
+        formik.values.mobileNumber === formik.values.beneficiaryMobileNumber
+      ) {
+        const response = await buyDataWithAirtime({
+          ...formik.values,
+        });
 
-      if (response.data) {
-        setShowConfirmationModal(false);
-        setShowSuccessModal(true);
-        formik.resetForm();
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
+      } else {
+        const response = await giftDataWithAirtime({
+          ...formik.values,
+          dataCategory: getDataCategory(formik.values.bundleId),
+        });
+
+        if (response.data) {
+          setShowConfirmationModal(false);
+          setShowSuccessModal(true);
+          formik.resetForm();
+        }
       }
     } catch (errorResp) {
       logger.log(errorResp);
@@ -144,10 +164,18 @@ export const BuyDataWithAirtime: React.FC = () => {
     if (error) {
       setBuyDataError(error);
     }
-  }, [error]);
+
+    if (giftError) {
+      setGiftDataError(giftError);
+    }
+  }, [error, giftError]);
 
   const DataPurchaseError = buyDataError.message && (
     <ErrorBox>{buyDataError.message}</ErrorBox>
+  );
+
+  const DataGiftingError = giftDataError.message && (
+    <ErrorBox>{giftDataError.message}</ErrorBox>
   );
 
   const renderModals = () => (
@@ -157,11 +185,13 @@ export const BuyDataWithAirtime: React.FC = () => {
         onClose={() => {
           setShowConfirmationModal(false);
           setBuyDataError(emptyError);
+          setGiftDataError(emptyError);
         }}
         header={{ title: 'Transaction Confirmation' }}
         size="sm"
       >
         {DataPurchaseError}
+        {DataGiftingError}
         <SizedBox height={15} />
         <Column>
           <Text>Hi {user?.firstName},</Text>
@@ -177,7 +207,7 @@ export const BuyDataWithAirtime: React.FC = () => {
             <Column xs={6} useAppMargin>
               <Button
                 onClick={handleBuyDataWithAirtime}
-                isLoading={loading}
+                isLoading={loading || giftLoading}
                 fullWidth
               >
                 Confirm
@@ -214,7 +244,7 @@ export const BuyDataWithAirtime: React.FC = () => {
           <SizedBox height={10} />
           <Button
             onClick={() => setShowSuccessModal(false)}
-            isLoading={loading}
+            isLoading={loading || giftLoading}
             fullWidth
           >
             Done
@@ -373,7 +403,11 @@ export const BuyDataWithAirtime: React.FC = () => {
 
                     <SizedBox height={5} />
 
-                    <Button type="submit" isLoading={loading} fullWidth>
+                    <Button
+                      type="submit"
+                      isLoading={loading || giftLoading}
+                      fullWidth
+                    >
                       Recharge Now
                     </Button>
                     {renderModals()}
