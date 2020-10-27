@@ -132,7 +132,7 @@ export const TransferAirtime: React.FC = () => {
           <SizedBox height={15} />
           <Text>
             You are about to transfer{' '}
-            <Text variant="darker">{formik.values.amount}</Text> airtime to{' '}
+            <Text variant="darker">₦{formik.values.amount}</Text> airtime to{' '}
             <Text variant="darker">{formik.values.recipientMobileNumber}</Text>{' '}
           </Text>
           <SizedBox height={10} />
