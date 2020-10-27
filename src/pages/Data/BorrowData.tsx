@@ -24,6 +24,7 @@ import { logger } from '../../utils/logger';
 import { BorrowEligibilityResp } from './Interface';
 import { generateShortId } from '../../utils/generateShortId';
 import { TextField } from '../../components/TextField';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 
 interface BorrowSuccessResp {
   responseCode: number;
@@ -41,13 +42,6 @@ export const BorrowData: React.FC = () => {
 
   const [selectedNumber, setSelectedNumber] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<number>();
-
-  const [mobileNumbers, setMobileNumbers] = useState<
-    {
-      label: string;
-      value: string;
-    }[]
-  >([]);
 
   interface BorrowingAmounts {
     [x: string]: {
@@ -68,7 +62,6 @@ export const BorrowData: React.FC = () => {
         }),
       );
 
-      setMobileNumbers(mobileResults);
       setSelectedNumber(mobileResults[0].value);
     }
   }, [dataEligibility]);
@@ -113,6 +106,7 @@ export const BorrowData: React.FC = () => {
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { mobileNumbers } = useGetMobileNumbers();
 
   const handleborrowData = async () => {
     try {

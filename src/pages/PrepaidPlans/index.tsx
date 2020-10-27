@@ -145,9 +145,7 @@ export const PrepaidPlansPage: React.FC = () => {
                         {plan.name}
                       </Text>
                       <SizedBox height={8} />
-                      <Text casing="sentenceCase" variant="lighter">
-                        {plan.description}
-                      </Text>
+                      <Text variant="lighter">{plan.description}</Text>
                     </Column>
                   </Row>
                 </Card>

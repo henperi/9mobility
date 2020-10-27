@@ -22,6 +22,7 @@ import { Spinner } from '../../components/Spinner';
 import { logger } from '../../utils/logger';
 import { TextField } from '../../components/TextField';
 import { getFieldError } from '../../utils/formikHelper';
+import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 
 interface BorrowEligibilityResp {
   result: {
@@ -42,6 +43,7 @@ interface BorrowSuccessResp {
 }
 
 export const BorrowAirtime: React.FC = () => {
+  const { mobileNumbers } = useGetMobileNumbers();
   const [borrowAirtime, { loading, data, error }] = usePost<BorrowSuccessResp>(
     'Mobility.Account/api/Airtime/Borrow',
   );
@@ -52,13 +54,6 @@ export const BorrowAirtime: React.FC = () => {
 
   const [selectedNumber, setSelectedNumber] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<number>();
-
-  const [mobileNumbers, setMobileNumbers] = useState<
-    {
-      label: string;
-      value: string;
-    }[]
-  >([]);
 
   interface BorrowingAmounts {
     [x: string]: {
@@ -79,7 +74,6 @@ export const BorrowAirtime: React.FC = () => {
         }),
       );
 
-      setMobileNumbers(mobileResults);
       setSelectedNumber(mobileResults[0].value);
     }
   }, [dataEligibility]);
