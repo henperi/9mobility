@@ -46,7 +46,7 @@ export const ConfirmOTP: React.FC<{
   const [errorMessage, setErrorMessage] = useState<string | undefined>('');
 
   const [verifyOTP] = usePost<OtpVerificationResponse>(
-    'Mobility.Onboarding/api/Verification/verifyotp',
+    'Mobility.Onboarding/api/Verification/verifysimotp',
   );
 
   const handleVerifyOTP = async (data: typeof formik.values) => {
@@ -54,7 +54,11 @@ export const ConfirmOTP: React.FC<{
       setLoading(true);
       setErrorMessage('');
 
-      const result = await verifyOTP({ ...data, trackingId, mobileNumber });
+      const result = await verifyOTP({
+        otp: formik.values.otp,
+        trackingId,
+        simNumber: mobileNumber,
+      });
 
       if (result.data.responseCode === 1) {
         setshowOTPScreen(false);
