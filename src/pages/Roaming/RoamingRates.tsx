@@ -231,7 +231,7 @@ export const RoamingRates: React.FC = () => {
   return (
     <>
       <PageBody centeralize>
-        <Column xs={12} md={6} lg={5}>
+        <Column xs={12} md={6}>
           <CardStyles.CardHeader
             style={{ height: '100%', position: 'relative', padding: '20px' }}
           >

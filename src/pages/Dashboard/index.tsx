@@ -43,9 +43,9 @@ export const Dashboard: React.FC<any> = () => {
   const userGreeting = () => {
     let greeting;
     const time = new Date().getHours();
-    if (time < 10) {
+    if (time < 12) {
       greeting = 'Good morning';
-    } else if (time < 20) {
+    } else if (time < 18) {
       greeting = 'Good afternoon';
     } else {
       greeting = 'Good evening';
