@@ -14,7 +14,7 @@ import { SizedBox } from '../../components/SizedBox';
 import { Card } from '../../components/Card';
 import { Button } from '../../components/Button';
 import { TextField } from '../../components/TextField';
-import { BackButton } from '../../components/BackButton';
+import { ActionBackButton } from '../../components/BackButton/ActionBackButton';
 import { getFieldError } from '../../utils/formikHelper';
 import { usePost } from '../../customHooks/useRequests';
 import { ErrorBox } from '../../components/ErrorBox';
@@ -35,7 +35,8 @@ interface MigrateSuccessResp {
 export const SinglePlan: React.FC<{
   plan: ActivePlan['result'];
   allPlans: ActivePlan['result'][];
-}> = ({ plan, allPlans }) => {
+  setSelectedPlan: any;
+}> = ({ plan, allPlans, setSelectedPlan }) => {
   const {
     data: activePlan,
     loading: activePlanLoading,
@@ -186,7 +187,7 @@ export const SinglePlan: React.FC<{
           >
             <img src={appLogoBig} alt="appLogoBig" />
 
-            <BackButton />
+            <ActionBackButton buttonAction={() => setSelectedPlan()} />
 
             <SizedBox height={25} />
 

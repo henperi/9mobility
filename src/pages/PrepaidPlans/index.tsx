@@ -48,7 +48,13 @@ export const PrepaidPlansPage: React.FC = () => {
   }, [refetchCurrentPlan]);
 
   if (selectedPlan && allPlans) {
-    return <SinglePlan plan={selectedPlan} allPlans={allPlans.result} />;
+    return (
+      <SinglePlan
+        plan={selectedPlan}
+        allPlans={allPlans.result}
+        setSelectedPlan={setSelectedPlan}
+      />
+    );
   }
 
   return (
