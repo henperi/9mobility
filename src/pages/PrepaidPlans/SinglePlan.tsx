@@ -67,6 +67,17 @@ export const SinglePlan: React.FC<{
     }
   }, [allPlans]);
 
+  useEffect(() => {
+    if (plan && mobileNumbers) {
+      formik.setValues({
+        offeringId: plan.id,
+        planName: plan.name,
+        mobileNumber: mobileNumbers ? mobileNumbers[0].value : '',
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mobileNumbers, plan]);
+
   const {
     state: {
       auth: { user },
@@ -123,8 +134,8 @@ export const SinglePlan: React.FC<{
           <SizedBox height={15} />
           <Text>
             You are about to migrate to{' '}
-            <Text variant="darker">{formik.values.planName}</Text>
-            prepaid plan
+            <Text variant="darker">{formik.values.planName}</Text>&nbsp; prepaid
+            plan
           </Text>
           <SizedBox height={10} />
           <Row useAppMargin>
