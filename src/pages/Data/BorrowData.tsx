@@ -112,7 +112,7 @@ export const BorrowData: React.FC = () => {
     try {
       const response = await borrowData({
         ...formik.values,
-        amount: Number(formik.values.amount),
+        amount: formik.values.amount,
       });
 
       if (response.data) {
