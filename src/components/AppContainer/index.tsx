@@ -17,7 +17,7 @@ export const AppContainer: React.FC = ({ children }) => {
   } = useGlobalStore();
 
   const { width } = useScreenSize();
-  const isOnboardingRoute = window.location.pathname.includes('onboarding');
+  // const isOnboardingRoute = window.location.pathname.includes('onboarding');
 
   const hasValidAccess =
     auth.isAuthenticated && !!auth.user?.firstName && !!auth.user.lastName;
@@ -50,9 +50,7 @@ export const AppContainer: React.FC = ({ children }) => {
             <Column
               style={{
                 width:
-                  width >= ScreenSizes.lg &&
-                  hasValidAccess &&
-                  !isOnboardingRoute
+                  width >= ScreenSizes.lg && hasValidAccess
                     ? `calc(100% - ${rem(240)}`
                     : '100%',
               }}
