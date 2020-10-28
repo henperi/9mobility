@@ -95,7 +95,7 @@ export const ConfirmOTP: React.FC<{
             </Text>
             <SizedBox height={6} />
             <Text weight={300} alignment="center">
-              Kindly enter the OPT sent to this number
+              Kindly enter the OTP sent to this number
             </Text>
             <SizedBox height={36} />
             <TextField
