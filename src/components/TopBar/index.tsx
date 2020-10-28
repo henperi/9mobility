@@ -17,6 +17,8 @@ import { useWindowSize } from '../../customHooks/useWindowSize';
 import { ScreenSizes } from '../Column/styles';
 import { useInterceptor } from '../../customHooks/useInterceptor';
 import { rem } from '../../utils/rem';
+import { useSimStore } from '../../store/simStore';
+import { setSecondaryNumber } from '../../store/simModules/simNumbers/actions';
 
 export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
   auth: boolean;
@@ -26,11 +28,13 @@ export interface ITopBar extends HtmlHTMLAttributes<HTMLDivElement> {
 export const TopBar: React.FC<ITopBar> = (props) => {
   const { auth, setShowSidebar = () => null, ...rest } = props;
   const { dispatch } = useGlobalStore();
+  const { dispatch: simDispatch } = useSimStore();
   const history = useHistory();
   useInterceptor();
 
   const handleLogout = () => {
     dispatch(removeAuthUser());
+    simDispatch(setSecondaryNumber(''));
   };
 
   const { width } = useWindowSize();

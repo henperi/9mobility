@@ -1,4 +1,3 @@
-import { logger } from '../../../utils/logger';
 import types from './types';
 
 export const simNumbersInitialState: {
@@ -13,7 +12,6 @@ export const simNumbersReducer = (
 ) => {
   switch (action.type) {
     case types.SET_SECONDARY_NUMBER:
-      logger.log('Hey dispatch?', action.payload.simNumber);
       return {
         ...state,
         secondarySim: action.payload.simNumber,
