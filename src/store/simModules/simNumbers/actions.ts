@@ -1,5 +1,4 @@
-import types from './types';  
-
+import types from './types';
 
 /**
  * @description method to set the status of network error
