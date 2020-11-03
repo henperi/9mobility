@@ -234,9 +234,13 @@ export const BuyWithPin: React.FC = () => {
                   dropDown
                   dropDownOptions={mobileNumbers}
                   value={formik.values.mobileNumber}
-                  onChange={(e) =>
-                    formik.setFieldValue('mobileNumber', e.target.value)
-                  }
+                  onChange={(e) => {
+                    formik.setFieldValue('mobileNumber', e.target.value);
+                    formik.setFieldValue(
+                      'recipientMobileNumber',
+                      e.target.value,
+                    );
+                  }}
                   type="tel"
                   minLength={11}
                   maxLength={11}
@@ -280,6 +284,7 @@ export const BuyWithPin: React.FC = () => {
                 )}
               />
               <SizedBox height={24} />
+
               <Button type="submit" isLoading={loading} fullWidth>
                 Recharge Now
               </Button>
