@@ -32,6 +32,7 @@ import { Settings } from '../pages/Settings';
 import { ManageNumbers } from '../pages/Settings/ManageNumbers';
 import { BuyRoamingBundles } from '../pages/Roaming/BuyRoamingBundles';
 import { IDDRates } from '../pages/Roaming/IDDRates';
+import { RegisterTest } from '../pages/OnboardingPage/TestRegister';
 
 export const Routes = () => {
   return (
@@ -45,6 +46,7 @@ export const Routes = () => {
       <Route exact path="/onboarding/confirmNumber" component={ConfirmNumber} />
       <Route exact path="/onboarding/verifyOTP" component={ConfirmOTP} />
       <Route exact path="/onboarding/register" component={Register} />
+      <Route exact path="/onboarding/register-test" component={RegisterTest} />
       <Route
         exact
         path="/onboarding/successful"
