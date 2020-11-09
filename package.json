@@ -45,7 +45,7 @@
     "format": "prettier --write src/**/*.ts{,x}",
     "isready": "npm run format && npm run lint && npm run build",
     "lint:css": "stylelint './src/**/*.ts'",
-    "deploy-surge": "npm run build && mv build/index.html build/200.html && surge build http://9mobility.surge.sh/"
+    "deploy-surge": "npm run build && mv build/index.html build/200.html && surge build https://9mobility.surge.sh/"
   },
   "eslintConfig": {
     "extends": "react-app"
