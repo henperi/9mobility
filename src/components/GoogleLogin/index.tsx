@@ -18,7 +18,8 @@ export const GoogleSocialLogin: React.FC<Props> = (props) => {
 
   return (
     <GoogleLogin
-      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}
+      // clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || '291167880848-2fgnr3pfjokfof99h96um61sao8o9dv2.apps.googleusercontent.com'}
+      clientId="291167880848-2fgnr3pfjokfof99h96um61sao8o9dv2.apps.googleusercontent.com"
       render={(renderProps) => (
         <Button
           border

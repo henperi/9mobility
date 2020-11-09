@@ -172,7 +172,7 @@ export const RegisterTest: React.FC<SetScreen> = () => {
                     dataSource: DataSourceEnum.Google,
                   });
               }}
-              onFailure={(user) => logger.log(user)}
+              onFailure={(user) => logger.log('user:>> ', user)}
             />
             <FacebookLogin
               onSuccess={(user) => {
