@@ -26,8 +26,23 @@ import { convertHexToRGBA } from '../../utils/convertHexToRGBA';
 import { useGetMobileNumbers } from '../../customHooks/useGetMobileNumber';
 import { useGetActivePlan } from '../../customHooks/useGetActivePlan';
 import { Spinner } from '../../components/Spinner';
+import { rem } from '../../utils/rem';
+import { generateShortId } from '../../utils/generateShortId';
 
 interface MigrateSuccessResp {
+  responseCode: number;
+  message: string;
+}
+
+interface FNFResponse {
+  result: {
+    phoneNumbers: string[];
+  };
+  responseCode: number;
+  message: string;
+}
+
+interface SuccessResp {
   responseCode: number;
   message: string;
 }
@@ -43,9 +58,53 @@ export const SinglePlan: React.FC<{
     refetch,
   } = useGetActivePlan();
 
+  const [fnfNumbers, setFnfNumbers] = useState<
+    FNFResponse['result']['phoneNumbers']
+  >([]);
+
   const [migrateToPlan, { loading, data, error }] = usePost<MigrateSuccessResp>(
     'Mobility.Account/api/Plans/MigrateToPlan',
   );
+
+  const [addNumber, { loading: adding, error: addError }] = usePost<
+    SuccessResp
+  >('Mobility.Onboarding/api/Onboarding/addfnf');
+
+  const [loadFNFNumbers, { loading: loadingFNF, data: FNFData }] = usePost<
+    FNFResponse
+  >('Mobility.Onboarding/api/Onboarding/queryfnf');
+
+  const fnfFormik = useFormik({
+    initialValues: {
+      fnfNumber: '',
+    },
+    validationSchema: Yup.object({
+      fnfNumber: Yup.string().required('This field is required'),
+    }),
+    onSubmit: async ({ fnfNumber }) => {
+      handleAddFNF();
+    },
+  });
+
+  useEffect(() => {
+    if (FNFData) {
+      setFnfNumbers(FNFData?.result?.phoneNumbers);
+    }
+  }, [FNFData]);
+
+  const handleAddFNF = async () => {
+    try {
+      const response = await addNumber({
+        fnfNumber: fnfFormik.values.fnfNumber,
+      });
+      if (response.data) {
+        loadFNFNumbers();
+        fnfFormik.resetForm();
+      }
+    } catch (errorResp) {
+      logger.log(errorResp);
+    }
+  };
 
   const { mobileNumbers } = useGetMobileNumbers();
 
@@ -104,6 +163,7 @@ export const SinglePlan: React.FC<{
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showFNFModal, setShowFNFModal] = useState(false);
 
   const handlemigrateToPlan = async () => {
     try {
@@ -182,6 +242,110 @@ export const SinglePlan: React.FC<{
           </Button>
         </Column>
       </Modal>
+
+      <Modal
+        isVisible={showFNFModal}
+        showCloseButton={false}
+        onClose={() => setShowFNFModal(false)}
+        size="sm"
+      >
+        <Row>
+          <Column xs={6}>
+            <Text size={25} weight={600}>
+              You and Me List
+            </Text>
+          </Column>
+          <Column xs={6} justifyContent="flex-end">
+            <Text size={25} weight={400} onClick={() => setShowFNFModal(false)}>
+              X
+            </Text>
+          </Column>
+        </Row>
+        <SizedBox height={30} />
+
+        <Card
+          fullWidth
+          style={{
+            backgroundColor: convertHexToRGBA(Colors.yellowGreen, 0.2),
+            padding: rem(25),
+            minHeight: 'auto',
+          }}
+        >
+          {loadingFNF ? (
+            <Spinner isFixed>Gathering your plan information</Spinner>
+          ) : (
+            <>
+              {fnfNumbers?.length > 0 ? (
+                <>
+                  {fnfNumbers?.map((num) => (
+                    <Card
+                      key={generateShortId()}
+                      fullWidth
+                      style={{
+                        backgroundColor: convertHexToRGBA(
+                          Colors.yellowGreen,
+                          0.2,
+                        ),
+                        padding: rem(25),
+                        minHeight: 'auto',
+                      }}
+                    >
+                      <Row style={{ padding: '0' }} key={generateShortId()}>
+                        <Column xs={8}>{num}</Column>
+                        <Column xs={4} justifyContent="flex-end">
+                          icon
+                        </Column>
+                      </Row>
+                    </Card>
+                  ))}
+                </>
+              ) : (
+                <Text>
+                  No numbers have been added yet{' '}
+                  <pre>{JSON.stringify(fnfNumbers, null, 2)}</pre>
+                </Text>
+              )}
+            </>
+          )}
+        </Card>
+        <SizedBox height={30} />
+
+        <form onSubmit={fnfFormik.handleSubmit}>
+          <Row childGap={5}>
+            <Column xs={12} xl={7}>
+              <TextField
+                placeholder="Enter new number to add"
+                {...fnfFormik.getFieldProps('fnfNumber')}
+                minLength={11}
+                maxLength={11}
+                type="tel"
+                error={getFieldError(
+                  fnfFormik.errors.fnfNumber,
+                  fnfFormik.touched.fnfNumber,
+                )}
+              />
+            </Column>
+            <Column xs={12} xl={5} style={{ flex: '1' }}>
+              <Button
+                variant="default"
+                border
+                type="submit"
+                fullWidth
+                style={{
+                  borderWidth: '1px',
+                  borderColor: `${Colors.darkGreen}`,
+                  marginTop: `${rem(3)}`,
+                }}
+                isLoading={adding}
+              >
+                Add Number
+              </Button>
+            </Column>
+          </Row>
+        </form>
+
+        {addError && <ErrorBox>{addError.message}</ErrorBox>}
+      </Modal>
     </>
   );
 
@@ -233,6 +397,21 @@ export const SinglePlan: React.FC<{
                     <Text size={12} variant="lighter">
                       {activePlan?.result.description}
                     </Text>
+
+                    <SizedBox height={30} />
+                    {plan.id === '10079' && (
+                      <Button
+                        outline
+                        onClick={() => {
+                          setShowFNFModal(true);
+                          loadFNFNumbers();
+                        }}
+                      >
+                        <Text color={Colors.darkGreen}>
+                          Manage &quot;You &amp; me&quot;
+                        </Text>
+                      </Button>
+                    )}
                   </>
                 )}
               </Card>
@@ -248,7 +427,7 @@ export const SinglePlan: React.FC<{
                     label="Migrate to other plans"
                     placeholder="Select Plan"
                     dropDown
-                    dropDownOptions={plans}
+                    dropDownOptions={plans.filter((p) => p.value !== plan.id)}
                     onChange={(e) => {
                       const { id, name } = getPlan(e.target.value)[0];
 
