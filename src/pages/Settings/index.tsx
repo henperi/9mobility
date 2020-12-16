@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -24,6 +24,7 @@ import { ErrorBox } from '../../components/ErrorBox';
 import { logger } from '../../utils/logger';
 import { Spinner } from '../../components/Spinner';
 import { setAuthUser } from '../../store/modules/auth/actions';
+import { rem } from '../../utils/rem';
 
 interface SuccessResp {
   responseCode: number;
@@ -103,6 +104,21 @@ export const Settings = () => {
     },
   });
 
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+
+  const handleClick = () => {
+    if (hiddenFileInput.current !== null) {
+      hiddenFileInput.current.click();
+    }
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files?.length) {
+      const fileUploaded = event.target.files[0];
+      logger.log(fileUploaded);
+    }
+  };
+
   const renderModals = () => (
     <>
       <Modal
@@ -168,13 +184,18 @@ export const Settings = () => {
       <Column justifyContent="center">
         <Column xs={12} md={10} lg={9}>
           <CardStyles.CardHeader
-            style={{ height: '100%', position: 'relative', padding: '28px' }}
+            style={{
+              height: '100%',
+              position: 'relative',
+              padding: rem(40),
+              marginTop: rem(16),
+            }}
           >
             <img src={appLogoBig} alt="appLogoBig" />
 
             <Column>
               <SizedBox height={10} />
-              <Text size={32} weight={500}>
+              <Text size={24} weight={500}>
                 Settings
               </Text>
               <SizedBox height={5} />
@@ -194,16 +215,36 @@ export const Settings = () => {
                 <Text size={18} weight={600}>
                   Profile Settings
                 </Text>
+                <SizedBox height={10} />
+
                 <Text>Manage Profile</Text>
                 <SizedBox height={20} />
 
                 <Column justifyContent="center">
+                  <SizedBox height={30} />
+
                   <Avatar
                     name="profile-avatar"
-                    style={{ width: '50px', height: '50px' }}
+                    style={{ width: '70px', height: '70px', cursor: 'pointer' }}
                     image="https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png"
+                    onClick={handleClick}
                   />
-                  {/* <Text>Tap to change pic</Text> */}
+                  <SizedBox height={10} />
+
+                  <Text
+                    size={12}
+                    color={Colors.darkGreen}
+                    onClick={handleClick}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    Tap to change pic
+                  </Text>
+                  <input
+                    type="file"
+                    ref={hiddenFileInput}
+                    onChange={(e) => handleChange(e)}
+                    style={{ display: 'none' }}
+                  />
                 </Column>
 
                 <SizedBox height={20} />
